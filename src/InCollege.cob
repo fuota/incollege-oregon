@@ -42,7 +42,7 @@ PROCEDURE DIVISION.
        CLOSE OutputFile
        OPEN INPUT InputFile
 
-       PERFORM Show-Menu.
+       PERFORM Show-Login-Menu
 
        READ InputFile INTO User-Input
            AT END
@@ -52,7 +52,18 @@ PROCEDURE DIVISION.
                STOP RUN
        END-READ
 
-       PERFORM Handle-User-Choice.
+       PERFORM Handle-Auth
+       PERFORM Show-Main-Menu
+
+       READ InputFile INTO User-Input
+           AT END
+               MOVE "No input found." TO Message-Text
+               PERFORM Write-And-Display
+               CLOSE InputFile
+               STOP RUN
+       END-READ
+
+       PERFORM Handle-Selection.
 
        CLOSE InputFile
        STOP RUN.
@@ -65,7 +76,7 @@ Write-And-Display SECTION.
        CLOSE OutputFile
        EXIT.
 
-Show-Menu SECTION.
+Show-Login-Menu SECTION.
        MOVE "Welcome to InCollege!" TO Message-Text
        PERFORM Write-And-Display
        MOVE "1. Log In" TO Message-Text
@@ -76,7 +87,21 @@ Show-Menu SECTION.
        PERFORM Write-And-Display
        EXIT.
 
-Handle-User-Choice SECTION.
+Show-Main-Menu SECTION.
+       STRING "Welcome, " Account-Username INTO Message-Text
+       PERFORM Write-And-Display
+
+       MOVE "1. Search for a job" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "2. Find someone you know" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "3. Learn a new skill" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "Enter your choice (1-3): " TO Message-Text
+       PERFORM Write-And-Display
+       EXIT.
+
+Handle-Auth SECTION.
        EVALUATE User-Input
            WHEN "1"
                PERFORM Log-In-Workflow
@@ -86,6 +111,23 @@ Handle-User-Choice SECTION.
                MOVE "Invalid choice." TO Message-Text
                PERFORM Write-And-Display
        END-EVALUATE.
+
+Handle-Selection SECTION.
+       EVALUATE User-Input
+           WHEN "1"
+               MOVE "Job search/internship is under construction." TO Message-Text
+               PERFORM Write-And-Display
+           WHEN "2"
+               MOVE "Find someone you know is under construction." TO Message-Text
+               PERFORM Write-And-Display
+           WHEN "3"
+               MOVE "Learn a new skill is under construction." TO Message-Text
+               PERFORM Write-And-Display
+           WHEN OTHER
+               MOVE "Invalid choice." TO Message-Text
+               PERFORM Write-And-Display
+       END-EVALUATE.
+       EXIT.
 
 Ask-For-Login SECTION.
        MOVE "Please enter your username: " TO Message-Text
@@ -110,6 +152,24 @@ Ask-For-Login SECTION.
        EXIT.
 
 Create-Account-Workflow SECTION.
+       OPEN INPUT AccountsFile
+       MOVE 0 TO IDX
+       PERFORM UNTIL IDX >= 5
+           READ AccountsFile
+               AT END
+                   EXIT PERFORM
+               NOT AT END
+                   ADD 1 TO IDX
+           END-READ
+       END-PERFORM
+       CLOSE AccountsFile
+
+       IF IDX >= 5
+           MOVE "All permitted accounts have been created, please come back later." TO Message-Text
+           PERFORM Write-And-Display
+           EXIT SECTION
+       END-IF
+
        PERFORM Ask-For-Login
        PERFORM Create-Account.
        EXIT.
