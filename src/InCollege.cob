@@ -115,8 +115,11 @@ Create-Account-Workflow SECTION.
        EXIT.
 
 Log-In-Workflow SECTION.
-       PERFORM Ask-For-Login
-       PERFORM Log-In.
+       MOVE 'N' TO Is-Logged-In
+       PERFORM UNTIL Is-Logged-In = 'Y'
+           PERFORM Ask-For-Login
+           PERFORM Log-In
+       END-PERFORM
        EXIT.
 
 Log-In SECTION.
