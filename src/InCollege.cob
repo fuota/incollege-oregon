@@ -25,7 +25,7 @@ DATA DIVISION.
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(100).
            01 Account-Username-Input PIC X(50).
-           01 Account-Password-Input PIC X(50).
+           01 Account-Password-Input PIC X(12).
            01 User-Choice PIC X(100).
            01 Username-Exists PIC X VALUE 'N'.
            01 Password-Valid PIC X VALUE 'N'.
@@ -35,6 +35,7 @@ DATA DIVISION.
            01 Upper-Flag PIC 9 VALUE 0.
            01 Digit-Flag PIC 9 VALUE 0.
            01 Special-Flag PIC 9 VALUE 0.
+           01 Is-Logged-In PIC X VALUE 'N'.
 
 PROCEDURE DIVISION.
        OPEN OUTPUT OutputFile
@@ -86,7 +87,7 @@ Handle-User-Choice SECTION.
                PERFORM Write-And-Display
        END-EVALUATE.
 
-Create-Account-Workflow SECTION.
+Ask-For-Login SECTION.
        MOVE "Please enter your username: " TO Message-Text
        PERFORM Write-And-Display
        READ InputFile INTO Account-Username-Input
@@ -106,13 +107,41 @@ Create-Account-Workflow SECTION.
                EXIT SECTION
                STOP RUN
        END-READ
+       EXIT.
 
+Create-Account-Workflow SECTION.
+       PERFORM Ask-For-Login
        PERFORM Create-Account.
        EXIT.
 
 Log-In-Workflow SECTION.
-       MOVE "Log In functionality is not implemented yet." TO Message-Text
-       PERFORM Write-And-Display
+       PERFORM Ask-For-Login
+       PERFORM Log-In.
+       EXIT.
+
+Log-In SECTION.
+       OPEN INPUT AccountsFile
+       MOVE 'N' TO Username-Exists
+       PERFORM UNTIL Is-Logged-In = 'Y'
+           READ AccountsFile
+                AT END
+                   MOVE "Invalid username or password." TO Message-Text
+                   PERFORM Write-And-Display
+                   CLOSE AccountsFile
+                   EXIT PERFORM
+
+               NOT AT END
+                   IF Account-Username = Account-Username-Input
+                       IF Account-Password = Account-Password-Input
+                           MOVE 'Y' TO Is-Logged-In
+                           MOVE "You have successfully logged in!" TO Message-Text
+                           PERFORM Write-And-Display
+                           CLOSE AccountsFile
+                           EXIT PERFORM
+                       END-IF
+                   END-IF
+           END-READ
+       END-PERFORM.
        EXIT.
 
 Create-Account SECTION.
@@ -122,13 +151,20 @@ Create-Account SECTION.
            READ AccountsFile
                AT END
                    CLOSE AccountsFile
-                   PERFORM Verify-Password
-                   IF Password-Valid = 'Y'
-                       PERFORM Write-Account
-                       MOVE "Account created successfully!" TO Message-Text
-                       PERFORM Write-And-Display
-                       EXIT PERFORM
+                   IF FUNCTION LENGTH(FUNCTION TRIM(Account-Username-Input)) > 0 AND FUNCTION LENGTH(FUNCTION TRIM(Account-Username-Input)) < 50
+                       PERFORM Verify-Password
+                       IF Password-Valid = 'Y'
+                           PERFORM Write-Account
+                           MOVE 'Y' TO Is-Logged-In
+                           MOVE "Account created successfully!" TO Message-Text
+                           PERFORM Write-And-Display
+                           EXIT PERFORM
+                       ELSE
+                           EXIT SECTION
+                       END-IF
                    ELSE
+                       MOVE "Invalid username length. Try again." TO Message-Text
+                       PERFORM Write-And-Display
                        EXIT SECTION
                    END-IF
 
