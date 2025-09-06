@@ -136,7 +136,7 @@ Ask-For-Login SECTION.
            AT END
                MOVE "No username input found." TO Message-Text
                PERFORM Write-And-Display
-               EXIT SECTION
+               CLOSE InputFile
                STOP RUN
        END-READ
 
@@ -146,7 +146,7 @@ Ask-For-Login SECTION.
            AT END
                MOVE "No password input found." TO Message-Text
                PERFORM Write-And-Display
-               EXIT SECTION
+               CLOSE InputFile
                STOP RUN
        END-READ
        EXIT.
