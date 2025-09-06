@@ -53,6 +53,12 @@ PROCEDURE DIVISION.
        END-READ
 
        PERFORM Handle-Auth
+
+       IF Is-Logged-In = 'N'
+           CLOSE InputFile
+           STOP RUN
+       END-IF
+
        PERFORM Show-Main-Menu
 
        READ InputFile INTO User-Input
