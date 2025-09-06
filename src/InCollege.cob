@@ -1,0 +1,192 @@
+*> This is free-form
+IDENTIFICATION DIVISION.
+PROGRAM-ID. InCollege.
+ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+           FILE-CONTROL.
+               SELECT InputFile ASSIGN TO "/workspace/src/InCollege-Input.txt"
+                   ORGANIZATION IS LINE SEQUENTIAL.
+               SELECT OutputFile ASSIGN TO "/workspace/src/InCollege-Output.txt"
+                   ORGANIZATION IS LINE SEQUENTIAL.
+               SELECT AccountsFile ASSIGN TO "/workspace/src/Accounts.txt"
+                   ORGANIZATION IS LINE SEQUENTIAL.
+
+DATA DIVISION.
+       FILE SECTION.
+           FD InputFile.
+               01 User-Input PIC X(100).
+           FD OutputFile.
+               01 Output-Line PIC X(100).
+           FD AccountsFile.
+               01 Account-Record.
+                   05 Account-Username PIC X(50).
+                   05 Account-Password PIC X(12).
+
+       WORKING-STORAGE SECTION.
+           01 Message-Text PIC X(100).
+           01 Account-Username-Input PIC X(50).
+           01 Account-Password-Input PIC X(50).
+           01 User-Choice PIC X(100).
+           01 Username-Exists PIC X VALUE 'N'.
+           01 Password-Valid PIC X VALUE 'N'.
+           01 PW-Length PIC 9(2).
+           01 IDX PIC 9(2).
+           01 CHAR-ORD PIC 9(3).
+           01 Upper-Flag PIC 9 VALUE 0.
+           01 Digit-Flag PIC 9 VALUE 0.
+           01 Special-Flag PIC 9 VALUE 0.
+
+PROCEDURE DIVISION.
+       OPEN OUTPUT OutputFile
+       CLOSE OutputFile
+       OPEN INPUT InputFile
+
+       PERFORM Show-Menu.
+
+       READ InputFile INTO User-Input
+           AT END
+               MOVE "No input found." TO Message-Text
+               PERFORM Write-And-Display
+               CLOSE InputFile
+               STOP RUN
+       END-READ
+
+       PERFORM Handle-User-Choice.
+
+       CLOSE InputFile
+       STOP RUN.
+
+Write-And-Display SECTION.
+       OPEN EXTEND OutputFile
+       MOVE Message-Text TO Output-Line.
+       DISPLAY Output-Line
+       WRITE Output-Line
+       CLOSE OutputFile
+       EXIT.
+
+Show-Menu SECTION.
+       MOVE "Welcome to InCollege!" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "1. Log In" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "2. Create New Account" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "Enter your choice (1 or 2): " TO Message-Text
+       PERFORM Write-And-Display
+       EXIT.
+
+Handle-User-Choice SECTION.
+       EVALUATE User-Input
+           WHEN "1"
+               PERFORM Log-In-Workflow
+           WHEN "2"
+               PERFORM Create-Account-Workflow
+           WHEN OTHER
+               MOVE "Invalid choice." TO Message-Text
+               PERFORM Write-And-Display
+       END-EVALUATE.
+
+Create-Account-Workflow SECTION.
+       MOVE "Please enter your username: " TO Message-Text
+       PERFORM Write-And-Display
+       READ InputFile INTO Account-Username-Input
+           AT END
+               MOVE "No username input found." TO Message-Text
+               PERFORM Write-And-Display
+               EXIT SECTION
+               STOP RUN
+       END-READ
+
+       MOVE "Please enter your password: " TO Message-Text
+       PERFORM Write-And-Display
+       READ InputFile INTO Account-Password-Input
+           AT END
+               MOVE "No password input found." TO Message-Text
+               PERFORM Write-And-Display
+               EXIT SECTION
+               STOP RUN
+       END-READ
+
+       PERFORM Create-Account.
+       EXIT.
+
+Log-In-Workflow SECTION.
+       MOVE "Log In functionality is not implemented yet." TO Message-Text
+       PERFORM Write-And-Display
+       EXIT.
+
+Create-Account SECTION.
+       OPEN INPUT AccountsFile
+       MOVE 'N' TO Username-Exists
+       PERFORM UNTIL Username-Exists = 'Y'
+           READ AccountsFile
+               AT END
+                   CLOSE AccountsFile
+                   PERFORM Verify-Password
+                   IF Password-Valid = 'Y'
+                       PERFORM Write-Account
+                       MOVE "Account created successfully!" TO Message-Text
+                       PERFORM Write-And-Display
+                       EXIT PERFORM
+                   ELSE
+                       EXIT SECTION
+                   END-IF
+
+               NOT AT END
+                   IF Account-Username = Account-Username-Input
+                        MOVE "Username already exists. Try again." TO Message-Text
+                        PERFORM Write-And-Display
+                        MOVE 'Y' TO Username-Exists
+                        CLOSE AccountsFile
+                   END-IF
+           END-READ
+       END-PERFORM.
+       EXIT.
+
+Verify-Password SECTION.
+       MOVE FUNCTION LENGTH(FUNCTION TRIM(Account-Password-Input)) TO PW-Length
+       MOVE 0 TO Upper-Flag Digit-Flag Special-Flag
+
+       IF PW-Length < 8 OR PW-Length > 12
+           MOVE "Password must be 8-12 characters." TO Message-Text
+           PERFORM Write-And-Display
+           MOVE 'N' TO Password-Valid
+           EXIT SECTION
+       END-IF
+
+       *> check for character types
+       PERFORM VARYING IDX FROM 1 BY 1 UNTIL IDX > PW-Length
+           MOVE FUNCTION ORD(Account-Password-Input(IDX:1)) TO CHAR-ORD
+           IF CHAR-ORD >= 65 AND CHAR-ORD <= 90
+             MOVE 1 TO Upper-Flag
+           ELSE IF CHAR-ORD >= 48 AND CHAR-ORD <= 57
+             MOVE 1 TO Digit-Flag
+           ELSE IF (CHAR-ORD >= 33 AND CHAR-ORD <= 47) OR
+                  (CHAR-ORD >= 58 AND CHAR-ORD <= 64) OR
+                  (CHAR-ORD >= 91 AND CHAR-ORD <= 96) OR
+                  (CHAR-ORD >= 123 AND CHAR-ORD <= 126)
+             MOVE 1 TO Special-Flag
+           END-IF
+       END-PERFORM.
+
+       IF Upper-Flag = 1 AND Digit-Flag = 1 AND Special-Flag = 1
+           MOVE 'Y' TO Password-Valid
+           EXIT SECTION
+       ELSE
+           MOVE "Password must include at least one uppercase letter, one digit, and one special character." TO Message-Text
+           PERFORM Write-And-Display
+           MOVE 'N' TO Password-Valid
+           EXIT SECTION
+       END-IF
+
+       MOVE 'Y' TO Password-Valid
+       EXIT.
+
+Write-Account SECTION.
+       OPEN EXTEND AccountsFile
+       MOVE Account-Username-Input TO Account-Username
+       MOVE Account-Password-Input TO Account-Password
+       WRITE Account-Record
+       CLOSE AccountsFile
+       EXIT.
+
