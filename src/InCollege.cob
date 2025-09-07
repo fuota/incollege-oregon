@@ -176,8 +176,11 @@ Create-Account-Workflow SECTION.
            EXIT SECTION
        END-IF
 
-       PERFORM Ask-For-Login
-       PERFORM Create-Account.
+       MOVE 'N' TO Is-Logged-In
+       PERFORM UNTIL Is-Logged-In = 'Y'
+           PERFORM Ask-For-Login
+           PERFORM Create-Account
+       END-PERFORM
        EXIT.
 
 Log-In-Workflow SECTION.
@@ -276,15 +279,10 @@ Verify-Password SECTION.
 
        IF Upper-Flag = 1 AND Digit-Flag = 1 AND Special-Flag = 1
            MOVE 'Y' TO Password-Valid
-           DISPLAY "CHAR-ORD: " CHAR-ORD
            EXIT SECTION
        ELSE
            MOVE "Password must include at least one uppercase letter, one digit, and one special character." TO Message-Text
            PERFORM Write-And-Display
-           DISPLAY "CHAR-ORD: " CHAR-ORD
-           DISPLAY "Upper-Flag: " Upper-Flag
-           DISPLAY "Digit-Flag: " Digit-Flag
-           DISPLAY "Special-Flag: " Special-Flag
            MOVE 'N' TO Password-Valid
            EXIT SECTION
        END-IF
