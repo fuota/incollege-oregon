@@ -1,0 +1,61 @@
+* Try invalid choice at pre-login
+3
+
+
+
+* Create Account 1 - valid (8 chars password, meets all rules)
+2
+UserA
+Passw!1A
+1
+
+
+
+* Create Account 2 - valid (12 chars password, upper+digit+special)
+2
+UserD
+PassWord12!@
+2
+
+
+
+* Create Account 3- valid
+2
+UserE
+GoodPass1!
+2
+
+
+*Creat Account 4- Valid
+2
+UserF
+FinalPass1!
+2
+
+*Creat Account 5- Valid
+2
+UserG
+FinalPass1!
+3
+
+* Create Account - invalid (no special character)
+2
+UserF1
+FinalPass1
+
+* Create Account - invalid (too long character)
+2
+User1
+FinalPass1!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+
+* Create Account - invalid (too short, 7 chars)
+2
+UserB
+Sho!1aB
+
+
+* Create Account - invalid (no special character)
+2
+UserC
+Password1A
