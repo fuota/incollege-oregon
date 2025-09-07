@@ -59,3 +59,22 @@ Sho!1aB
 2
 UserC
 Password1A
+
+* Login existing account but wrong password, then retry
+1
+UserA
+WrongPass1!
+1
+UserA
+Passw!1A
+2
+
+
+* Create account, fail password requirement, then retry
+2
+UserH
+badpass
+2
+UserH
+GoodPass2!
+3
