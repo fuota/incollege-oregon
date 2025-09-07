@@ -20,12 +20,12 @@ DATA DIVISION.
            FD AccountsFile.
                01 Account-Record.
                    05 Account-Username PIC X(50).
-                   05 Account-Password PIC X(12).
+                   05 Account-Password PIC X(50).
 
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(100).
            01 Account-Username-Input PIC X(50).
-           01 Account-Password-Input PIC X(12).
+           01 Account-Password-Input PIC X(50).
            01 User-Choice PIC X(100).
            01 Username-Exists PIC X VALUE 'N'.
            01 Password-Valid PIC X VALUE 'N'.
@@ -262,24 +262,29 @@ Verify-Password SECTION.
        *> check for character types
        PERFORM VARYING IDX FROM 1 BY 1 UNTIL IDX > PW-Length
            MOVE FUNCTION ORD(Account-Password-Input(IDX:1)) TO CHAR-ORD
-           IF CHAR-ORD >= 65 AND CHAR-ORD <= 90
-             MOVE 1 TO Upper-Flag
-           ELSE IF CHAR-ORD >= 48 AND CHAR-ORD <= 57
-             MOVE 1 TO Digit-Flag
-           ELSE IF (CHAR-ORD >= 33 AND CHAR-ORD <= 47) OR
-                  (CHAR-ORD >= 58 AND CHAR-ORD <= 64) OR
-                  (CHAR-ORD >= 91 AND CHAR-ORD <= 96) OR
-                  (CHAR-ORD >= 123 AND CHAR-ORD <= 126)
-             MOVE 1 TO Special-Flag
+           IF CHAR-ORD >= 66 AND CHAR-ORD <= 91
+               MOVE 1 TO Upper-Flag
+           ELSE IF CHAR-ORD >= 49 AND CHAR-ORD <= 58
+               MOVE 1 TO Digit-Flag
+           ELSE IF (CHAR-ORD >= 34 AND CHAR-ORD <= 48) OR
+                  (CHAR-ORD >= 59 AND CHAR-ORD <= 65) OR
+                  (CHAR-ORD >= 92 AND CHAR-ORD <= 97) OR
+                  (CHAR-ORD >= 124 AND CHAR-ORD <= 127)
+               MOVE 1 TO Special-Flag
            END-IF
        END-PERFORM.
 
        IF Upper-Flag = 1 AND Digit-Flag = 1 AND Special-Flag = 1
            MOVE 'Y' TO Password-Valid
+           DISPLAY "CHAR-ORD: " CHAR-ORD
            EXIT SECTION
        ELSE
            MOVE "Password must include at least one uppercase letter, one digit, and one special character." TO Message-Text
            PERFORM Write-And-Display
+           DISPLAY "CHAR-ORD: " CHAR-ORD
+           DISPLAY "Upper-Flag: " Upper-Flag
+           DISPLAY "Digit-Flag: " Digit-Flag
+           DISPLAY "Special-Flag: " Special-Flag
            MOVE 'N' TO Password-Valid
            EXIT SECTION
        END-IF
