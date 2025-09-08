@@ -1,0 +1,14 @@
+2
+
+Password*1
+ThisAccountUsernameIsExactly Fifty Characters Long
+Password*1
+NoCapital
+abcd1234*
+NoDigit
+OneHundred%
+NoSpecialChar
+Password22
+Uname*8chPass
+8Ch*long
+3
