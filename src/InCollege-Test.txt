@@ -26,7 +26,7 @@ alice
 
 * Create Account 1 - valid (8 chars password, meets all rules)
 2
-alice
+alices
 Abcdef1!
 3
 2
@@ -44,6 +44,7 @@ PassWord12!@
 
 
 
+
 * Create Account 3- valid
 2
 UserE
@@ -57,11 +58,6 @@ UserF
 FinalPass1!
 2
 
-*Creat Account 5- Valid
-2
-UserG
-FinalPass1!
-3
 
 *Creat Account 6- invalid ( reach the limti of 5 accounts)
 2
@@ -72,25 +68,20 @@ FinalPass1!
 
 
 * Login existing account but wrong password, then retry( but have to create the account first  to test login)
-(2
-UserA
-Passw!1A
- then do the following under)
 1
-UserA
+UserD
 WrongPass1!
+UserD
+PassWord12!@
 1
-UserA
-Passw!1A
-2
 
 
-* Create account, fail password requirement, then retry
+* Create account, fail password requirement, then retry( Please Delete the account in the Accounts.txt before testing this)
 2
 UserH
 badpass
-2
 UserH
 GoodPass2!
 3
+1
 
