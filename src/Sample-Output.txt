@@ -1,0 +1,34 @@
+-- SAMPLE_OUTPUT_WEEK1.TXT --
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+Please enter your username:
+Please enter your password:
+Account created successfully!
+Welcome, (username)
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+Enter your choice (1-3):
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+Welcome, alice
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+Enter your choice (1-3):
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+(skill) is under construction.
+--- END_OF_PROGRAM_EXECUTION ---
