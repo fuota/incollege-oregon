@@ -6,7 +6,7 @@ ENVIRONMENT DIVISION.
            FILE-CONTROL.
                SELECT InputFile ASSIGN TO "/workspace/src/InCollege-Input.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
-               SELECT OutputFile ASSIGN TO "/workspace/src/InCollege-Output.txt"
+               SELECT OutputFile ASSIGN TO "/workspace/src/Keep-Output.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
                SELECT AccountsFile ASSIGN TO "/workspace/src/Accounts.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
