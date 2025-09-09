@@ -1,0 +1,5 @@
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+Invalid choice.

@@ -1,3 +1,24 @@
+
+* Create Account - invalid (no special character)(too long character)(too short, 7 chars)(no special character)
+2
+alice
+short
+alice
+alllower1!
+alice
+alllower1
+alice
+NoDigit!!
+User1
+FinalPass1!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+UserC
+Password1A
+alice
+12Chars*Long
+3
+1
+
+
 * Try invalid choice at pre-login
 3
 
@@ -5,9 +26,13 @@
 
 * Create Account 1 - valid (8 chars password, meets all rules)
 2
-UserA
-Passw!1A
+alice
+Abcdef1!
+3
+2
+6
 1
+
 
 
 
@@ -38,29 +63,19 @@ UserG
 FinalPass1!
 3
 
-* Create Account - invalid (no special character)
+*Creat Account 6- invalid ( reach the limti of 5 accounts)
 2
-UserF1
-FinalPass1
-
-* Create Account - invalid (too long character)
+UserS
+FinalPass1!
 2
-User1
-FinalPass1!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
-* Create Account - invalid (too short, 7 chars)
-2
-UserB
-Sho!1aB
 
-
-* Create Account - invalid (no special character)
-2
-UserC
-Password1A
-
-* Login existing account but wrong password, then retry
+* Login existing account but wrong password, then retry( but have to create the account first  to test login)
+(2
+UserA
+Passw!1A
+ then do the following under)
 1
 UserA
 WrongPass1!
@@ -78,3 +93,4 @@ badpass
 UserH
 GoodPass2!
 3
+
