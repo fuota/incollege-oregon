@@ -1,4 +1,9 @@
-1
+2
 alice
-Abcdef1!
+12Chars*Long
+1
+2
+3
+6
+3
 1
