@@ -76,6 +76,8 @@ Write-And-Display SECTION.
        EXIT.
 
 Show-Login-Menu SECTION.
+       MOVE "Welcome to InCollege!" TO Message-Text
+       PERFORM Write-And-Display
        MOVE "1. Log In" TO Message-Text
        PERFORM Write-And-Display
        MOVE "2. Create New Account" TO Message-Text
