@@ -178,13 +178,13 @@ Learn-Skill-Menu SECTION.
                PERFORM Learn-Skill-Menu
            WHEN "6"
                PERFORM Show-Main-Menu
-               READ InputFile INTO User-Input
-                   AT END
-                       MOVE "No input found." TO Message-Text
-                       PERFORM Write-And-Display
-                       EXIT SECTION
-               END-READ
-               PERFORM Show-Main-Menu
+      *>         READ InputFile INTO User-Input
+      *>             AT END
+      *>                 MOVE "No input found." TO Message-Text
+      *>                 PERFORM Write-And-Display
+      *>                 EXIT SECTION
+      *>         END-READ
+      *>         PERFORM Show-Main-Menu
            WHEN OTHER
                MOVE "Invalid skill choice." TO Message-Text
                PERFORM Write-And-Display
