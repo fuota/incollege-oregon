@@ -1,1 +1,2 @@
-Uname*12chPass                                    12Chars*Long
+lucaskaspary                                      Zpassrd1!
+alice                                             Abcdef1!

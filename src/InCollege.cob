@@ -6,7 +6,7 @@ ENVIRONMENT DIVISION.
            FILE-CONTROL.
                SELECT InputFile ASSIGN TO "/workspace/src/InCollege-Test-UsePass12-UseApp.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
-               SELECT OutputFile ASSIGN TO "/workspace/src/InCollege-Output.txt"
+               SELECT OutputFile ASSIGN TO "/workspace/src/Keep-Output.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
                SELECT AccountsFile ASSIGN TO "/workspace/src/Accounts.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
@@ -59,17 +59,10 @@ PROCEDURE DIVISION.
            STOP RUN
        END-IF
 
+       STRING "Welcome, " Account-Username INTO Message-Text
+       PERFORM Write-And-Display
+
        PERFORM Show-Main-Menu
-
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No input found." TO Message-Text
-               PERFORM Write-And-Display
-               CLOSE InputFile
-               STOP RUN
-       END-READ
-
-       PERFORM Handle-Selection.
 
        CLOSE InputFile
        STOP RUN.
@@ -94,9 +87,6 @@ Show-Login-Menu SECTION.
        EXIT.
 
 Show-Main-Menu SECTION.
-       STRING "Welcome, " Account-Username INTO Message-Text
-       PERFORM Write-And-Display
-
        MOVE "1. Search for a job" TO Message-Text
        PERFORM Write-And-Display
        MOVE "2. Find someone you know" TO Message-Text
@@ -105,6 +95,30 @@ Show-Main-Menu SECTION.
        PERFORM Write-And-Display
        MOVE "Enter your choice (1-3): " TO Message-Text
        PERFORM Write-And-Display
+
+       READ InputFile INTO User-Input
+           AT END
+               MOVE "No input found." TO Message-Text
+               PERFORM Write-And-Display
+               CLOSE InputFile
+               STOP RUN
+       END-READ
+
+       EVALUATE User-Input
+           WHEN "1"
+               MOVE "Job search/internship is under construction." TO Message-Text
+               PERFORM Write-And-Display
+               PERFORM Show-Main-Menu
+           WHEN "2"
+               MOVE "Find someone you know is under construction." TO Message-Text
+               PERFORM Write-And-Display
+               PERFORM Show-Main-Menu
+           WHEN "3"
+               PERFORM Learn-Skill-Menu
+           WHEN OTHER
+               MOVE "Invalid choice." TO Message-Text
+               PERFORM Write-And-Display
+       END-EVALUATE.
        EXIT.
 
 Handle-Auth SECTION.
@@ -118,22 +132,60 @@ Handle-Auth SECTION.
                PERFORM Write-And-Display
        END-EVALUATE.
 
-Handle-Selection SECTION.
+Learn-Skill-Menu SECTION.
+       MOVE "1. AWS" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "2. Docker" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "3. COBOL" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "4. Azure" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "5. GCP" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "6. Return to main menu" TO Message-Text
+       PERFORM Write-And-Display
+       MOVE "Enter your choice (1-6): " TO Message-Text
+       PERFORM Write-And-Display
+
+       READ InputFile INTO User-Input
+           AT END
+               MOVE "No skill input found." TO Message-Text
+               PERFORM Write-And-Display
+               EXIT SECTION
+       END-READ
+
        EVALUATE User-Input
            WHEN "1"
-               MOVE "Job search/internship is under construction." TO Message-Text
+               MOVE "AWS is under construction." TO Message-Text
                PERFORM Write-And-Display
            WHEN "2"
-               MOVE "Find someone you know is under construction." TO Message-Text
+               MOVE "Docker is under construction." TO Message-Text
                PERFORM Write-And-Display
            WHEN "3"
-               MOVE "Learn a new skill is under construction." TO Message-Text
+               MOVE "COBOL is under construction." TO Message-Text
                PERFORM Write-And-Display
+           WHEN "4"
+               MOVE "Azure is under construction." TO Message-Text
+               PERFORM Write-And-Display
+           WHEN "5"
+               MOVE "GCP is under construction." TO Message-Text
+               PERFORM Write-And-Display
+           WHEN "6"
+               PERFORM Show-Main-Menu
+               READ InputFile INTO User-Input
+                   AT END
+                       MOVE "No input found." TO Message-Text
+                       PERFORM Write-And-Display
+                       EXIT SECTION
+               END-READ
+               PERFORM Show-Main-Menu
            WHEN OTHER
-               MOVE "Invalid choice." TO Message-Text
+               MOVE "Invalid skill choice." TO Message-Text
                PERFORM Write-And-Display
        END-EVALUATE.
        EXIT.
+
 
 Ask-For-Login SECTION.
        MOVE "Please enter your username: " TO Message-Text
