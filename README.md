@@ -42,12 +42,13 @@ Skill menu ( If selected 3, the skill menu pop up : 1 to 5 is skills, 6 is for r
 
 
 Example Input: 
--2
--alice
--Abcdef1!
--3
--2
--6
--1
+- 2 
+- alice
+- Abcdef1!
+- 3 
+- 2
+- 6
+- 1
+
 
 
