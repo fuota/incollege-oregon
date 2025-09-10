@@ -256,6 +256,7 @@ Create-Account-Workflow SECTION.
             AT END
                 MOVE "No input found." TO Message-Text
                 PERFORM Write-And-Display
+                CLOSE InputFile
                 STOP RUN
         END-READ
         PERFORM Handle-Auth
