@@ -3,6 +3,11 @@
     1. Log In
     2. Create New Account
     Enter your choice (1 or 2):
+    Invalid choice. Please choose 1-2.
+    Welcome to InCollege!
+    1. Log In
+    2. Create New Account
+    Enter your choice (1 or 2):
     Please enter your username:
     Please enter your password:
     Password must be 8-12 characters.
@@ -24,7 +29,7 @@
     Please enter your username:
     Please enter your password:
     Account created successfully!
-    Welcome, alice
+    Welcome, alice1
     1. Search for a job
     2. Find someone you know
     3. Learn a new skill
@@ -47,6 +52,14 @@
     6. Return to main menu
     Enter your choice (1-6):
     AWS is under construction.
+    1. AWS
+    2. Docker
+    3. COBOL
+    4. Azure
+    5. GCP
+    6. Return to main menu
+    Enter your choice (1-6):
+    No skill input found.
 
 
 2. Try invalid choice at pre-login
@@ -54,7 +67,20 @@
     1. Log In
     2. Create New Account
     Enter your choice (1 or 2):
-    Invalid choice.
+    Invalid choice. Please choose 1-2.
+    Welcome to InCollege!
+    1. Log In
+    2. Create New Account
+    Enter your choice (1 or 2):
+    Please enter your username:
+    Please enter your password:
+    You have successfully logged in!
+    Welcome, alice1
+    1. Search for a job
+    2. Find someone you know
+    3. Learn a new skill
+    Enter your choice (1-3):
+    No input found.
 
 
 
@@ -67,7 +93,7 @@
     Please enter your username:
     Please enter your password:
     Account created successfully!
-    Welcome, alices
+    Welcome, USERA
     1. Search for a job
     2. Find someone you know
     3. Learn a new skill
@@ -80,6 +106,24 @@
     6. Return to main menu
     Enter your choice (1-6):
     Docker is under construction.
+    1. AWS
+    2. Docker
+    3. COBOL
+    4. Azure
+    5. GCP
+    6. Return to main menu
+    Enter your choice (1-6):
+    1. Search for a job
+    2. Find someone you know
+    3. Learn a new skill
+    Enter your choice (1-3):
+    Job search/internship is under construction.
+    1. Search for a job
+    2. Find someone you know
+    3. Learn a new skill
+    Enter your choice (1-3):
+    No input found.
+
 
 
 4. Create Account 2 - valid (12 chars password, upper+digit+special)
@@ -157,11 +201,33 @@
 7. Create Account 6- invalid ( reach the limit of 5 accounts)
 
     Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    All permitted accounts have been created, please come back later.
-
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+All permitted accounts have been created, please come back later.
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+Invalid choice. Please choose 1-2.
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+Invalid choice. Please choose 1-2.
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+Please enter your username:
+Please enter your password:
+You have successfully logged in!
+Welcome, alice1
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+Enter your choice (1-3):
+No input found.
 
 
 8. Login existing account but wrong password, then retry( but have to create the account first  to test login)
