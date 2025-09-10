@@ -132,6 +132,17 @@ Handle-Auth SECTION.
                MOVE "Invalid choice. Please choose 1-2." TO Message-Text
                PERFORM Write-And-Display
                PERFORM Show-Login-Menu
+
+               READ InputFile INTO User-Input
+                   AT END
+                       MOVE "No input found." TO Message-Text
+                       PERFORM Write-And-Display
+                       CLOSE InputFile
+                       STOP RUN
+               END-READ
+
+               PERFORM Handle-Auth
+
        END-EVALUATE.
 
 Learn-Skill-Menu SECTION.
