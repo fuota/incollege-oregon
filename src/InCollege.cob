@@ -116,8 +116,9 @@ Show-Main-Menu SECTION.
            WHEN "3"
                PERFORM Learn-Skill-Menu
            WHEN OTHER
-               MOVE "Invalid choice." TO Message-Text
+               MOVE "Invalid choice. Please choose from 1-3." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Show-Main-Menu
        END-EVALUATE.
        EXIT.
 
@@ -128,8 +129,9 @@ Handle-Auth SECTION.
            WHEN "2"
                PERFORM Create-Account-Workflow
            WHEN OTHER
-               MOVE "Invalid choice." TO Message-Text
+               MOVE "Invalid choice. Please choose 1-2." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Show-Login-Menu
        END-EVALUATE.
 
 Learn-Skill-Menu SECTION.
@@ -186,7 +188,7 @@ Learn-Skill-Menu SECTION.
       *>         END-READ
       *>         PERFORM Show-Main-Menu
            WHEN OTHER
-               MOVE "Invalid skill choice." TO Message-Text
+               MOVE "Invalid skill choice. Please choose from 1-6." TO Message-Text
                PERFORM Write-And-Display
                PERFORM Learn-Skill-Menu
        END-EVALUATE.
