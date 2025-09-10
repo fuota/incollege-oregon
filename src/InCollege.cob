@@ -4,7 +4,7 @@ PROGRAM-ID. InCollege.
 ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
            FILE-CONTROL.
-               SELECT InputFile ASSIGN TO "/workspace/src/InCollege-Test-UsePass12-UseApp.txt"
+               SELECT InputFile ASSIGN TO "/workspace/src/InCollege-Input.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
                SELECT OutputFile ASSIGN TO "/workspace/src/Keep-Output.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
