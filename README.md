@@ -31,14 +31,14 @@ For  running the program : ./bin/InCollege
 
 ## ⚙️Preparing Input Files
 
-Inputs are read line-by-line from a InCollege-Input.txt file
-Each line represents what a user would normally type at the console:
+- Inputs are read line-by-line from a InCollege-Input.txt file
+- Each line represents what a user would normally type at the console:
 
-Menu selections (1, 2 ), ( 1 for Login, 2 for Creating an account)
-Usernames, ( enter a username)
-Passwords. (enterpasswords)
-Post Login Menu (1 , 2, 3) ( 1 for search for a job, 2 for find someone that they know, or  3 learn a new skill.)
-Skill menu ( If selected 3, the skill menu pop up : 1 to 5 is skills, 6 is for return to the post login menu).
+- Menu selections (1, 2 ), ( 1 for Login, 2 for Creating an account)
+- Usernames, ( enter a username)
+- Passwords. (enterpasswords)
+- Post Login Menu (1 , 2, 3) ( 1 for search for a job, 2 for find someone that they know, or  3 learn a new skill.)
+- Skill menu ( If selected 3, the skill menu pop up : 1 to 5 is skills, 6 is for return to the post login menu).
 
 
 Example Input: 
