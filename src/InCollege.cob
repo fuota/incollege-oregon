@@ -159,18 +159,23 @@ Learn-Skill-Menu SECTION.
            WHEN "1"
                MOVE "AWS is under construction." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
            WHEN "2"
                MOVE "Docker is under construction." TO Message-Text
                PERFORM Write-And-Display
+                PERFORM Learn-Skill-Menu
            WHEN "3"
                MOVE "COBOL is under construction." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
            WHEN "4"
                MOVE "Azure is under construction." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
            WHEN "5"
                MOVE "GCP is under construction." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
            WHEN "6"
                PERFORM Show-Main-Menu
                READ InputFile INTO User-Input
@@ -183,6 +188,7 @@ Learn-Skill-Menu SECTION.
            WHEN OTHER
                MOVE "Invalid skill choice." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
        END-EVALUATE.
        EXIT.
 
