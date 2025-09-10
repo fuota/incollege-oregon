@@ -26,7 +26,7 @@ For testing:
 ## ⚙️ How to Compile and Run
 
 From the `src/InCollege.cob` file, Press Ctrl Shift B, then open the terminal.
-For  running the program : ./bin/InCollege
+For  running the program : ./bin/InCollege.cob
 
 
 ## ⚙️Preparing Input Files
