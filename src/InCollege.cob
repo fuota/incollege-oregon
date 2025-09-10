@@ -108,6 +108,7 @@ Show-Main-Menu SECTION.
            WHEN "1"
                MOVE "Job search/internship is under construction." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Show-Main-Menu
            WHEN "2"
                MOVE "Find someone you know is under construction." TO Message-Text
                PERFORM Write-And-Display
