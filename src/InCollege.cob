@@ -59,17 +59,10 @@ PROCEDURE DIVISION.
            STOP RUN
        END-IF
 
+       STRING "Welcome, " Account-Username INTO Message-Text
+       PERFORM Write-And-Display
+
        PERFORM Show-Main-Menu
-
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No input found." TO Message-Text
-               PERFORM Write-And-Display
-               CLOSE InputFile
-               STOP RUN
-       END-READ
-
-       PERFORM Handle-Selection.
 
        CLOSE InputFile
        STOP RUN.
@@ -83,8 +76,6 @@ Write-And-Display SECTION.
        EXIT.
 
 Show-Login-Menu SECTION.
-       MOVE "Welcome to InCollege!" TO Message-Text
-       PERFORM Write-And-Display
        MOVE "1. Log In" TO Message-Text
        PERFORM Write-And-Display
        MOVE "2. Create New Account" TO Message-Text
@@ -94,9 +85,6 @@ Show-Login-Menu SECTION.
        EXIT.
 
 Show-Main-Menu SECTION.
-       STRING "Welcome, " Account-Username INTO Message-Text
-       PERFORM Write-And-Display
-
        MOVE "1. Search for a job" TO Message-Text
        PERFORM Write-And-Display
        MOVE "2. Find someone you know" TO Message-Text
@@ -105,6 +93,29 @@ Show-Main-Menu SECTION.
        PERFORM Write-And-Display
        MOVE "Enter your choice (1-3): " TO Message-Text
        PERFORM Write-And-Display
+
+       READ InputFile INTO User-Input
+           AT END
+               MOVE "No input found." TO Message-Text
+               PERFORM Write-And-Display
+               CLOSE InputFile
+               STOP RUN
+       END-READ
+
+       EVALUATE User-Input
+           WHEN "1"
+               MOVE "Job search/internship is under construction." TO Message-Text
+               PERFORM Write-And-Display
+           WHEN "2"
+               MOVE "Find someone you know is under construction." TO Message-Text
+               PERFORM Write-And-Display
+               PERFORM Show-Main-Menu
+           WHEN "3"
+               PERFORM Learn-Skill-Menu
+           WHEN OTHER
+               MOVE "Invalid choice." TO Message-Text
+               PERFORM Write-And-Display
+       END-EVALUATE.
        EXIT.
 
 Handle-Auth SECTION.
@@ -117,26 +128,6 @@ Handle-Auth SECTION.
                MOVE "Invalid choice." TO Message-Text
                PERFORM Write-And-Display
        END-EVALUATE.
-
-Handle-Selection SECTION.
-       EVALUATE User-Input
-           WHEN "1"
-               MOVE "Job search/internship is under construction." TO Message-Text
-               PERFORM Write-And-Display
-           WHEN "2"
-               MOVE "Find someone you know is under construction." TO Message-Text
-               PERFORM Write-And-Display
-           WHEN "3"
-               MOVE "Learn a new skill is under ." TO Message-Text
-            *>    PERFORM Write-And-Display
-               PERFORM Learn-Skill-Menu
-           WHEN OTHER
-               MOVE "Invalid choice." TO Message-Text
-               PERFORM Write-And-Display
-       END-EVALUATE.
-       EXIT.
-
-
 
 Learn-Skill-Menu SECTION.
        MOVE "1. AWS" TO Message-Text
@@ -185,7 +176,7 @@ Learn-Skill-Menu SECTION.
                        PERFORM Write-And-Display
                        EXIT SECTION
                END-READ
-               PERFORM Handle-Selection
+               PERFORM Show-Main-Menu
            WHEN OTHER
                MOVE "Invalid skill choice." TO Message-Text
                PERFORM Write-And-Display
