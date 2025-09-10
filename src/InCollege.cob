@@ -117,6 +117,7 @@ Show-Main-Menu SECTION.
                PERFORM Learn-Skill-Menu
            WHEN OTHER
                MOVE "Invalid choice." TO Message-Text
+               PERFORM Show-Main-Menu
                PERFORM Write-And-Display
        END-EVALUATE.
        EXIT.
@@ -183,6 +184,7 @@ Learn-Skill-Menu SECTION.
            WHEN OTHER
                MOVE "Invalid skill choice." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
        END-EVALUATE.
        EXIT.
 
