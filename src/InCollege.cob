@@ -49,6 +49,7 @@ PROCEDURE DIVISION.
                MOVE "No input found." TO Message-Text
                PERFORM Write-And-Display
                CLOSE InputFile
+               CLOSE OutputFile
                STOP RUN
        END-READ
 
@@ -65,6 +66,8 @@ PROCEDURE DIVISION.
        PERFORM Show-Main-Menu
 
        CLOSE InputFile
+       CLOSE  OutputFile
+       CLOSE  AccountsFile
        STOP RUN.
 
 Write-And-Display SECTION.
@@ -229,30 +232,43 @@ Ask-For-Login SECTION.
        EXIT.
 
 Create-Account-Workflow SECTION.
-       OPEN INPUT AccountsFile
-       MOVE 0 TO IDX
-       PERFORM UNTIL IDX >= 5
-           READ AccountsFile
-               AT END
-                   EXIT PERFORM
-               NOT AT END
-                   ADD 1 TO IDX
-           END-READ
-       END-PERFORM
-       CLOSE AccountsFile
+    *> Count how many accounts exist
+    OPEN INPUT AccountsFile
+    MOVE 0 TO IDX
+    PERFORM UNTIL IDX >= 5
+        READ AccountsFile
+            AT END
+                EXIT PERFORM
+            NOT AT END
+                ADD 1 TO IDX
+        END-READ
+    END-PERFORM
+    CLOSE AccountsFile
 
-       IF IDX >= 5
-           MOVE "All permitted accounts have been created, please come back later." TO Message-Text
-           PERFORM Write-And-Display
-           EXIT SECTION
-       END-IF
+    *> If already 5 accounts, show message and return to login menu
+    IF IDX >= 5
+        MOVE "All permitted accounts have been created, please come back later."
+            TO Message-Text
+        PERFORM Write-And-Display
 
-       MOVE 'N' TO Is-Logged-In
-       PERFORM UNTIL Is-Logged-In = 'Y'
-           PERFORM Ask-For-Login
-           PERFORM Create-Account
-       END-PERFORM
-       EXIT.
+        PERFORM Show-Login-Menu
+        READ InputFile INTO User-Input
+            AT END
+                MOVE "No input found." TO Message-Text
+                PERFORM Write-And-Display
+                STOP RUN
+        END-READ
+        PERFORM Handle-Auth
+        EXIT SECTION
+    END-IF
+
+    *> Otherwise, proceed to ask for new username/password
+    MOVE 'N' TO Is-Logged-In
+    PERFORM UNTIL Is-Logged-In = 'Y'
+        PERFORM Ask-For-Login     *> (better: Ask-For-New-Account)
+        PERFORM Create-Account
+    END-PERFORM
+    EXIT.
 
 Log-In-Workflow SECTION.
        MOVE 'N' TO Is-Logged-In
