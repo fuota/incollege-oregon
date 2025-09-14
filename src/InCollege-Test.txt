@@ -1,18 +1,19 @@
 * Create Account - invalid (no special character)(too long character)(too short, 7 chars)(no special character)
+3
 2
-alice
+alice1
 short
-alice
+alice1
 alllower1!
-alice
+alice1
 alllower1
-alice
+alice1
 NoDigit!!
-User1
+alice1
 FinalPass1!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-UserC
+alice1
 Password1A
-alice
+alice1
 12Chars*Long
 1
 2
@@ -22,12 +23,16 @@ alice
 
 * Try invalid choice at pre-login
 3
+1
+alice1
+12Chars*Long
+
 
 
 
 * Create Account 1 - valid (8 chars password, meets all rules)
 2
-alices
+USERA
 Abcdef1!
 3
 2
@@ -64,7 +69,10 @@ FinalPass1!
 2
 UserS
 FinalPass1!
-2
+1
+alice1
+12Chars*Long
+
 
 
 
