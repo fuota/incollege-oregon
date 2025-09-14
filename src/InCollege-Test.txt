@@ -29,6 +29,7 @@ alice1
 
 
 
+
 * Create Account 1 - valid (8 chars password, meets all rules)
 2
 USERA
@@ -71,6 +72,7 @@ FinalPass1!
 1
 alice1
 12Chars*Long
+
 
 
 
