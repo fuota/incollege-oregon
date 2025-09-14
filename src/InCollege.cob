@@ -49,6 +49,7 @@ PROCEDURE DIVISION.
                MOVE "No input found." TO Message-Text
                PERFORM Write-And-Display
                CLOSE InputFile
+               CLOSE OutputFile
                STOP RUN
        END-READ
 
@@ -65,6 +66,8 @@ PROCEDURE DIVISION.
        PERFORM Show-Main-Menu
 
        CLOSE InputFile
+       CLOSE  OutputFile
+       CLOSE  AccountsFile
        STOP RUN.
 
 Write-And-Display SECTION.
@@ -116,9 +119,9 @@ Show-Main-Menu SECTION.
            WHEN "3"
                PERFORM Learn-Skill-Menu
            WHEN OTHER
-               MOVE "Invalid choice." TO Message-Text
-               PERFORM Show-Main-Menu
+               MOVE "Invalid choice. Please choose from 1-3." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Show-Main-Menu
        END-EVALUATE.
        EXIT.
 
@@ -129,8 +132,20 @@ Handle-Auth SECTION.
            WHEN "2"
                PERFORM Create-Account-Workflow
            WHEN OTHER
-               MOVE "Invalid choice." TO Message-Text
+               MOVE "Invalid choice. Please choose 1-2." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Show-Login-Menu
+
+               READ InputFile INTO User-Input
+                   AT END
+                       MOVE "No input found." TO Message-Text
+                       PERFORM Write-And-Display
+                       CLOSE InputFile
+                       STOP RUN
+               END-READ
+
+               PERFORM Handle-Auth
+
        END-EVALUATE.
 
 Learn-Skill-Menu SECTION.
@@ -160,29 +175,34 @@ Learn-Skill-Menu SECTION.
            WHEN "1"
                MOVE "AWS is under construction." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
            WHEN "2"
                MOVE "Docker is under construction." TO Message-Text
                PERFORM Write-And-Display
+                PERFORM Learn-Skill-Menu
            WHEN "3"
                MOVE "COBOL is under construction." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
            WHEN "4"
                MOVE "Azure is under construction." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
            WHEN "5"
                MOVE "GCP is under construction." TO Message-Text
                PERFORM Write-And-Display
+               PERFORM Learn-Skill-Menu
            WHEN "6"
                PERFORM Show-Main-Menu
-               READ InputFile INTO User-Input
-                   AT END
-                       MOVE "No input found." TO Message-Text
-                       PERFORM Write-And-Display
-                       EXIT SECTION
-               END-READ
-               PERFORM Show-Main-Menu
+      *>         READ InputFile INTO User-Input
+      *>             AT END
+      *>                 MOVE "No input found." TO Message-Text
+      *>                 PERFORM Write-And-Display
+      *>                 EXIT SECTION
+      *>         END-READ
+      *>         PERFORM Show-Main-Menu
            WHEN OTHER
-               MOVE "Invalid skill choice." TO Message-Text
+               MOVE "Invalid skill choice. Please choose from 1-6." TO Message-Text
                PERFORM Write-And-Display
                PERFORM Learn-Skill-Menu
        END-EVALUATE.
@@ -212,30 +232,44 @@ Ask-For-Login SECTION.
        EXIT.
 
 Create-Account-Workflow SECTION.
-       OPEN INPUT AccountsFile
-       MOVE 0 TO IDX
-       PERFORM UNTIL IDX >= 5
-           READ AccountsFile
-               AT END
-                   EXIT PERFORM
-               NOT AT END
-                   ADD 1 TO IDX
-           END-READ
-       END-PERFORM
-       CLOSE AccountsFile
+    *> Count how many accounts exist
+    OPEN INPUT AccountsFile
+    MOVE 0 TO IDX
+    PERFORM UNTIL IDX >= 5
+        READ AccountsFile
+            AT END
+                EXIT PERFORM
+            NOT AT END
+                ADD 1 TO IDX
+        END-READ
+    END-PERFORM
+    CLOSE AccountsFile
 
-       IF IDX >= 5
-           MOVE "All permitted accounts have been created, please come back later." TO Message-Text
-           PERFORM Write-And-Display
-           EXIT SECTION
-       END-IF
+    *> If already 5 accounts, show message and return to login menu
+    IF IDX >= 5
+        MOVE "All permitted accounts have been created, please come back later."
+            TO Message-Text
+        PERFORM Write-And-Display
 
-       MOVE 'N' TO Is-Logged-In
-       PERFORM UNTIL Is-Logged-In = 'Y'
-           PERFORM Ask-For-Login
-           PERFORM Create-Account
-       END-PERFORM
-       EXIT.
+        PERFORM Show-Login-Menu
+        READ InputFile INTO User-Input
+            AT END
+                MOVE "No input found." TO Message-Text
+                PERFORM Write-And-Display
+                CLOSE InputFile
+                STOP RUN
+        END-READ
+        PERFORM Handle-Auth
+        EXIT SECTION
+    END-IF
+
+    *> Otherwise, proceed to ask for new username/password
+    MOVE 'N' TO Is-Logged-In
+    PERFORM UNTIL Is-Logged-In = 'Y'
+        PERFORM Ask-For-Login     *> (better: Ask-For-New-Account)
+        PERFORM Create-Account
+    END-PERFORM
+    EXIT.
 
 Log-In-Workflow SECTION.
        MOVE 'N' TO Is-Logged-In
