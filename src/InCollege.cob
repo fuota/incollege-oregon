@@ -10,6 +10,9 @@ ENVIRONMENT DIVISION.
                    ORGANIZATION IS LINE SEQUENTIAL.
                SELECT AccountsFile ASSIGN TO "/workspace/src/Accounts.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
+               SELECT ProfilesFile ASSIGN TO "/workspace/src/Profiles.txt"
+                   ORGANIZATION IS LINE SEQUENTIAL.
+
 
 DATA DIVISION.
        FILE SECTION.
@@ -21,6 +24,28 @@ DATA DIVISION.
                01 Account-Record.
                    05 Account-Username PIC X(50).
                    05 Account-Password PIC X(50).
+
+           FD ProfilesFile.
+               01 Profile-Record.
+                  05 Prof-Username                 PIC X(50).
+                  05 Prof-FirstName                PIC X(30).
+                  05 Prof-LastName                 PIC X(30).
+                  05 Prof-University               PIC X(60).
+                  05 Prof-Major                    PIC X(40).
+                  05 Prof-GradYear                 PIC 9(4).
+                  05 Prof-About                    PIC X(200).
+                  05 Prof-Exp-Count                PIC 9.
+                  05 Prof-Exp OCCURS 3 TIMES.
+                     10 Prof-Exp-Title             PIC X(40).
+                     10 Prof-Exp-Company           PIC X(40).
+                     10 Prof-Exp-Dates             PIC X(30).
+                     10 Prof-Exp-Desc              PIC X(100).
+                  05 Prof-Edu-Count                PIC 9.
+                  05 Prof-Edu OCCURS 3 TIMES.
+                     10 Prof-Edu-Degree            PIC X(40).
+                     10 Prof-Edu-University        PIC X(60).
+                     10 Prof-Edu-Years             PIC X(20).
+
 
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(100).
@@ -36,6 +61,39 @@ DATA DIVISION.
            01 Digit-Flag PIC 9 VALUE 0.
            01 Special-Flag PIC 9 VALUE 0.
            01 Is-Logged-In PIC X VALUE 'N'.
+
+           01 Current-Username            PIC X(50).  *> set after successful login
+           01 Temp-Input                   PIC X(100).
+
+            *>     * Required profile fields
+           01 WS-FirstName                 PIC X(30).
+           01 WS-LastName                  PIC X(30).
+           01 WS-University                PIC X(60).
+           01 WS-Major                     PIC X(40).
+           01 WS-GradYear-Text             PIC X(4).
+           01 WS-GradYear                  PIC 9(4).
+
+           *>     * Optional fields
+           01 WS-About                     PIC X(200).
+
+           *>     * Experience arrays
+           01 WS-Exp-Count                 PIC 9 VALUE 0.
+           01 WS-Exp-Titles     OCCURS 3 TIMES PIC X(40).
+           01 WS-Exp-Companies  OCCURS 3 TIMES PIC X(40).
+           01 WS-Exp-Dates      OCCURS 3 TIMES PIC X(30).
+           01 WS-Exp-Descs      OCCURS 3 TIMES PIC X(100).
+
+           *>     * Education arrays
+           01 WS-Edu-Count                 PIC 9 VALUE 0.
+           01 WS-Edu-Degrees    OCCURS 3 TIMES PIC X(40).
+           01 WS-Edu-Univers    OCCURS 3 TIMES PIC X(60).
+           01 WS-Edu-Years      OCCURS 3 TIMES PIC X(20).
+
+           *>     * Loop helpers
+           01 I                          PIC 9 VALUE 0.
+           01 Done-Flag                  PIC X VALUE 'N'.
+           01 All-Digits                 PIC X VALUE 'Y'.
+
 
 PROCEDURE DIVISION.
        OPEN OUTPUT OutputFile
@@ -215,6 +273,7 @@ LOG-IN-AUTHENTICATE SECTION.
                            MOVE 'Y' TO Is-Logged-In
                            MOVE "You have successfully logged in!" TO Message-Text
                            PERFORM WRITE-AND-DISPLAY
+                           MOVE Account-Username-Input TO Current-Username
                            CLOSE AccountsFile
                        ELSE
                             MOVE "Invalid password. Please try again." TO Message-Text
@@ -293,27 +352,327 @@ SHOW-MAIN-MENU SECTION.
 
        EVALUATE User-Input
            WHEN "1"
-               MOVE "CREATE/EDIT PROFILE IS CHOSEN" TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
+               PERFORM CREATE-EDIT-PROFILE
                PERFORM SHOW-MAIN-MENU
            WHEN "2"
-               MOVE "FIND SOMEONE YOU KNOW IS CHOSEN" TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
+               PERFORM VIEW-PROFILE
                PERFORM SHOW-MAIN-MENU
            WHEN "3"
                PERFORM LEARN-SKILL-MENU
-            WHEN "4"
-                MOVE "SEARCH FOR A USER IS UNDER CONSTRUCTION" TO Message-Text
-                PERFORM WRITE-AND-DISPLAY
-                PERFORM SHOW-MAIN-MENU
+           WHEN "4"
+               MOVE "Search for a user is under construction." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM SHOW-MAIN-MENU
            WHEN OTHER
                MOVE "Invalid choice. Please choose from 1-4." TO Message-Text
                PERFORM WRITE-AND-DISPLAY
                PERFORM SHOW-MAIN-MENU
        END-EVALUATE.
+
+       EXIT SECTION.
+*> PROFILE
+CREATE-EDIT-PROFILE SECTION.
+       MOVE "--- Create/Edit Profile ---" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       *> First Name (required)
+       MOVE "Enter First Name:" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-FirstName
+       IF WS-FirstName = SPACES
+           MOVE "First Name is required." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> Last Name (required)
+       MOVE "Enter Last Name:" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-LastName
+       IF WS-LastName = SPACES
+           MOVE "Last Name is required." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> University (required)
+       MOVE "Enter University/College Attended:" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-University
+       IF WS-University = SPACES
+           MOVE "University is required." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> Major (required)
+       MOVE "Enter Major:" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-Major
+       IF WS-Major = SPACES
+           MOVE "Major is required." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> Graduation Year (required, 4 digits, reasonable range)
+       MOVE "Enter Graduation Year (YYYY):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-GradYear-Text
+
+       IF FUNCTION LENGTH(WS-GradYear-Text) NOT = 4
+           MOVE "Graduation Year must be 4 digits." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       MOVE 'Y' TO All-Digits
+       PERFORM VARYING I FROM 1 BY 1 UNTIL I > 4
+           IF WS-GradYear-Text(I:1) < "0" OR WS-GradYear-Text(I:1) > "9"
+               MOVE 'N' TO All-Digits
+           END-IF
+       END-PERFORM
+       IF All-Digits NOT = 'Y'
+           MOVE "Graduation Year must be numeric." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       MOVE WS-GradYear-Text TO WS-GradYear
+       IF WS-GradYear < 1900 OR WS-GradYear > 2099
+           MOVE "Graduation Year out of range (1900-2099)." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> About Me (optional)
+       MOVE "Enter About Me (optional, max 200 chars, blank to skip):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-About
+
+       *> Experience loop (up to 3)
+       MOVE 0 TO WS-Exp-Count
+       MOVE "Add Experience (optional, max 3 entries. Enter 'DONE' to finish):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM VARYING I FROM 1 BY 1 UNTIL I > 3
+           MOVE "Experience # " TO Message-Text
+           STRING Message-Text DELIMITED BY SIZE
+                  FUNCTION NUMVAL(I) DELIMITED BY SIZE
+                  " - Title (or DONE):" DELIMITED BY SIZE
+                  INTO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM READ-NEXT-INPUT
+           IF FUNCTION UPPER-CASE(FUNCTION TRIM(User-Input)) = "DONE"
+               EXIT PERFORM
+           END-IF
+           ADD 1 TO WS-Exp-Count
+           MOVE FUNCTION TRIM(User-Input)         TO WS-Exp-Titles(I)
+
+           MOVE "Company/Organization:" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM READ-NEXT-INPUT
+           MOVE FUNCTION TRIM(User-Input)         TO WS-Exp-Companies(I)
+
+           MOVE "Dates (e.g., Summer 2024):" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM READ-NEXT-INPUT
+           MOVE FUNCTION TRIM(User-Input)         TO WS-Exp-Dates(I)
+
+           MOVE "Description (optional, blank to skip):" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM READ-NEXT-INPUT
+           MOVE FUNCTION TRIM(User-Input)         TO WS-Exp-Descs(I)
+       END-PERFORM
+
+       *> Education loop (up to 3)
+       MOVE 0 TO WS-Edu-Count
+       MOVE "Add Education (optional, max 3 entries. Enter 'DONE' to finish):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM VARYING I FROM 1 BY 1 UNTIL I > 3
+           MOVE "Education # " TO Message-Text
+           STRING Message-Text DELIMITED BY SIZE
+                  FUNCTION NUMVAL(I) DELIMITED BY SIZE
+                  " - Degree (or DONE):" DELIMITED BY SIZE
+                  INTO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM READ-NEXT-INPUT
+           IF FUNCTION UPPER-CASE(FUNCTION TRIM(User-Input)) = "DONE"
+               EXIT PERFORM
+           END-IF
+           ADD 1 TO WS-Edu-Count
+           MOVE FUNCTION TRIM(User-Input)         TO WS-Edu-Degrees(I)
+
+           MOVE "University/College:" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM READ-NEXT-INPUT
+           MOVE FUNCTION TRIM(User-Input)         TO WS-Edu-Univers(I)
+
+           MOVE "Years Attended (e.g., 2023-2025):" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM READ-NEXT-INPUT
+           MOVE FUNCTION TRIM(User-Input)         TO WS-Edu-Years(I)
+       END-PERFORM
+
+       PERFORM SAVE-PROFILE
+       MOVE "Profile saved successfully!" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       EXIT SECTION.
+
+SAVE-PROFILE SECTION.
+       OPEN EXTEND ProfilesFile
+
+       MOVE Current-Username  TO Prof-Username
+       MOVE WS-FirstName      TO Prof-FirstName
+       MOVE WS-LastName       TO Prof-LastName
+       MOVE WS-University     TO Prof-University
+       MOVE WS-Major          TO Prof-Major
+       MOVE WS-GradYear       TO Prof-GradYear
+       MOVE WS-About          TO Prof-About
+
+       MOVE WS-Exp-Count      TO Prof-Exp-Count
+       PERFORM VARYING I FROM 1 BY 1 UNTIL I > 3
+           IF I <= WS-Exp-Count
+               MOVE WS-Exp-Titles(I)    TO Prof-Exp(I)-Prof-Exp-Title
+               MOVE WS-Exp-Companies(I) TO Prof-Exp(I)-Prof-Exp-Company
+               MOVE WS-Exp-Dates(I)     TO Prof-Exp(I)-Prof-Exp-Dates
+               MOVE WS-Exp-Descs(I)     TO Prof-Exp(I)-Prof-Exp-Desc
+           ELSE
+               MOVE SPACES TO Prof-Exp(I)-Prof-Exp-Title
+               MOVE SPACES TO Prof-Exp(I)-Prof-Exp-Company
+               MOVE SPACES TO Prof-Exp(I)-Prof-Exp-Dates
+               MOVE SPACES TO Prof-Exp(I)-Prof-Exp-Desc
+           END-IF
+       END-PERFORM
+
+       MOVE WS-Edu-Count      TO Prof-Edu-Count
+       PERFORM VARYING I FROM 1 BY 1 UNTIL I > 3
+           IF I <= WS-Edu-Count
+               MOVE WS-Edu-Degrees(I)   TO Prof-Edu(I)-Prof-Edu-Degree
+               MOVE WS-Edu-Univers(I)   TO Prof-Edu(I)-Prof-Edu-University
+               MOVE WS-Edu-Years(I)     TO Prof-Edu(I)-Prof-Edu-Years
+           ELSE
+               MOVE SPACES TO Prof-Edu(I)-Prof-Edu-Degree
+               MOVE SPACES TO Prof-Edu(I)-Prof-Edu-University
+               MOVE SPACES TO Prof-Edu(I)-Prof-Edu-Years
+           END-IF
+       END-PERFORM
+
+       WRITE Profile-Record
+       CLOSE ProfilesFile
        EXIT SECTION.
 
 
+
+VIEW-PROFILE SECTION.
+       MOVE "--- Your Profile ---" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       OPEN INPUT ProfilesFile
+       MOVE 'N' TO Found-Flag
+       01 Found-Flag PIC X VALUE 'N'.
+       01 Last-Match  PIC X VALUE 'N'.  *> not really needed; we'll use Found-Flag
+
+       *> Scan entire file; remember the last record for Current-Username
+       PERFORM UNTIL 1 = 0
+           READ ProfilesFile
+               AT END
+                   EXIT PERFORM
+               NOT AT END
+                   IF Prof-Username = Current-Username
+                       MOVE 'Y' TO Found-Flag
+                       *> Keep this record in memory (Profile-Record already holds it)
+                   END-IF
+           END-READ
+       END-PERFORM
+       CLOSE ProfilesFile
+
+       IF Found-Flag NOT = 'Y'
+           MOVE "No profile found for current user." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> Display the last-matched profile currently in Profile-Record
+       MOVE "Name: " TO Message-Text
+       STRING Message-Text DELIMITED BY SIZE
+              Prof-FirstName DELIMITED BY SIZE
+              " " DELIMITED BY SIZE
+              Prof-LastName DELIMITED BY SIZE
+              INTO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       MOVE "University: " TO Message-Text
+       STRING Message-Text DELIMITED BY SIZE Prof-University DELIMITED BY SIZE INTO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       MOVE "Major: " TO Message-Text
+       STRING Message-Text DELIMITED BY SIZE Prof-Major DELIMITED BY SIZE INTO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       MOVE "Graduation Year: " TO Message-Text
+       STRING Message-Text DELIMITED BY SIZE Prof-GradYear DELIMITED BY SIZE INTO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       IF Prof-About NOT = SPACES
+           MOVE "About Me: " TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           MOVE Prof-About TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       END-IF
+
+       MOVE "Experience:" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM VARYING I FROM 1 BY 1 UNTIL I > Prof-Exp-Count
+           MOVE "  Title: " TO Message-Text
+           STRING Message-Text DELIMITED BY SIZE Prof-Exp(I)-Prof-Exp-Title DELIMITED BY SIZE INTO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+
+           MOVE "  Company: " TO Message-Text
+           STRING Message-Text DELIMITED BY SIZE Prof-Exp(I)-Prof-Exp-Company DELIMITED BY SIZE INTO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+
+           MOVE "  Dates: " TO Message-Text
+           STRING Message-Text DELIMITED BY SIZE Prof-Exp(I)-Prof-Exp-Dates DELIMITED BY SIZE INTO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+
+           IF Prof-Exp(I)-Prof-Exp-Desc NOT = SPACES
+               MOVE "  Description: " TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               MOVE Prof-Exp(I)-Prof-Exp-Desc TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+           END-IF
+       END-PERFORM
+
+       MOVE "Education:" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM VARYING I FROM 1 BY 1 UNTIL I > Prof-Edu-Count
+           MOVE "  Degree: " TO Message-Text
+           STRING Message-Text DELIMITED BY SIZE Prof-Edu(I)-Prof-Edu-Degree DELIMITED BY SIZE INTO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+
+           MOVE "  University: " TO Message-Text
+           STRING Message-Text DELIMITED BY SIZE Prof-Edu(I)-Prof-Edu-University DELIMITED BY SIZE INTO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+
+           MOVE "  Years: " TO Message-Text
+           STRING Message-Text DELIMITED BY SIZE Prof-Edu(I)-Prof-Edu-Years DELIMITED BY SIZE INTO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       END-PERFORM
+
+       MOVE "--------------------" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       EXIT SECTION.
+
+
+*> LEARN A NEW SKILL
 LEARN-SKILL-MENU SECTION.
        MOVE "1. AWS" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
@@ -367,6 +726,20 @@ LEARN-SKILL-MENU SECTION.
                PERFORM WRITE-AND-DISPLAY
                PERFORM LEARN-SKILL-MENU
        END-EVALUATE.
+       EXIT SECTION.
+
+
+
+
+*> HELPER SECTIONS
+READ-NEXT-INPUT SECTION.
+       READ InputFile INTO User-Input
+           AT END
+               MOVE "No input found." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               CLOSE InputFile
+               STOP RUN
+       END-READ
        EXIT SECTION.
 
 WRITE-AND-DISPLAY SECTION.
