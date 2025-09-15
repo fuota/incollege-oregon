@@ -42,18 +42,7 @@ PROCEDURE DIVISION.
        CLOSE OutputFile
        OPEN INPUT InputFile
 
-       PERFORM Show-Login-Menu
-
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No input found." TO Message-Text
-               PERFORM Write-And-Display
-               CLOSE InputFile
-               CLOSE OutputFile
-               STOP RUN
-       END-READ
-
-       PERFORM Handle-Auth
+       PERFORM MAIN-AUTHENTICATE
 
        IF Is-Logged-In = 'N'
            CLOSE InputFile
@@ -61,291 +50,194 @@ PROCEDURE DIVISION.
        END-IF
 
        STRING "Welcome, " Account-Username INTO Message-Text
-       PERFORM Write-And-Display
+       PERFORM WRITE-AND-DISPLAY
 
-       PERFORM Show-Main-Menu
+       PERFORM SHOW-MAIN-MENU
 
        CLOSE InputFile
-       CLOSE  OutputFile
-       CLOSE  AccountsFile
        STOP RUN.
 
-Write-And-Display SECTION.
-       OPEN EXTEND OutputFile
-       MOVE Message-Text TO Output-Line.
-       DISPLAY Output-Line
-       WRITE Output-Line
-       CLOSE OutputFile
-       EXIT.
 
-Show-Login-Menu SECTION.
+*> AUTHENTICATION
+MAIN-AUTHENTICATE SECTION.
        MOVE "Welcome to InCollege!" TO Message-Text
-       PERFORM Write-And-Display
+       PERFORM WRITE-AND-DISPLAY
        MOVE "1. Log In" TO Message-Text
-       PERFORM Write-And-Display
+       PERFORM WRITE-AND-DISPLAY
        MOVE "2. Create New Account" TO Message-Text
-       PERFORM Write-And-Display
+       PERFORM WRITE-AND-DISPLAY
        MOVE "Enter your choice (1 or 2): " TO Message-Text
-       PERFORM Write-And-Display
+       PERFORM WRITE-AND-DISPLAY
        EXIT.
-
-Show-Main-Menu SECTION.
-       MOVE "1. Search for a job" TO Message-Text
-       PERFORM Write-And-Display
-       MOVE "2. Find someone you know" TO Message-Text
-       PERFORM Write-And-Display
-       MOVE "3. Learn a new skill" TO Message-Text
-       PERFORM Write-And-Display
-       MOVE "Enter your choice (1-3): " TO Message-Text
-       PERFORM Write-And-Display
 
        READ InputFile INTO User-Input
            AT END
                MOVE "No input found." TO Message-Text
-               PERFORM Write-And-Display
+               PERFORM WRITE-AND-DISPLAY
                CLOSE InputFile
+      *>         CLOSE OutputFile
                STOP RUN
        END-READ
 
        EVALUATE User-Input
            WHEN "1"
-               MOVE "Job search/internship is under construction." TO Message-Text
-               PERFORM Write-And-Display
-               PERFORM Show-Main-Menu
+               PERFORM LOG-IN
            WHEN "2"
-               MOVE "Find someone you know is under construction." TO Message-Text
-               PERFORM Write-And-Display
-               PERFORM Show-Main-Menu
-           WHEN "3"
-               PERFORM Learn-Skill-Menu
-           WHEN OTHER
-               MOVE "Invalid choice. Please choose from 1-3." TO Message-Text
-               PERFORM Write-And-Display
-               PERFORM Show-Main-Menu
-       END-EVALUATE.
-       EXIT.
-
-Handle-Auth SECTION.
-       EVALUATE User-Input
-           WHEN "1"
-               PERFORM Log-In-Workflow
-           WHEN "2"
-               PERFORM Create-Account-Workflow
+               PERFORM CREATE-ACCOUNT
            WHEN OTHER
                MOVE "Invalid choice. Please choose 1-2." TO Message-Text
-               PERFORM Write-And-Display
-               PERFORM Show-Login-Menu
-
-               READ InputFile INTO User-Input
-                   AT END
-                       MOVE "No input found." TO Message-Text
-                       PERFORM Write-And-Display
-                       CLOSE InputFile
-                       STOP RUN
-               END-READ
-
-               PERFORM Handle-Auth
-
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM MAIN-AUTHENTICATE
        END-EVALUATE.
-
-Learn-Skill-Menu SECTION.
-       MOVE "1. AWS" TO Message-Text
-       PERFORM Write-And-Display
-       MOVE "2. Docker" TO Message-Text
-       PERFORM Write-And-Display
-       MOVE "3. COBOL" TO Message-Text
-       PERFORM Write-And-Display
-       MOVE "4. Azure" TO Message-Text
-       PERFORM Write-And-Display
-       MOVE "5. GCP" TO Message-Text
-       PERFORM Write-And-Display
-       MOVE "6. Return to main menu" TO Message-Text
-       PERFORM Write-And-Display
-       MOVE "Enter your choice (1-6): " TO Message-Text
-       PERFORM Write-And-Display
-
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No skill input found." TO Message-Text
-               PERFORM Write-And-Display
-               EXIT SECTION
-       END-READ
-
-       EVALUATE User-Input
-           WHEN "1"
-               MOVE "AWS is under construction." TO Message-Text
-               PERFORM Write-And-Display
-               PERFORM Learn-Skill-Menu
-           WHEN "2"
-               MOVE "Docker is under construction." TO Message-Text
-               PERFORM Write-And-Display
-                PERFORM Learn-Skill-Menu
-           WHEN "3"
-               MOVE "COBOL is under construction." TO Message-Text
-               PERFORM Write-And-Display
-               PERFORM Learn-Skill-Menu
-           WHEN "4"
-               MOVE "Azure is under construction." TO Message-Text
-               PERFORM Write-And-Display
-               PERFORM Learn-Skill-Menu
-           WHEN "5"
-               MOVE "GCP is under construction." TO Message-Text
-               PERFORM Write-And-Display
-               PERFORM Learn-Skill-Menu
-           WHEN "6"
-               PERFORM Show-Main-Menu
-      *>         READ InputFile INTO User-Input
-      *>             AT END
-      *>                 MOVE "No input found." TO Message-Text
-      *>                 PERFORM Write-And-Display
-      *>                 EXIT SECTION
-      *>         END-READ
-      *>         PERFORM Show-Main-Menu
-           WHEN OTHER
-               MOVE "Invalid skill choice. Please choose from 1-6." TO Message-Text
-               PERFORM Write-And-Display
-               PERFORM Learn-Skill-Menu
-       END-EVALUATE.
-       EXIT.
+       EXIT SECTION.
 
 
-Ask-For-Login SECTION.
+TAKE-ACCOUNT-INPUT SECTION.
        MOVE "Please enter your username: " TO Message-Text
-       PERFORM Write-And-Display
+       PERFORM WRITE-AND-DISPLAY
        READ InputFile INTO Account-Username-Input
            AT END
                MOVE "No username input found." TO Message-Text
-               PERFORM Write-And-Display
+               PERFORM WRITE-AND-DISPLAY
                CLOSE InputFile
                STOP RUN
        END-READ
 
        MOVE "Please enter your password: " TO Message-Text
-       PERFORM Write-And-Display
+       PERFORM WRITE-AND-DISPLAY
        READ InputFile INTO Account-Password-Input
            AT END
                MOVE "No password input found." TO Message-Text
-               PERFORM Write-And-Display
+               PERFORM WRITE-AND-DISPLAY
                CLOSE InputFile
                STOP RUN
        END-READ
-       EXIT.
+       EXIT SECTION.
 
-Create-Account-Workflow SECTION.
-    *> Count how many accounts exist
-    OPEN INPUT AccountsFile
-    MOVE 0 TO IDX
-    PERFORM UNTIL IDX >= 5
-        READ AccountsFile
-            AT END
-                EXIT PERFORM
-            NOT AT END
-                ADD 1 TO IDX
-        END-READ
-    END-PERFORM
-    CLOSE AccountsFile
+CREATE-ACCOUNT SECTION.
+       *> Count how many accounts exist
+       OPEN INPUT AccountsFile
+       MOVE 0 TO IDX
+       PERFORM UNTIL IDX >= 5
+            READ AccountsFile
+                AT END
+                    EXIT PERFORM
+                NOT AT END
+                    ADD 1 TO IDX
+            END-READ
+       END-PERFORM
+       CLOSE AccountsFile
 
-    *> If already 5 accounts, show message and return to login menu
-    IF IDX >= 5
-        MOVE "All permitted accounts have been created, please come back later."
-            TO Message-Text
-        PERFORM Write-And-Display
+         *> If already 5 accounts, show message and return to login menu
+       IF IDX >= 5
+           MOVE "All permitted accounts have been created, please come back later."
+               TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
 
-        PERFORM Show-Login-Menu
-        READ InputFile INTO User-Input
-            AT END
-                MOVE "No input found." TO Message-Text
-                PERFORM Write-And-Display
-                CLOSE InputFile
-                STOP RUN
-        END-READ
-        PERFORM Handle-Auth
-        EXIT SECTION
-    END-IF
+           PERFORM MAIN-AUTHENTICATE
+           EXIT SECTION
+       END-IF
 
-    *> Otherwise, proceed to ask for new username/password
-    MOVE 'N' TO Is-Logged-In
-    PERFORM UNTIL Is-Logged-In = 'Y'
-        PERFORM Ask-For-Login     *> (better: Ask-For-New-Account)
-        PERFORM Create-Account
-    END-PERFORM
-    EXIT.
-
-Log-In-Workflow SECTION.
+       *> Otherwise, proceed to ask for new username/password
        MOVE 'N' TO Is-Logged-In
        PERFORM UNTIL Is-Logged-In = 'Y'
-           PERFORM Ask-For-Login
-           PERFORM Log-In
+           PERFORM TAKE-ACCOUNT-INPUT     *> (better: Ask-For-New-Account)
+           PERFORM CREATE-ACCOUNT-AUTHENTICATE
        END-PERFORM
-       EXIT.
+       EXIT SECTION.
 
-Log-In SECTION.
-       OPEN INPUT AccountsFile
+CREATE-ACCOUNT-AUTHENTICATE SECTION.
+      *> MOVE 'RUNNING CREATE-ACCOUNT-AUTHENTICATE' TO Message-Text
+      *> PERFORM WRITE-AND-DISPLAY
+
+       MOVE 'N' TO Is-Logged-In
        MOVE 'N' TO Username-Exists
-       PERFORM UNTIL Is-Logged-In = 'Y'
-           READ AccountsFile
-                AT END
-                   MOVE "Invalid username or password." TO Message-Text
-                   PERFORM Write-And-Display
-                   CLOSE AccountsFile
-                   EXIT PERFORM
 
-               NOT AT END
-                   IF Account-Username = Account-Username-Input
-                       IF Account-Password = Account-Password-Input
-                           MOVE 'Y' TO Is-Logged-In
-                           MOVE "You have successfully logged in!" TO Message-Text
-                           PERFORM Write-And-Display
-                           CLOSE AccountsFile
-                           EXIT PERFORM
-                       END-IF
-                   END-IF
-           END-READ
-       END-PERFORM.
-       EXIT.
-
-Create-Account SECTION.
        OPEN INPUT AccountsFile
-       MOVE 'N' TO Username-Exists
-       PERFORM UNTIL Username-Exists = 'Y'
+
+       PERFORM UNTIL Username-Exists = 'Y' OR Is-Logged-In = 'Y'
            READ AccountsFile
                AT END
+                    *> No accounts exist yet, so username is unique
                    CLOSE AccountsFile
                    IF FUNCTION LENGTH(FUNCTION TRIM(Account-Username-Input)) > 0 AND FUNCTION LENGTH(FUNCTION TRIM(Account-Username-Input)) < 50
-                       PERFORM Verify-Password
+                       PERFORM VERIFY-PASSWORD
                        IF Password-Valid = 'Y'
-                           PERFORM Write-Account
+                           PERFORM WRITE-ACCOUNT
                            MOVE 'Y' TO Is-Logged-In
                            MOVE "Account created successfully!" TO Message-Text
-                           PERFORM Write-And-Display
-                           EXIT PERFORM
+                           PERFORM WRITE-AND-DISPLAY
                        ELSE
                            EXIT SECTION
                        END-IF
                    ELSE
                        MOVE "Invalid username length. Try again." TO Message-Text
-                       PERFORM Write-And-Display
+                       PERFORM WRITE-AND-DISPLAY
                        EXIT SECTION
                    END-IF
 
                NOT AT END
                    IF Account-Username = Account-Username-Input
                         MOVE "Username already exists. Try again." TO Message-Text
-                        PERFORM Write-And-Display
+                        PERFORM WRITE-AND-DISPLAY
                         MOVE 'Y' TO Username-Exists
                         CLOSE AccountsFile
+                        EXIT SECTION
                    END-IF
            END-READ
-       END-PERFORM.
-       EXIT.
+       END-PERFORM
+       EXIT SECTION.
 
-Verify-Password SECTION.
+LOG-IN SECTION.
+       MOVE 'N' TO Is-Logged-In
+       PERFORM UNTIL Is-Logged-In = 'Y'
+           PERFORM TAKE-ACCOUNT-INPUT
+           PERFORM LOG-IN-AUTHENTICATE
+       END-PERFORM
+       EXIT SECTION.
+
+LOG-IN-AUTHENTICATE SECTION.
+       MOVE 'N' TO Is-Logged-In
+       MOVE 'N' TO Username-Exists
+       OPEN INPUT AccountsFile
+
+       PERFORM UNTIL Username-Exists = 'Y'
+           READ AccountsFile
+               AT END
+                   MOVE "Invalid username. Please try again." TO Message-Text
+                   PERFORM WRITE-AND-DISPLAY
+                   CLOSE AccountsFile
+                   PERFORM LOG-IN
+               NOT AT END
+                   IF Account-Username = Account-Username-Input
+                       MOVE 'Y' TO Username-Exists
+                       IF Account-Password = Account-Password-Input
+                           MOVE 'Y' TO Is-Logged-In
+                           MOVE "You have successfully logged in!" TO Message-Text
+                           PERFORM WRITE-AND-DISPLAY
+                           CLOSE AccountsFile
+                       ELSE
+                            MOVE "Invalid password. Please try again." TO Message-Text
+                            PERFORM WRITE-AND-DISPLAY
+                            CLOSE AccountsFile
+                            PERFORM LOG-IN
+                          END-IF
+                   END-IF
+           END-READ
+       END-PERFORM
+       EXIT SECTION.
+
+
+
+VERIFY-PASSWORD SECTION.
+       MOVE 'N' TO Password-Valid
        MOVE FUNCTION LENGTH(FUNCTION TRIM(Account-Password-Input)) TO PW-Length
        MOVE 0 TO Upper-Flag Digit-Flag Special-Flag
 
+
        IF PW-Length < 8 OR PW-Length > 12
            MOVE "Password must be 8-12 characters." TO Message-Text
-           PERFORM Write-And-Display
+           PERFORM WRITE-AND-DISPLAY
            MOVE 'N' TO Password-Valid
            EXIT SECTION
        END-IF
@@ -370,19 +262,126 @@ Verify-Password SECTION.
            EXIT SECTION
        ELSE
            MOVE "Password must include at least one uppercase letter, one digit, and one special character." TO Message-Text
-           PERFORM Write-And-Display
+           PERFORM WRITE-AND-DISPLAY
            MOVE 'N' TO Password-Valid
            EXIT SECTION
        END-IF
 
        MOVE 'Y' TO Password-Valid
-       EXIT.
+       EXIT SECTION.
 
-Write-Account SECTION.
+*> MAIN MENU
+SHOW-MAIN-MENU SECTION.
+       MOVE "1. Create/Edit My Profile" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "2. View My Profile" TO Message-Text
+        PERFORM WRITE-AND-DISPLAY
+       MOVE "3. Learn a new skill" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "4. Search for a user" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice (1-4): " TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       READ InputFile INTO User-Input
+           AT END
+               MOVE "No input found." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               CLOSE InputFile
+               STOP RUN
+       END-READ
+
+       EVALUATE User-Input
+           WHEN "1"
+               MOVE "CREATE/EDIT PROFILE IS CHOSEN" TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM SHOW-MAIN-MENU
+           WHEN "2"
+               MOVE "FIND SOMEONE YOU KNOW IS CHOSEN" TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM SHOW-MAIN-MENU
+           WHEN "3"
+               PERFORM LEARN-SKILL-MENU
+            WHEN "4"
+                MOVE "SEARCH FOR A USER IS UNDER CONSTRUCTION" TO Message-Text
+                PERFORM WRITE-AND-DISPLAY
+                PERFORM SHOW-MAIN-MENU
+           WHEN OTHER
+               MOVE "Invalid choice. Please choose from 1-4." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM SHOW-MAIN-MENU
+       END-EVALUATE.
+       EXIT SECTION.
+
+
+LEARN-SKILL-MENU SECTION.
+       MOVE "1. AWS" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "2. Docker" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "3. COBOL" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "4. Azure" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "5. GCP" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "6. Return to main menu" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice (1-6): " TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       READ InputFile INTO User-Input
+           AT END
+               MOVE "No skill input found." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               CLOSE InputFile
+               STOP RUN
+       END-READ
+
+       EVALUATE User-Input
+           WHEN "1"
+               MOVE "AWS is under construction." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM LEARN-SKILL-MENU
+           WHEN "2"
+               MOVE "Docker is under construction." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+                PERFORM LEARN-SKILL-MENU
+           WHEN "3"
+               MOVE "COBOL is under construction." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM LEARN-SKILL-MENU
+           WHEN "4"
+               MOVE "Azure is under construction." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM LEARN-SKILL-MENU
+           WHEN "5"
+               MOVE "GCP is under construction." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM LEARN-SKILL-MENU
+           WHEN "6"
+               PERFORM SHOW-MAIN-MENU
+               EXIT SECTION
+           WHEN OTHER
+               MOVE "Invalid skill choice. Please choose from 1-6." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM LEARN-SKILL-MENU
+       END-EVALUATE.
+       EXIT SECTION.
+
+WRITE-AND-DISPLAY SECTION.
+       OPEN EXTEND OutputFile
+       MOVE Message-Text TO Output-Line.
+       DISPLAY Output-Line
+       WRITE Output-Line
+       CLOSE OutputFile
+       EXIT SECTION.
+
+WRITE-ACCOUNT SECTION.
        OPEN EXTEND AccountsFile
        MOVE Account-Username-Input TO Account-Username
        MOVE Account-Password-Input TO Account-Password
        WRITE Account-Record
        CLOSE AccountsFile
-       EXIT.
+       EXIT SECTION.
 
