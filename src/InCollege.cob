@@ -641,12 +641,13 @@ VIEW-PROFILE SECTION.
                  WITH POINTER Ptr
             PERFORM WRITE-AND-DISPLAY
 
-       IF Prof-About NOT = SPACES
-           MOVE "About Me: " TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-           MOVE Prof-About TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-       END-IF
+       MOVE SPACES TO Message-Text
+       MOVE 1 TO Ptr
+         STRING "About Me: " DELIMITED BY SIZE
+                 Prof-About DELIMITED BY SIZE
+                 INTO Message-Text
+                 WITH POINTER Ptr
+            PERFORM WRITE-AND-DISPLAY
 
        MOVE "Experience:" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
@@ -675,12 +676,14 @@ VIEW-PROFILE SECTION.
                       WITH POINTER Ptr
                  PERFORM WRITE-AND-DISPLAY
 
-           IF Prof-Exp-Desc(I) NOT = SPACES
-               MOVE "  Description: " TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
-               MOVE Prof-Exp-Desc(I) TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
-           END-IF
+           MOVE SPACES TO Message-Text
+           MOVE 1 TO Ptr
+           STRING "  Description: " DELIMITED BY SIZE
+                 Prof-Exp-Desc(I) DELIMITED BY SIZE
+                 INTO Message-Text
+                 WITH POINTER Ptr
+           PERFORM WRITE-AND-DISPLAY
+
        END-PERFORM
 
        MOVE "Education:" TO Message-Text
