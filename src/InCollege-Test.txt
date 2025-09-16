@@ -1,87 +1,29 @@
-* Create Account - invalid (no special character)(too long character)(too short, 7 chars)(no special character)
+1. Create Account and Profile
 2
-alice
-short
-alice
-alllower1!
-alice
-alllower1
-alice
-NoDigit!!
-User1
-FinalPass1!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-UserC
-Password1A
 alice
 12Chars*Long
 1
+Alice
+Doe
+University of South Florida
+Computer Science
+2026
+Hi I love manga
+REU
+RARE Lab
+Summer 2024
+
+DONE
+Bachelor of Science in Computer Science
+USF
+2022-2026
+DONE
 2
-3
+
+
+2. View Profile for an existing user with profile created
 1
-
-
-* Try invalid choice at pre-login
-3
-
-
-
-* Create Account 1 - valid (8 chars password, meets all rules)
-2
-alices
-Abcdef1!
-3
-2
-6
-1
-
-
-
-
-* Create Account 2 - valid (12 chars password, upper+digit+special)
-2
-UserD
-PassWord12!@
+alice
+12Chars*Long
 2
 
-
-
-
-* Create Account 3- valid
-2
-UserE
-GoodPass1!
-2
-
-
-*Creat Account 4- Valid
-2
-UserF
-FinalPass1!
-2
-
-
-*Creat Account 6- invalid ( reach the limti of 5 accounts)
-2
-UserS
-FinalPass1!
-2
-
-
-
-* Login existing account but wrong password, then retry( but have to create the account first  to test login)
-1
-UserD
-WrongPass1!
-UserD
-PassWord12!@
-1
-
-
-* Create account, fail password requirement, then retry( Please Delete the account in the Accounts.txt before testing this)
-2
-UserH
-badpass
-UserH
-GoodPass2!
-3
-1

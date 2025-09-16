@@ -35,17 +35,18 @@ DATA DIVISION.
                   05 Prof-GradYear                 PIC 9(4).
                   05 Prof-About                    PIC X(200).
                   05 Prof-Exp-Count                PIC 9.
+
                   05 Prof-Exp OCCURS 3 TIMES.
-                     10 Prof-Exp-Title             PIC X(40).
-                     10 Prof-Exp-Company           PIC X(40).
-                     10 Prof-Exp-Dates             PIC X(30).
-                     10 Prof-Exp-Desc              PIC X(100).
+                      10 Prof-Exp-Title    PIC X(40).
+                      10 Prof-Exp-Company  PIC X(40).
+                      10 Prof-Exp-Dates    PIC X(30).
+                      10 Prof-Exp-Desc     PIC X(100).
+
                   05 Prof-Edu-Count                PIC 9.
                   05 Prof-Edu OCCURS 3 TIMES.
-                     10 Prof-Edu-Degree            PIC X(40).
-                     10 Prof-Edu-University        PIC X(60).
-                     10 Prof-Edu-Years             PIC X(20).
-
+                     10 Prof-Edu-Degree     PIC X(40).
+                     10 Prof-Edu-University PIC X(60).
+                     10 Prof-Edu-Years      PIC X(20).
 
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(100).
@@ -91,8 +92,12 @@ DATA DIVISION.
 
            *>     * Loop helpers
            01 I                          PIC 9 VALUE 0.
-           01 Done-Flag                  PIC X VALUE 'N'.
+           01 Found-Flag                  PIC X VALUE 'N'.
            01 All-Digits                 PIC X VALUE 'Y'.
+
+           *>Helper for string operations
+           01  Ptr          PIC 9(4).
+
 
 
 PROCEDURE DIVISION.
@@ -540,28 +545,30 @@ SAVE-PROFILE SECTION.
        MOVE WS-Exp-Count      TO Prof-Exp-Count
        PERFORM VARYING I FROM 1 BY 1 UNTIL I > 3
            IF I <= WS-Exp-Count
-               MOVE WS-Exp-Titles(I)    TO Prof-Exp(I)-Prof-Exp-Title
-               MOVE WS-Exp-Companies(I) TO Prof-Exp(I)-Prof-Exp-Company
-               MOVE WS-Exp-Dates(I)     TO Prof-Exp(I)-Prof-Exp-Dates
-               MOVE WS-Exp-Descs(I)     TO Prof-Exp(I)-Prof-Exp-Desc
+               MOVE WS-Exp-Titles(I)    TO Prof-Exp-Title(I)
+               MOVE WS-Exp-Companies(I) TO Prof-Exp-Company(I)
+               MOVE WS-Exp-Dates(I)     TO Prof-Exp-Dates(I)
+               MOVE WS-Exp-Descs(I)     TO Prof-Exp-Desc(I)
+
            ELSE
-               MOVE SPACES TO Prof-Exp(I)-Prof-Exp-Title
-               MOVE SPACES TO Prof-Exp(I)-Prof-Exp-Company
-               MOVE SPACES TO Prof-Exp(I)-Prof-Exp-Dates
-               MOVE SPACES TO Prof-Exp(I)-Prof-Exp-Desc
+               MOVE SPACES TO Prof-Exp-Title(I)
+               MOVE SPACES TO Prof-Exp-Company(I)
+               MOVE SPACES TO Prof-Exp-Dates(I)
+               MOVE SPACES TO Prof-Exp-Desc(I)
            END-IF
        END-PERFORM
 
        MOVE WS-Edu-Count      TO Prof-Edu-Count
        PERFORM VARYING I FROM 1 BY 1 UNTIL I > 3
            IF I <= WS-Edu-Count
-               MOVE WS-Edu-Degrees(I)   TO Prof-Edu(I)-Prof-Edu-Degree
-               MOVE WS-Edu-Univers(I)   TO Prof-Edu(I)-Prof-Edu-University
-               MOVE WS-Edu-Years(I)     TO Prof-Edu(I)-Prof-Edu-Years
+               MOVE WS-Edu-Degrees(I) TO Prof-Edu-Degree(I)
+               MOVE WS-Edu-Univers(I) TO Prof-Edu-University(I)
+               MOVE WS-Edu-Years(I)   TO Prof-Edu-Years(I)
+
            ELSE
-               MOVE SPACES TO Prof-Edu(I)-Prof-Edu-Degree
-               MOVE SPACES TO Prof-Edu(I)-Prof-Edu-University
-               MOVE SPACES TO Prof-Edu(I)-Prof-Edu-Years
+               MOVE SPACES TO Prof-Edu(I)
+               MOVE SPACES TO Prof-Edu-University(I)
+               MOVE SPACES TO Prof-Edu-Years(I)
            END-IF
        END-PERFORM
 
@@ -577,8 +584,6 @@ VIEW-PROFILE SECTION.
 
        OPEN INPUT ProfilesFile
        MOVE 'N' TO Found-Flag
-       01 Found-Flag PIC X VALUE 'N'.
-       01 Last-Match  PIC X VALUE 'N'.  *> not really needed; we'll use Found-Flag
 
        *> Scan entire file; remember the last record for Current-Username
        PERFORM UNTIL 1 = 0
@@ -588,6 +593,7 @@ VIEW-PROFILE SECTION.
                NOT AT END
                    IF Prof-Username = Current-Username
                        MOVE 'Y' TO Found-Flag
+                       EXIT PERFORM
                        *> Keep this record in memory (Profile-Record already holds it)
                    END-IF
            END-READ
@@ -600,26 +606,40 @@ VIEW-PROFILE SECTION.
            EXIT SECTION
        END-IF
 
-       *> Display the last-matched profile currently in Profile-Record
-       MOVE "Name: " TO Message-Text
-       STRING Message-Text DELIMITED BY SIZE
-              Prof-FirstName DELIMITED BY SIZE
+
+       MOVE SPACES TO Message-Text
+       MOVE 1 TO Ptr
+       STRING "Name: " DELIMITED BY SIZE
+              Prof-FirstName DELIMITED BY SPACE
               " " DELIMITED BY SIZE
-              Prof-LastName DELIMITED BY SIZE
+              Prof-LastName DELIMITED BY SPACE
               INTO Message-Text
+              WITH POINTER Ptr
        PERFORM WRITE-AND-DISPLAY
 
-       MOVE "University: " TO Message-Text
-       STRING Message-Text DELIMITED BY SIZE Prof-University DELIMITED BY SIZE INTO Message-Text
-       PERFORM WRITE-AND-DISPLAY
+       MOVE SPACES TO Message-Text
+         MOVE 1 TO Ptr
+         STRING "University: " DELIMITED BY SIZE
+                  Prof-University DELIMITED BY SIZE
+                  INTO Message-Text
+                  WITH POINTER Ptr
+         PERFORM WRITE-AND-DISPLAY
 
-       MOVE "Major: " TO Message-Text
-       STRING Message-Text DELIMITED BY SIZE Prof-Major DELIMITED BY SIZE INTO Message-Text
-       PERFORM WRITE-AND-DISPLAY
+       MOVE SPACES TO Message-Text
+       MOVE 1 TO Ptr
+       STRING "Major: " DELIMITED BY SIZE
+                Prof-Major DELIMITED BY SIZE
+                INTO Message-Text
+                WITH POINTER Ptr
+         PERFORM WRITE-AND-DISPLAY
 
-       MOVE "Graduation Year: " TO Message-Text
-       STRING Message-Text DELIMITED BY SIZE Prof-GradYear DELIMITED BY SIZE INTO Message-Text
-       PERFORM WRITE-AND-DISPLAY
+       MOVE SPACES TO Message-Text
+       MOVE 1 TO Ptr
+         STRING "Graduation Year: " DELIMITED BY SIZE
+                 Prof-GradYear DELIMITED BY SIZE
+                 INTO Message-Text
+                 WITH POINTER Ptr
+            PERFORM WRITE-AND-DISPLAY
 
        IF Prof-About NOT = SPACES
            MOVE "About Me: " TO Message-Text
@@ -631,22 +651,34 @@ VIEW-PROFILE SECTION.
        MOVE "Experience:" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
        PERFORM VARYING I FROM 1 BY 1 UNTIL I > Prof-Exp-Count
-           MOVE "  Title: " TO Message-Text
-           STRING Message-Text DELIMITED BY SIZE Prof-Exp(I)-Prof-Exp-Title DELIMITED BY SIZE INTO Message-Text
-           PERFORM WRITE-AND-DISPLAY
+           MOVE SPACES TO Message-Text
+           MOVE 1 TO Ptr
+              STRING "  Title: " DELIMITED BY SIZE
+                    Prof-Exp-Title(I) DELIMITED BY SIZE
+                    INTO Message-Text
+                    WITH POINTER Ptr
+                PERFORM WRITE-AND-DISPLAY
 
-           MOVE "  Company: " TO Message-Text
-           STRING Message-Text DELIMITED BY SIZE Prof-Exp(I)-Prof-Exp-Company DELIMITED BY SIZE INTO Message-Text
-           PERFORM WRITE-AND-DISPLAY
+           MOVE SPACES TO Message-Text
+              MOVE 1 TO Ptr
+              STRING "  Company: " DELIMITED BY SIZE
+                    Prof-Exp-Company(I) DELIMITED BY SIZE
+                    INTO Message-Text
+                    WITH POINTER Ptr
+                PERFORM WRITE-AND-DISPLAY
 
-           MOVE "  Dates: " TO Message-Text
-           STRING Message-Text DELIMITED BY SIZE Prof-Exp(I)-Prof-Exp-Dates DELIMITED BY SIZE INTO Message-Text
-           PERFORM WRITE-AND-DISPLAY
+              MOVE SPACES TO Message-Text
+                  MOVE 1 TO Ptr
+                  STRING "  Dates: " DELIMITED BY SIZE
+                      Prof-Exp-Dates(I) DELIMITED BY SIZE
+                      INTO Message-Text
+                      WITH POINTER Ptr
+                 PERFORM WRITE-AND-DISPLAY
 
-           IF Prof-Exp(I)-Prof-Exp-Desc NOT = SPACES
+           IF Prof-Exp-Desc(I) NOT = SPACES
                MOVE "  Description: " TO Message-Text
                PERFORM WRITE-AND-DISPLAY
-               MOVE Prof-Exp(I)-Prof-Exp-Desc TO Message-Text
+               MOVE Prof-Exp-Desc(I) TO Message-Text
                PERFORM WRITE-AND-DISPLAY
            END-IF
        END-PERFORM
@@ -654,17 +686,29 @@ VIEW-PROFILE SECTION.
        MOVE "Education:" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
        PERFORM VARYING I FROM 1 BY 1 UNTIL I > Prof-Edu-Count
-           MOVE "  Degree: " TO Message-Text
-           STRING Message-Text DELIMITED BY SIZE Prof-Edu(I)-Prof-Edu-Degree DELIMITED BY SIZE INTO Message-Text
-           PERFORM WRITE-AND-DISPLAY
+           MOVE SPACES TO Message-Text
+                MOVE 1 TO Ptr
+                STRING "  Degree: " DELIMITED BY SIZE
+                        Prof-Edu-Degree(I) DELIMITED BY SIZE
+                        INTO Message-Text
+                        WITH POINTER Ptr
+                    PERFORM WRITE-AND-DISPLAY
 
-           MOVE "  University: " TO Message-Text
-           STRING Message-Text DELIMITED BY SIZE Prof-Edu(I)-Prof-Edu-University DELIMITED BY SIZE INTO Message-Text
-           PERFORM WRITE-AND-DISPLAY
+              MOVE SPACES TO Message-Text
+                 MOVE 1 TO Ptr
+                 STRING "  University: " DELIMITED BY SIZE
+                            Prof-Edu-University(I) DELIMITED BY SIZE
+                            INTO Message-Text
+                            WITH POINTER Ptr
+                      PERFORM WRITE-AND-DISPLAY
 
-           MOVE "  Years: " TO Message-Text
-           STRING Message-Text DELIMITED BY SIZE Prof-Edu(I)-Prof-Edu-Years DELIMITED BY SIZE INTO Message-Text
-           PERFORM WRITE-AND-DISPLAY
+           MOVE SPACES TO Message-Text
+              MOVE 1 TO Ptr
+              STRING "  Years: " DELIMITED BY SIZE
+                         Prof-Edu-Years(I) DELIMITED BY SIZE
+                         INTO Message-Text
+                         WITH POINTER Ptr
+                 PERFORM WRITE-AND-DISPLAY
        END-PERFORM
 
        MOVE "--------------------" TO Message-Text
