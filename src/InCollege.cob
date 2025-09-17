@@ -19,7 +19,7 @@ ENVIRONMENT DIVISION.
 DATA DIVISION.
        FILE SECTION.
            FD InputFile.
-               01 User-Input PIC X(200).
+               01 User-Input PIC X(300).
            FD OutputFile.
                01 Output-Line PIC X(300).
            FD AccountsFile.
@@ -86,6 +86,9 @@ DATA DIVISION.
            01 Digit-Flag PIC 9 VALUE 0.
            01 Special-Flag PIC 9 VALUE 0.
            01 Is-Logged-In PIC X VALUE 'N'.
+
+           01 Validation-Failed PIC X VALUE 'N'.
+
 
            01 Current-Username            PIC X(50).  *> set after successful login
            01 Temp-Input                   PIC X(100).
@@ -360,6 +363,8 @@ VERIFY-PASSWORD SECTION.
 
 *> MAIN MENU
 SHOW-MAIN-MENU SECTION.
+       Move "------- Main Menu --------" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
        MOVE "1. Create/Edit My Profile" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
        MOVE "2. View My Profile" TO Message-Text
@@ -409,44 +414,27 @@ CREATE-EDIT-PROFILE SECTION.
        PERFORM WRITE-AND-DISPLAY
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-FirstName
-       IF WS-FirstName = SPACES
-           MOVE "First Name is required." TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-           EXIT SECTION
-       END-IF
+
 
        *> Last Name (required)
        MOVE "Enter Last Name:" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-LastName
-       IF WS-LastName = SPACES
-           MOVE "Last Name is required." TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-           EXIT SECTION
-       END-IF
+
 
        *> University (required)
        MOVE "Enter University/College Attended:" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-University
-       IF WS-University = SPACES
-           MOVE "University is required." TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-           EXIT SECTION
-       END-IF
 
        *> Major (required)
        MOVE "Enter Major:" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-Major
-       IF WS-Major = SPACES
-           MOVE "Major is required." TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-           EXIT SECTION
-       END-IF
+
 
        *> Graduation Year (required, 4 digits, reasonable range)
        MOVE "Enter Graduation Year (YYYY):" TO Message-Text
@@ -454,44 +442,11 @@ CREATE-EDIT-PROFILE SECTION.
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-GradYear-Text
 
-       IF FUNCTION LENGTH(WS-GradYear-Text) NOT = 4
-           MOVE "Graduation Year must be 4 digits." TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-           EXIT SECTION
-       END-IF
-
-       MOVE 'Y' TO All-Digits
-       PERFORM VARYING I FROM 1 BY 1 UNTIL I > 4
-           IF WS-GradYear-Text(I:1) < "0" OR WS-GradYear-Text(I:1) > "9"
-               MOVE 'N' TO All-Digits
-           END-IF
-       END-PERFORM
-       IF All-Digits NOT = 'Y'
-           MOVE "Graduation Year must be numeric." TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-           EXIT SECTION
-       END-IF
-
-       MOVE WS-GradYear-Text TO WS-GradYear
-       IF WS-GradYear < 1900 OR WS-GradYear > 2099
-           MOVE "Graduation Year out of range (1900-2099)." TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-           EXIT SECTION
-       END-IF
-
        *> About Me (optional)
        MOVE "Enter About Me (optional, max 200 chars, blank to skip):" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-About
-
-       *> Check length does not exceed 200
-       IF FUNCTION LENGTH(WS-About) > 200
-           MOVE "About Me must be at most 200 characters." TO Message-Text
-           PERFORM WRITE-AND-DISPLAY
-           *> Truncate extra characters to fit in WS-About
-           MOVE WS-About(1:200) TO WS-About
-       END-IF
 
        *> Experience loop (up to 3)
        MOVE 0 TO WS-Exp-Count
@@ -558,6 +513,76 @@ CREATE-EDIT-PROFILE SECTION.
            MOVE FUNCTION TRIM(User-Input)         TO WS-Edu-Years(I)
        END-PERFORM
 
+       PERFORM VALIDATE-AND-SAVE
+       EXIT SECTION.
+
+VALIDATE-AND-SAVE SECTION.
+       MOVE 'N' TO Validation-Failed
+
+       *> --- Validation checks ---
+       IF WS-FirstName = SPACES
+           MOVE "First Name is required." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           MOVE 'Y' TO Validation-Failed
+       END-IF
+
+       IF WS-LastName = SPACES
+           MOVE "Last Name is required." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           MOVE 'Y' TO Validation-Failed
+       END-IF
+
+       IF WS-University = SPACES
+           MOVE "University is required." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           MOVE 'Y' TO Validation-Failed
+       END-IF
+
+       IF WS-Major = SPACES
+           MOVE "Major is required." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           MOVE 'Y' TO Validation-Failed
+       END-IF
+
+       IF FUNCTION LENGTH(WS-GradYear-Text) NOT = 4
+           MOVE "Graduation Year must be 4 digits." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           MOVE 'Y' TO Validation-Failed
+       ELSE
+           MOVE 'Y' TO All-Digits
+           PERFORM VARYING I FROM 1 BY 1 UNTIL I > 4
+               IF WS-GradYear-Text(I:1) < "0" OR WS-GradYear-Text(I:1) > "9"
+                   MOVE 'N' TO All-Digits
+               END-IF
+           END-PERFORM
+           IF All-Digits NOT = 'Y'
+               MOVE "Graduation Year must be numeric." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               MOVE 'Y' TO Validation-Failed
+           ELSE
+               MOVE WS-GradYear-Text TO WS-GradYear
+               IF WS-GradYear < 1900 OR WS-GradYear > 2099
+                   MOVE "Graduation Year out of range (1900–2099)." TO Message-Text
+                   PERFORM WRITE-AND-DISPLAY
+                   MOVE 'Y' TO Validation-Failed
+               END-IF
+           END-IF
+       END-IF
+
+       IF FUNCTION LENGTH(WS-About) > 200
+           MOVE "About Me must be at most 200 characters." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           MOVE 'Y' TO Validation-Failed
+       END-IF
+
+       *> --- Stop if any validation failed ---
+       IF Validation-Failed = 'Y'
+           MOVE "Profile not saved due to errors." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> --- Save profile if all validations passed ---
        PERFORM SAVE-PROFILE
        MOVE "Profile saved successfully!" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
@@ -781,8 +806,8 @@ VIEW-PROFILE SECTION.
                  PERFORM WRITE-AND-DISPLAY
        END-PERFORM
 
-       MOVE "--------------------" TO Message-Text
-       PERFORM WRITE-AND-DISPLAY
+      *> MOVE "--------------------" TO Message-Text
+      *> PERFORM WRITE-AND-DISPLAY
        EXIT SECTION.
 
 
