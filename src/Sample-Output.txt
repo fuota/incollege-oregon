@@ -3,10 +3,15 @@ Welcome to InCollege!
 1. Log In
 2. Create New Account
 Enter your choice (1 or 2):
+Invalid choice. Please choose 1-2.
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
 Please enter your username:
 Please enter your password:
 Account created successfully!
-Welcome, username
+Welcome, (username)
 1. Search for a job
 2. Find someone you know
 3. Learn a new skill
@@ -28,10 +33,7 @@ Enter your choice (1-3):
 5. GCP
 6. Return to main menu
 Enter your choice (1-6):
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-Enter your choice (1-3):
+Invalid skill choice. Please choose from 1-6.
 1. AWS
 2. Docker
 3. COBOL
@@ -40,5 +42,53 @@ Enter your choice (1-3):
 6. Return to main menu
 Enter your choice (1-6):
 AWS is under construction.
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+Docker is under construction.
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+COBOL is under construction.
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+Azure is under construction.
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+GCP is under construction.
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+Enter your choice (1-3):
+Job search/internship is under construction.
+1. Search for a job
+2. Find someone you know
+3. Learn a new skill
+Enter your choice (1-3):
 No input found.
 --- END_OF_PROGRAM_EXECUTION ---

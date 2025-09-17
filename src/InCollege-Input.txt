@@ -1,16 +1,29 @@
 1
-alice
-12Chars*Long
+edgeuser
+PassWord9@
 1
-Alice
-Bus
-University of South Florida
-Comouter Science
-2026
-I am a student
-Intern
-apple
-Summer 2025
-worked
+Max
+Lee
+FIU
+Information Systems
+2027
+Future IT leader.
+Software Intern
+Tech1
+2024
+Internship project work.
+Software Engineer
+Tech2
+2025
+Backend development.
 DONE
-DONE
+Bachelor of Science
+UCLA
+2018-2022
+Master of Science
+UCLA
+2022-2024
+PhD
+UCLA
+2024-2028
+2

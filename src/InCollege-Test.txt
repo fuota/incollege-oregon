@@ -1,29 +1,74 @@
-1. Create Account and Profile
+* Create Account - invalid (no special character)(too long character)(too short, 7 chars)(no special character)
+3
 2
-alice
+alice1
+short
+alice1
+alllower1!
+alice1
+alllower1
+alice1
+NoDigit!!
+alice1
+FinalPass1!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+alice1
+Password1A
+alice1
 12Chars*Long
 1
-Alice
-Doe
-University of South Florida
-Computer Science
-2026
-Hi I love manga
-REU
-RARE Lab
-Summer 2024
-
-DONE
-Bachelor of Science in Computer Science
-USF
-2022-2026
-DONE
 2
-
-
-2. View Profile for an existing user with profile created
+3
 1
-alice
+
+
+* Try invalid choice at pre-login
+3
+1
+alice1
 12Chars*Long
+
+
+
+
+* Create Account 1 - valid (8 chars password, meets all rules)
+2
+USERA
+Abcdef1!
+3
+2
+6
+1
+
+
+
+
+* Create Account 2 - valid (12 chars password, upper+digit+special)
+2
+UserD
+PassWord12!@
 2
 
+
+
+
+* Create Account 3- valid
+2
+UserE
+GoodPass1!
+2
+
+
+*Creat Account 4- Valid
+2
+UserF
+FinalPass1!
+2
+
+
+*Creat Account 6- invalid ( reach the limti of 5 accounts)
+2
+UserS
+FinalPass1!
+1
+alice1
+12Chars*Long

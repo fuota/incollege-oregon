@@ -5,7 +5,7 @@ Enter your choice (1 or 2):
 Please enter your username:
 Please enter your password:
 You have successfully logged in!
-Welcome, edgeuser
+Welcome, alice
 1. Create/Edit My Profile
 2. View My Profile
 3. Learn a new skill
@@ -28,48 +28,12 @@ Company/Organization:
 Dates (e.g., Summer 2024):
 Description (optional, blank to skip):
 Experience #
+Company/Organization:
+Dates (e.g., Summer 2024):
+Description (optional, blank to skip):
 Add Education (optional, max 3 entries. Enter 'DONE' to finish):
 Education #
-University/College:
-Years Attended (e.g., 2023-2025):
-Education #
-University/College:
-Years Attended (e.g., 2023-2025):
-Education #
-University/College:
-Years Attended (e.g., 2023-2025):
 Profile saved successfully!
-1. Create/Edit My Profile
-2. View My Profile
-3. Learn a new skill
-4. Search for a user
-Enter your choice (1-4):
---- Your Profile ---
-Name: Max Lee
-University: FIU
-Major: Information Systems
-Graduation Year: 2027
-About Me: Future IT leader.
-Experience:
-  Title: Software Intern
-  Company: Tech1
-  Dates: 2024
-  Description: Internship project work.
-  Title: Software Engineer
-  Company: Tech2
-  Dates: 2025
-  Description: Backend development.
-Education:
-  Degree: Bachelor of Science
-  University: UCLA
-  Years: 2018-2022
-  Degree: Master of Science
-  University: UCLA
-  Years: 2022-2024
-  Degree: PhD
-  University: UCLA
-  Years: 2024-2028
---------------------
 1. Create/Edit My Profile
 2. View My Profile
 3. Learn a new skill

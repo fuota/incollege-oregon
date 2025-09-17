@@ -1,0 +1,20 @@
+1
+alice
+12Chars*Long
+1
+tyler
+dunham
+USF
+CS
+2026
+about me
+DONE
+1
+USF
+2022-2026
+2
+Scitech
+2018-2022
+3
+chestnut
+2015-2018

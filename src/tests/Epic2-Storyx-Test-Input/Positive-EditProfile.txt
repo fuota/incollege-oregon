@@ -1,0 +1,20 @@
+1
+alice
+Password1!
+1
+Alice
+Johnson
+USF Tampa
+Software Engineering
+2026
+Now passionate about cloud computing.
+Software Intern
+Tech Corp
+2025
+Worked on CI/CD pipelines.
+DONE
+Bachelor of Science
+USF
+2022-2026
+DONE
+2
