@@ -1,9 +1,34 @@
-2
-alice
-12Chars*Long
 1
-2
-3
-6
-3
+edgeuser
+PassWord9@
 1
+Max
+Lee
+FIU
+Information Systems
+2027
+Future IT leader.
+Software Intern
+Tech1
+2024
+Internship project work.
+Software Engineer
+Tech2
+2025
+Backend development.
+Research Assistant
+FIU Lab
+2023-2024
+Worked on ML models.
+DONE
+Bachelor of Science
+UCLA
+2018-2022
+Master of Science
+UCLA
+2022-2024
+PhD
+UCLA
+2024-2028
+DONE
+2

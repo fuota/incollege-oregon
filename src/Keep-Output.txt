@@ -4,39 +4,125 @@ Welcome to InCollege!
 Enter your choice (1 or 2):
 Please enter your username:
 Please enter your password:
-Account created successfully!
-Welcome, alice
-1. Search for a job
-2. Find someone you know
+You have successfully logged in!
+Welcome, edgeuser
+1. Create/Edit My Profile
+2. View My Profile
 3. Learn a new skill
-Enter your choice (1-3):
-Job search/internship is under construction.
-1. Search for a job
-2. Find someone you know
+4. Search for a user
+Enter your choice (1-4):
+--- Create/Edit Profile ---
+Enter First Name:
+Enter Last Name:
+Enter University/College Attended:
+Enter Major:
+Enter Graduation Year (YYYY):
+Enter About Me (optional, max 200 chars, blank to skip):
+Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
+Experience #
+Company/Organization:
+Dates (e.g., Summer 2024):
+Description (optional, blank to skip):
+Experience #
+Company/Organization:
+Dates (e.g., Summer 2024):
+Description (optional, blank to skip):
+Experience #
+Company/Organization:
+Dates (e.g., Summer 2024):
+Description (optional, blank to skip):
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+Education #
+Profile saved successfully!
+1. Create/Edit My Profile
+2. View My Profile
 3. Learn a new skill
-Enter your choice (1-3):
-Find someone you know is under construction.
-1. Search for a job
-2. Find someone you know
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
 3. Learn a new skill
-Enter your choice (1-3):
-1. AWS
-2. Docker
-3. COBOL
-4. Azure
-5. GCP
-6. Return to main menu
-Enter your choice (1-6):
-1. Search for a job
-2. Find someone you know
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
 3. Learn a new skill
-Enter your choice (1-3):
-1. AWS
-2. Docker
-3. COBOL
-4. Azure
-5. GCP
-6. Return to main menu
-Enter your choice (1-6):
-AWS is under construction.
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+Invalid choice. Please choose from 1-4.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+--- Your Profile ---
+Name: Max Lee
+University: FIU
+Major: Information Systems
+Graduation Year: 2027
+About Me: Future IT leader.
+Experience:
+  Title: Software Intern
+  Company: Tech1
+  Dates: 2024
+  Description: Internship project work.
+  Title: Software Engineer
+  Company: Tech2
+  Dates: 2025
+  Description: Backend development.
+  Title: Research Assistant
+  Company: FIU Lab
+  Dates: 2023-2024
+  Description: Worked on ML models.
+Education:
+--------------------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
 No input found.
