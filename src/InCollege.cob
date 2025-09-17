@@ -13,6 +13,8 @@ ENVIRONMENT DIVISION.
                SELECT ProfilesFile ASSIGN TO "/workspace/src/Profiles.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
 
+               SELECT TempProfilesFile ASSIGN TO "/workspace/src/ProfilesTmp.txt"
+                    ORGANIZATION IS LINE SEQUENTIAL.
 
 DATA DIVISION.
        FILE SECTION.
@@ -47,6 +49,28 @@ DATA DIVISION.
                      10 Prof-Edu-Degree     PIC X(40).
                      10 Prof-Edu-University PIC X(60).
                      10 Prof-Edu-Years      PIC X(20).
+
+           FD TempProfilesFile.
+                01 Temp-Profile-Record.
+                   05 T-Prof-Username       PIC X(50).
+                   05 T-Prof-FirstName      PIC X(30).
+                   05 T-Prof-LastName       PIC X(30).
+                   05 T-Prof-University     PIC X(60).
+                   05 T-Prof-Major          PIC X(40).
+                   05 T-Prof-GradYear       PIC 9(4).
+                   05 T-Prof-About          PIC X(200).
+                   05 T-Prof-Exp-Count      PIC 9.
+                   05 T-Prof-Exp OCCURS 3 TIMES.
+                      10 T-Prof-Exp-Title    PIC X(40).
+                      10 T-Prof-Exp-Company  PIC X(40).
+                      10 T-Prof-Exp-Dates    PIC X(30).
+                      10 T-Prof-Exp-Desc     PIC X(100).
+                   05 T-Prof-Edu-Count      PIC 9.
+                   05 T-Prof-Edu OCCURS 3 TIMES.
+                      10 T-Prof-Edu-Degree     PIC X(40).
+                      10 T-Prof-Edu-University PIC X(60).
+                      10 T-Prof-Edu-Years      PIC X(20).
+
 
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(100).
@@ -532,8 +556,24 @@ CREATE-EDIT-PROFILE SECTION.
        EXIT SECTION.
 
 SAVE-PROFILE SECTION.
-       OPEN EXTEND ProfilesFile
+       *> Step 1: Copy all profiles except current user into TempProfilesFile
+       OPEN INPUT ProfilesFile
+       OPEN OUTPUT TempProfilesFile
 
+       PERFORM UNTIL 1 = 0
+           READ ProfilesFile
+               AT END EXIT PERFORM
+               NOT AT END
+                   IF Prof-Username NOT = Current-Username
+                       MOVE Profile-Record TO Temp-Profile-Record
+                       WRITE Temp-Profile-Record
+                   END-IF
+           END-READ
+       END-PERFORM
+
+       CLOSE ProfilesFile
+
+       *> Step 2: Build the new profile for current user
        MOVE Current-Username  TO Prof-Username
        MOVE WS-FirstName      TO Prof-FirstName
        MOVE WS-LastName       TO Prof-LastName
@@ -549,7 +589,6 @@ SAVE-PROFILE SECTION.
                MOVE WS-Exp-Companies(I) TO Prof-Exp-Company(I)
                MOVE WS-Exp-Dates(I)     TO Prof-Exp-Dates(I)
                MOVE WS-Exp-Descs(I)     TO Prof-Exp-Desc(I)
-
            ELSE
                MOVE SPACES TO Prof-Exp-Title(I)
                MOVE SPACES TO Prof-Exp-Company(I)
@@ -558,23 +597,43 @@ SAVE-PROFILE SECTION.
            END-IF
        END-PERFORM
 
-       MOVE WS-Edu-Count      TO Prof-Edu-Count
+       MOVE WS-Edu-Count TO Prof-Edu-Count
        PERFORM VARYING I FROM 1 BY 1 UNTIL I > 3
            IF I <= WS-Edu-Count
                MOVE WS-Edu-Degrees(I) TO Prof-Edu-Degree(I)
                MOVE WS-Edu-Univers(I) TO Prof-Edu-University(I)
                MOVE WS-Edu-Years(I)   TO Prof-Edu-Years(I)
-
            ELSE
-               MOVE SPACES TO Prof-Edu(I)
+               MOVE SPACES TO Prof-Edu-Degree(I)
                MOVE SPACES TO Prof-Edu-University(I)
                MOVE SPACES TO Prof-Edu-Years(I)
            END-IF
        END-PERFORM
 
-       WRITE Profile-Record
+       *> Step 3: Append new/edited profile into TempProfilesFile
+       MOVE Profile-Record TO Temp-Profile-Record
+       WRITE Temp-Profile-Record
+
+       CLOSE TempProfilesFile
+
+       *> Step 4: Copy TempProfilesFile back to ProfilesFile
+       OPEN INPUT TempProfilesFile
+       OPEN OUTPUT ProfilesFile
+
+       PERFORM UNTIL 1 = 0
+           READ TempProfilesFile
+               AT END EXIT PERFORM
+               NOT AT END
+                   MOVE Temp-Profile-Record TO Profile-Record
+                   WRITE Profile-Record
+           END-READ
+       END-PERFORM
+
+       CLOSE TempProfilesFile
        CLOSE ProfilesFile
        EXIT SECTION.
+
+
 
 
 
