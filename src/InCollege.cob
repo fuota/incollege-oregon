@@ -19,9 +19,9 @@ ENVIRONMENT DIVISION.
 DATA DIVISION.
        FILE SECTION.
            FD InputFile.
-               01 User-Input PIC X(100).
+               01 User-Input PIC X(200).
            FD OutputFile.
-               01 Output-Line PIC X(100).
+               01 Output-Line PIC X(300).
            FD AccountsFile.
                01 Account-Record.
                    05 Account-Username PIC X(50).
@@ -73,7 +73,7 @@ DATA DIVISION.
 
 
        WORKING-STORAGE SECTION.
-           01 Message-Text PIC X(100).
+           01 Message-Text PIC X(300).
            01 Account-Username-Input PIC X(50).
            01 Account-Password-Input PIC X(50).
            01 User-Choice PIC X(100).
@@ -484,6 +484,14 @@ CREATE-EDIT-PROFILE SECTION.
        PERFORM WRITE-AND-DISPLAY
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-About
+
+       *> Check length does not exceed 200
+       IF FUNCTION LENGTH(WS-About) > 200
+           MOVE "About Me must be at most 200 characters." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           *> Truncate extra characters to fit in WS-About
+           MOVE WS-About(1:200) TO WS-About
+       END-IF
 
        *> Experience loop (up to 3)
        MOVE 0 TO WS-Exp-Count
