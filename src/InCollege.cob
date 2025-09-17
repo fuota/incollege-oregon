@@ -593,7 +593,7 @@ VIEW-PROFILE SECTION.
                NOT AT END
                    IF Prof-Username = Current-Username
                        MOVE 'Y' TO Found-Flag
-                       EXIT PERFORM
+                    *>    EXIT PERFORM
                        *> Keep this record in memory (Profile-Record already holds it)
                    END-IF
            END-READ

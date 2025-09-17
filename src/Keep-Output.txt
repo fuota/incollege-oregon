@@ -6,37 +6,30 @@ Please enter your username:
 Please enter your password:
 You have successfully logged in!
 Welcome, alice
-1. Search for a job
-2. Find someone you know
+1. Create/Edit My Profile
+2. View My Profile
 3. Learn a new skill
-Enter your choice (1-3):
-Job search/internship is under construction.
-1. Search for a job
-2. Find someone you know
+4. Search for a user
+Enter your choice (1-4):
+--- Create/Edit Profile ---
+Enter First Name:
+Enter Last Name:
+Enter University/College Attended:
+Enter Major:
+Enter Graduation Year (YYYY):
+Enter About Me (optional, max 200 chars, blank to skip):
+Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
+Experience #
+Company/Organization:
+Dates (e.g., Summer 2024):
+Description (optional, blank to skip):
+Experience #
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+Education #
+Profile saved successfully!
+1. Create/Edit My Profile
+2. View My Profile
 3. Learn a new skill
-Enter your choice (1-3):
-Find someone you know is under construction.
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-Enter your choice (1-3):
-1. AWS
-2. Docker
-3. COBOL
-4. Azure
-5. GCP
-6. Return to main menu
-Enter your choice (1-6):
-1. Search for a job
-2. Find someone you know
-3. Learn a new skill
-Enter your choice (1-3):
-1. AWS
-2. Docker
-3. COBOL
-4. Azure
-5. GCP
-6. Return to main menu
-Enter your choice (1-6):
-AWS is under construction.
+4. Search for a user
+Enter your choice (1-4):
 No input found.
