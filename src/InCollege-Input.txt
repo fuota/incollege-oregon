@@ -16,10 +16,6 @@ Software Engineer
 Tech2
 2025
 Backend development.
-Research Assistant
-FIU Lab
-2023-2024
-Worked on ML models.
 DONE
 Bachelor of Science
 UCLA
@@ -30,5 +26,5 @@ UCLA
 PhD
 UCLA
 2024-2028
-DONE
 2
+
