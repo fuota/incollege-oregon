@@ -4,26 +4,119 @@ alice
 12Chars*Long
 1
 Alice
-Doe
-University of South Florida
+Bunny
+USF
 Computer Science
 2026
-Hi I love manga
-REU
-RARE Lab
-Summer 2024
-
+I am a passionate software engineering student. I enjoy solving real-world problems with technology and continuously learning new programming languages, frameworks, and tools to sharpen my skills and build creative solutions for society.
+SWE Intern
+Google
+Summer 2025
+worked
 DONE
-Bachelor of Science in Computer Science
-USF
-2022-2026
 DONE
 2
 
-
-2. View Profile for an existing user with profile created
+2. Full Profile with 2 Experiences, 1 Education
 1
-alice
-12Chars*Long
+bob
+Secure!23
+1
+Bob
+
+
+
+abc
+I am a dedicated computer science student with a strong interest in artificial intelligence, human-robot interaction, and software engineering. I enjoy building real-world applications, collaborating with diverse teams, and sharing knowledge to inspire others. My long-term goal is to design systems that make technology more accessible.
+Intern
+Tesla
+Summer 2023
+Worked on designing automated assembly lines
+Research Assistant
+UF Robotics Lab
+2024
+Developed robot control software
+DONE
+Bachelor of Science in Mechanical Engineering
+UF
+2021-2025
+DONE
 2
+1
+Bob
+Smith
+University of Florida
+Mechanical Engineering
+2025
+Passionate about robotics and automation
+Intern
+Tesla
+Summer 2023
+Worked on designing automated assembly lines
+Research Assistant
+UF Robotics Lab
+2024
+Developed robot control software
+DONE
+Bachelor of Science in Mechanical Engineering
+UF
+2021-2025
+DONE
+2
+
+
+
+Sample Input 3 – Minimal Profile (required fields only, no About, no Exp, no Edu)
+1
+charlie
+Password9!
+1
+Charlie
+Nguyen
+MIT
+Mathematics
+2027
+
+DONE
+DONE
+
+4. – Long About Me, 3 Education entries
+1
+diana
+StrongPass1!
+1
+Diana
+Lee
+Stanford University
+Biology
+2024
+I am passionate about genetics research and eager to pursue a PhD in molecular biology. I enjoy mentoring other students and working on projects that combine data science and biology for health innovation.
+DONE
+Bachelor of Science in Biology
+Stanford
+2020-2024
+Masters in Genetics
+Stanford
+2024-2026
+PhD in Molecular Biology
+Stanford
+2026-2030
+DONE
+
+5. Edge Case: Graduation Year boundary (1900)
+1
+edward
+ValidPass!1
+1
+Edward
+Johnson
+Harvard University
+History
+1900
+Love reading historical documents and ancient manuscripts
+DONE
+Bachelor of Arts in History
+Harvard
+1896-1900
+DONE
 

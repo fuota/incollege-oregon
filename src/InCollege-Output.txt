@@ -1,231 +1,110 @@
-1. Create Account - invalid (no special character)(too long character)(too short, 7 chars)(no special character)
-    Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    Please enter your username:
-    Please enter your password:
-    Password must be 8-12 characters.
-    Please enter your username:
-    Please enter your password:
-    Password must include at least one uppercase letter, one digit, and one special character.
-    Please enter your username:
-    Please enter your password:
-    Password must include at least one uppercase letter, one digit, and one special character.
-    Please enter your username:
-    Please enter your password:
-    Password must include at least one uppercase letter, one digit, and one special character.
-    Please enter your username:
-    Please enter your password:
-    Password must be 8-12 characters.
-    Please enter your username:
-    Please enter your password:
-    Password must include at least one uppercase letter, one digit, and one special character.
-    Please enter your username:
-    Please enter your password:
-    Account created successfully!
-    Welcome, alice
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    Job search/internship is under construction.
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    Find someone you know is under construction.
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    1. AWS
-    2. Docker
-    3. COBOL
-    4. Azure
-    5. GCP
-    6. Return to main menu
-    Enter your choice (1-6):
-    AWS is under construction.
+1.
 
 
-2. Try invalid choice at pre-login
-    Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    Invalid choice.
-
-
-
-
-3. Create Account 1 - valid (8 chars password, meets all rules)
-    Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    Please enter your username:
-    Please enter your password:
-    Account created successfully!
-    Welcome, alices
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    1. AWS
-    2. Docker
-    3. COBOL
-    4. Azure
-    5. GCP
-    6. Return to main menu
-    Enter your choice (1-6):
-    Docker is under construction.
-    1. AWS
-    2. Docker
-    3. COBOL
-    4. Azure
-    5. GCP
-    6. Return to main menu
-    Enter your choice (1-6):
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    Job search/internship is under construction.
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    No input found.
-
-
-
-4. Create Account 2 - valid (12 chars password, upper+digit+special)
-    Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    Please enter your username:
-    Please enter your password:
-    Account created successfully!
-    Welcome, UserD
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    Find someone you know is under construction.
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    No input found.
-
-
-
-
-5. Create Account 3- valid
-    Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    Please enter your username:
-    Please enter your password:
-    Account created successfully!
-    Welcome, UserE
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    Find someone you know is under construction.
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    No input found.
-
-
-
-
-6. Creat Account 4- Valid
-    Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    Please enter your username:
-    Please enter your password:
-    Account created successfully!
-    Welcome, UserF
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    Find someone you know is under construction.
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    No input found.
-
-
-
-
-
-
-
-7. Create Account 6- invalid ( reach the limit of 5 accounts)
-
-    Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    All permitted accounts have been created, please come back later.
-
-
-
-8. Login existing account but wrong password, then retry( but have to create the account first  to test login)
-
-    Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    Please enter your username:
-    Please enter your password:
-    Invalid username or password.
-    Please enter your username:
-    Please enter your password:
-    You have successfully logged in!
-    Welcome, UserD
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    Job search/internship is under construction.
-
-
-
-
- 9. Create account, fail password requirement, then retry
-
-    Welcome to InCollege!
-    1. Log In
-    2. Create New Account
-    Enter your choice (1 or 2):
-    Please enter your username:
-    Please enter your password:
-    Password must be 8-12 characters.
-    Please enter your username:
-    Please enter your password:
-    Account created successfully!
-    Welcome, UserH
-    1. Search for a job
-    2. Find someone you know
-    3. Learn a new skill
-    Enter your choice (1-3):
-    1. AWS
-    2. Docker
-    3. COBOL
-    4. Azure
-    5. GCP
-    6. Return to main menu
-    Enter your choice (1-6):
-    AWS is under construction.
+2.
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+Please enter your username:
+Please enter your password:
+You have successfully logged in!
+Welcome, bob
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+--- Create/Edit Profile ---
+Enter First Name:
+Enter Last Name:
+Enter University/College Attended:
+Enter Major:
+Enter Graduation Year (YYYY):
+Enter About Me (optional, max 200 chars, blank to skip):
+Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
+Experience #
+Company/Organization:
+Dates (e.g., Summer 2024):
+Description (optional, blank to skip):
+Experience #
+Company/Organization:
+Dates (e.g., Summer 2024):
+Description (optional, blank to skip):
+Experience #
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+Education #
+University/College:
+Years Attended (e.g., 2023-2025):
+Education #
+Last Name is required.
+University is required.
+Major is required.
+Graduation Year must be numeric.
+Profile not saved due to errors.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+--- Your Profile ---
+No profile found for current user.
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+--- Create/Edit Profile ---
+Enter First Name:
+Enter Last Name:
+Enter University/College Attended:
+Enter Major:
+Enter Graduation Year (YYYY):
+Enter About Me (optional, max 200 chars, blank to skip):
+Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
+Experience #
+Company/Organization:
+Dates (e.g., Summer 2024):
+Description (optional, blank to skip):
+Experience #
+Company/Organization:
+Dates (e.g., Summer 2024):
+Description (optional, blank to skip):
+Experience #
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+Education #
+University/College:
+Years Attended (e.g., 2023-2025):
+Education #
+Profile saved successfully!
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+--- Your Profile ---
+Name: Bob Smith
+University: University of Florida
+Major: Mechanical Engineering
+Graduation Year: 2025
+About Me: Passionate about robotics and automation
+Experience:
+  Title: Intern
+  Company: Tesla
+  Dates: Summer 2023
+  Description: Worked on designing automated assembly lines
+  Title: Research Assistant
+  Company: UF Robotics Lab
+  Dates: 2024
+  Description: Developed robot control software
+Education:
+  Degree: Bachelor of Science in Mechanical Engine
+  University: UF
+  Years: 2021-2025
+--------------------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Search for a user
+Enter your choice (1-4):
+No input found.

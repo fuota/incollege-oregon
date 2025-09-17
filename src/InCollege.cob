@@ -6,7 +6,7 @@ ENVIRONMENT DIVISION.
            FILE-CONTROL.
                SELECT InputFile ASSIGN TO "/workspace/src/InCollege-Input.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
-               SELECT OutputFile ASSIGN TO "/workspace/src/Keep-Output.txt"
+               SELECT OutputFile ASSIGN TO "/workspace/src/InCollege-Output.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
                SELECT AccountsFile ASSIGN TO "/workspace/src/Accounts.txt"
                    ORGANIZATION IS LINE SEQUENTIAL.
@@ -879,6 +879,9 @@ READ-NEXT-INPUT SECTION.
                CLOSE InputFile
                STOP RUN
        END-READ
+
+       MOVE FUNCTION TRIM(User-Input) TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
        EXIT SECTION.
 
 WRITE-AND-DISPLAY SECTION.

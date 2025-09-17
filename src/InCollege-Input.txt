@@ -2,15 +2,12 @@
 alice
 12Chars*Long
 1
-Alice
-Bus
-University of South Florida
-Comouter Science
+tyler
+dunham
+USF
+CS
 2026
-I am a student
-Intern
-apple
-Summer 2025
-worked
+about me too long about me too long about me too long about me too long about me too long about me too long about me too long about me too long about me too long about me too long about me too long about me too long about me too long about me too long about me too longabout me too long about me too long about me too long about me too long about me too long about me too long
 DONE
 DONE
+2
