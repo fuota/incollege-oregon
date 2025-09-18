@@ -4,55 +4,17 @@ Welcome to InCollege!
 Enter your choice (1 or 2):
 Please enter your username:
 Please enter your password:
-You have successfully logged in!
-Welcome, alice
+Account created successfully!
+Welcome, phineas
 ------- Main Menu --------
 1. Create/Edit My Profile
 2. View My Profile
 3. Learn a new skill
-4. Search for a user
+4. Find someone you know
 Enter your choice (1-4):
---- Create/Edit Profile ---
-Enter First Name:
-Alice
-Enter Last Name:
-Johnson
-Enter University/College Attended:
-USF Tampa
-Enter Major:
-Computer Science
-Enter Graduation Year (YYYY):
-2025
-Enter About Me (optional, max 200 chars, blank to skip):
-Love coding and learning.
-Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
-Experience #
-Software Intern
-Company/Organization:
-Tech Corp
-Dates (e.g., Summer 2024):
-2024
-Description (optional, blank to skip):
-Developed internal testing tools.
-Experience #
-DONE
-Add Education (optional, max 3 entries. Enter 'DONE' to finish):
-Education #
-Bachelor of Science
-University/College:
-USF
-Years Attended (e.g., 2023-2025):
-2021-2025
-Education #
-DONE
-Profile saved successfully!
-------- Main Menu --------
-1. Create/Edit My Profile
-2. View My Profile
-3. Learn a new skill
-4. Search for a user
-Enter your choice (1-4):
---- Your Profile ---
+Enter the full name of the person you are looking for:
+Alice Johnson
+--- Found User Profile ---
 Name: Alice Johnson
 University: USF Tampa
 Major: Computer Science
@@ -71,6 +33,6 @@ Education:
 1. Create/Edit My Profile
 2. View My Profile
 3. Learn a new skill
-4. Search for a user
+4. Find someone you know
 Enter your choice (1-4):
 No input found.

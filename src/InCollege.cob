@@ -125,6 +125,9 @@ DATA DIVISION.
            *>Helper for string operations
            01  Ptr          PIC 9(4).
 
+           *> Search variables
+           01 Search-Name                 PIC X(100).
+           01 Full-Name                   PIC X(100).
 
 
 PROCEDURE DIVISION.
@@ -371,7 +374,7 @@ SHOW-MAIN-MENU SECTION.
         PERFORM WRITE-AND-DISPLAY
        MOVE "3. Learn a new skill" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       MOVE "4. Search for a user" TO Message-Text
+       MOVE "4. Find someone you know" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
        MOVE "Enter your choice (1-4): " TO Message-Text
        PERFORM WRITE-AND-DISPLAY
@@ -394,8 +397,7 @@ SHOW-MAIN-MENU SECTION.
            WHEN "3"
                PERFORM LEARN-SKILL-MENU
            WHEN "4"
-               MOVE "Search for a user is under construction." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
+               PERFORM SEARCH-USER
                PERFORM SHOW-MAIN-MENU
            WHEN OTHER
                MOVE "Invalid choice. Please choose from 1-4." TO Message-Text
@@ -666,10 +668,6 @@ SAVE-PROFILE SECTION.
        CLOSE ProfilesFile
        EXIT SECTION.
 
-
-
-
-
 VIEW-PROFILE SECTION.
        MOVE "--- Your Profile ---" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
@@ -677,7 +675,7 @@ VIEW-PROFILE SECTION.
        OPEN INPUT ProfilesFile
        MOVE 'N' TO Found-Flag
 
-       *> Scan entire file; remember the last record for Current-Username
+       *> Scan entire file to find current user's profile
        PERFORM UNTIL 1 = 0
            READ ProfilesFile
                AT END
@@ -685,7 +683,6 @@ VIEW-PROFILE SECTION.
                NOT AT END
                    IF Prof-Username = Current-Username
                        MOVE 'Y' TO Found-Flag
-                    *>    EXIT PERFORM
                        *> Keep this record in memory (Profile-Record already holds it)
                    END-IF
            END-READ
@@ -698,116 +695,210 @@ VIEW-PROFILE SECTION.
            EXIT SECTION
        END-IF
 
+       *> Display profile information
+       PERFORM DISPLAY-PROFILE-INFO
 
+       EXIT SECTION.
+
+DISPLAY-PROFILE-INFO SECTION.
+       *> Name
        MOVE SPACES TO Message-Text
        MOVE 1 TO Ptr
        STRING "Name: " DELIMITED BY SIZE
-              Prof-FirstName DELIMITED BY SPACE
+              FUNCTION TRIM(Prof-FirstName) DELIMITED BY SIZE
               " " DELIMITED BY SIZE
-              Prof-LastName DELIMITED BY SPACE
+              FUNCTION TRIM(Prof-LastName) DELIMITED BY SIZE
               INTO Message-Text
               WITH POINTER Ptr
        PERFORM WRITE-AND-DISPLAY
 
+       *> University
        MOVE SPACES TO Message-Text
-         MOVE 1 TO Ptr
-         STRING "University: " DELIMITED BY SIZE
-                  Prof-University DELIMITED BY SIZE
-                  INTO Message-Text
-                  WITH POINTER Ptr
-         PERFORM WRITE-AND-DISPLAY
+       MOVE 1 TO Ptr
+       STRING "University: " DELIMITED BY SIZE
+              FUNCTION TRIM(Prof-University) DELIMITED BY SIZE
+              INTO Message-Text
+              WITH POINTER Ptr
+       PERFORM WRITE-AND-DISPLAY
 
+       *> Major
        MOVE SPACES TO Message-Text
        MOVE 1 TO Ptr
        STRING "Major: " DELIMITED BY SIZE
-                Prof-Major DELIMITED BY SIZE
-                INTO Message-Text
-                WITH POINTER Ptr
-         PERFORM WRITE-AND-DISPLAY
+              FUNCTION TRIM(Prof-Major) DELIMITED BY SIZE
+              INTO Message-Text
+              WITH POINTER Ptr
+       PERFORM WRITE-AND-DISPLAY
 
+       *> Graduation Year
        MOVE SPACES TO Message-Text
        MOVE 1 TO Ptr
-         STRING "Graduation Year: " DELIMITED BY SIZE
-                 Prof-GradYear DELIMITED BY SIZE
-                 INTO Message-Text
-                 WITH POINTER Ptr
-            PERFORM WRITE-AND-DISPLAY
+       STRING "Graduation Year: " DELIMITED BY SIZE
+              Prof-GradYear DELIMITED BY SIZE
+              INTO Message-Text
+              WITH POINTER Ptr
+       PERFORM WRITE-AND-DISPLAY
 
-       MOVE SPACES TO Message-Text
-       MOVE 1 TO Ptr
-         STRING "About Me: " DELIMITED BY SIZE
-                 Prof-About DELIMITED BY SIZE
-                 INTO Message-Text
-                 WITH POINTER Ptr
-            PERFORM WRITE-AND-DISPLAY
+       *> About Me
+       IF FUNCTION TRIM(Prof-About) NOT = SPACES
+           MOVE SPACES TO Message-Text
+           MOVE 1 TO Ptr
+           STRING "About Me: " DELIMITED BY SIZE
+                  FUNCTION TRIM(Prof-About) DELIMITED BY SIZE
+                  INTO Message-Text
+                  WITH POINTER Ptr
+           PERFORM WRITE-AND-DISPLAY
+       ELSE
+           MOVE "About Me: " TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       END-IF
 
+       *> Experience
        MOVE "Experience:" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       PERFORM VARYING I FROM 1 BY 1 UNTIL I > Prof-Exp-Count
-           MOVE SPACES TO Message-Text
-           MOVE 1 TO Ptr
-              STRING "  Title: " DELIMITED BY SIZE
-                    Prof-Exp-Title(I) DELIMITED BY SIZE
-                    INTO Message-Text
-                    WITH POINTER Ptr
-                PERFORM WRITE-AND-DISPLAY
 
-           MOVE SPACES TO Message-Text
-              MOVE 1 TO Ptr
-              STRING "  Company: " DELIMITED BY SIZE
-                    Prof-Exp-Company(I) DELIMITED BY SIZE
-                    INTO Message-Text
-                    WITH POINTER Ptr
-                PERFORM WRITE-AND-DISPLAY
-
-              MOVE SPACES TO Message-Text
-                  MOVE 1 TO Ptr
-                  STRING "  Dates: " DELIMITED BY SIZE
-                      Prof-Exp-Dates(I) DELIMITED BY SIZE
+       IF Prof-Exp-Count = 0
+           MOVE "  None" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       ELSE
+           PERFORM VARYING I FROM 1 BY 1 UNTIL I > Prof-Exp-Count
+               MOVE SPACES TO Message-Text
+               MOVE 1 TO Ptr
+               STRING "  Title: " DELIMITED BY SIZE
+                      FUNCTION TRIM(Prof-Exp-Title(I)) DELIMITED BY SIZE
                       INTO Message-Text
                       WITH POINTER Ptr
-                 PERFORM WRITE-AND-DISPLAY
+               PERFORM WRITE-AND-DISPLAY
 
-           MOVE SPACES TO Message-Text
-           MOVE 1 TO Ptr
-           STRING "  Description: " DELIMITED BY SIZE
-                 Prof-Exp-Desc(I) DELIMITED BY SIZE
-                 INTO Message-Text
-                 WITH POINTER Ptr
-           PERFORM WRITE-AND-DISPLAY
+               MOVE SPACES TO Message-Text
+               MOVE 1 TO Ptr
+               STRING "  Company: " DELIMITED BY SIZE
+                      FUNCTION TRIM(Prof-Exp-Company(I)) DELIMITED BY SIZE
+                      INTO Message-Text
+                      WITH POINTER Ptr
+               PERFORM WRITE-AND-DISPLAY
 
-       END-PERFORM
+               MOVE SPACES TO Message-Text
+               MOVE 1 TO Ptr
+               STRING "  Dates: " DELIMITED BY SIZE
+                      FUNCTION TRIM(Prof-Exp-Dates(I)) DELIMITED BY SIZE
+                      INTO Message-Text
+                      WITH POINTER Ptr
+               PERFORM WRITE-AND-DISPLAY
 
+               IF FUNCTION TRIM(Prof-Exp-Desc(I)) NOT = SPACES
+                   MOVE SPACES TO Message-Text
+                   MOVE 1 TO Ptr
+                   STRING "  Description: " DELIMITED BY SIZE
+                          FUNCTION TRIM(Prof-Exp-Desc(I)) DELIMITED BY SIZE
+                          INTO Message-Text
+                          WITH POINTER Ptr
+                   PERFORM WRITE-AND-DISPLAY
+               ELSE
+                   MOVE "  Description: " TO Message-Text
+                   PERFORM WRITE-AND-DISPLAY
+               END-IF
+           END-PERFORM
+       END-IF
+
+       *> Education
        MOVE "Education:" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       PERFORM VARYING I FROM 1 BY 1 UNTIL I > Prof-Edu-Count
-           MOVE SPACES TO Message-Text
-                MOVE 1 TO Ptr
-                STRING "  Degree: " DELIMITED BY SIZE
-                        Prof-Edu-Degree(I) DELIMITED BY SIZE
-                        INTO Message-Text
-                        WITH POINTER Ptr
-                    PERFORM WRITE-AND-DISPLAY
 
-              MOVE SPACES TO Message-Text
-                 MOVE 1 TO Ptr
-                 STRING "  University: " DELIMITED BY SIZE
-                            Prof-Edu-University(I) DELIMITED BY SIZE
-                            INTO Message-Text
-                            WITH POINTER Ptr
-                      PERFORM WRITE-AND-DISPLAY
+       IF Prof-Edu-Count = 0
+           MOVE "  None" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       ELSE
+           PERFORM VARYING I FROM 1 BY 1 UNTIL I > Prof-Edu-Count
+               MOVE SPACES TO Message-Text
+               MOVE 1 TO Ptr
+               STRING "  Degree: " DELIMITED BY SIZE
+                      FUNCTION TRIM(Prof-Edu-Degree(I)) DELIMITED BY SIZE
+                      INTO Message-Text
+                      WITH POINTER Ptr
+               PERFORM WRITE-AND-DISPLAY
 
-           MOVE SPACES TO Message-Text
-              MOVE 1 TO Ptr
-              STRING "  Years: " DELIMITED BY SIZE
-                         Prof-Edu-Years(I) DELIMITED BY SIZE
-                         INTO Message-Text
-                         WITH POINTER Ptr
-                 PERFORM WRITE-AND-DISPLAY
-       END-PERFORM
+               MOVE SPACES TO Message-Text
+               MOVE 1 TO Ptr
+               STRING "  University: " DELIMITED BY SIZE
+                      FUNCTION TRIM(Prof-Edu-University(I)) DELIMITED BY SIZE
+                      INTO Message-Text
+                      WITH POINTER Ptr
+               PERFORM WRITE-AND-DISPLAY
 
+               MOVE SPACES TO Message-Text
+               MOVE 1 TO Ptr
+               STRING "  Years: " DELIMITED BY SIZE
+                      FUNCTION TRIM(Prof-Edu-Years(I)) DELIMITED BY SIZE
+                      INTO Message-Text
+                      WITH POINTER Ptr
+               PERFORM WRITE-AND-DISPLAY
+           END-PERFORM
+       END-IF
+*>
       *> MOVE "--------------------" TO Message-Text
       *> PERFORM WRITE-AND-DISPLAY
+       EXIT SECTION.
+
+*> USER SEARCH FUNCTIONALITY
+SEARCH-USER SECTION.
+       MOVE "Enter the full name of the person you are looking for:" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO Search-Name
+
+       *> Debug: Show what we're searching for
+      *> MOVE SPACES TO Message-Text
+      *> STRING "Searching for: [" DELIMITED BY SIZE
+      *>        Search-Name DELIMITED BY SIZE
+      *>        "]" DELIMITED BY SIZE
+      *>        INTO Message-Text
+      *> PERFORM WRITE-AND-DISPLAY
+
+       *> Search through profiles file
+       OPEN INPUT ProfilesFile
+      *> MOVE "ProfilesFile opened successfully" TO Message-Text
+      *> PERFORM WRITE-AND-DISPLAY
+       MOVE 'N' TO Found-Flag
+
+       PERFORM UNTIL 1 = 0
+           READ ProfilesFile
+               AT END
+      *>             MOVE "ProfilesFile is empty or at end" TO Message-Text
+      *>             PERFORM WRITE-AND-DISPLAY
+                   EXIT PERFORM
+               NOT AT END
+                   *> Build full name from profile
+      *>             MOVE "Found at least one profile record" TO Message-Text
+      *>             PERFORM WRITE-AND-DISPLAY
+                   MOVE SPACES TO Full-Name
+                   MOVE 1 TO Ptr
+                   STRING FUNCTION TRIM(Prof-FirstName) DELIMITED BY SIZE
+                          " " DELIMITED BY SIZE
+                          FUNCTION TRIM(Prof-LastName) DELIMITED BY SIZE
+                          INTO Full-Name
+                          WITH POINTER Ptr
+
+                   *> Compare with search name (case insensitive)
+                   IF FUNCTION UPPER-CASE(FUNCTION TRIM(Full-Name)) =
+                      FUNCTION UPPER-CASE(FUNCTION TRIM(Search-Name))
+                       MOVE 'Y' TO Found-Flag
+                       EXIT PERFORM
+                   END-IF
+           END-READ
+       END-PERFORM
+
+       CLOSE ProfilesFile
+       IF Found-Flag = 'Y'
+           MOVE "--- Found User Profile ---" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM DISPLAY-PROFILE-INFO
+       ELSE
+           MOVE "No one by that name could be found." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       END-IF
+
        EXIT SECTION.
 
 
