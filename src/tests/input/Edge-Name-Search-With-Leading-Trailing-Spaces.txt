@@ -1,1 +1,5 @@
-//Login, search for " John Doe  " -> should trim properly and return a match
+1
+alice
+12Chars*Long
+4
+     John Doe
