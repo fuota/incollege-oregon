@@ -2,6 +2,4 @@
 alice
 12Chars*Long
 4
-John Doe
-4
-Alice Johnson
+john doe

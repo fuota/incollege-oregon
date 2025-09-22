@@ -1,2 +1,5 @@
 alice                                             12Chars*Long
 user4                                             PassWord9@
+bob                                               12Chars*Long
+tammy                                             Secret2!
+phineas                                           Secret3!
