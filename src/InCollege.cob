@@ -881,8 +881,8 @@ SEARCH-USER SECTION.
                           WITH POINTER Ptr
 
                    *> Compare with search name (case insensitive)
-                   IF FUNCTION UPPER-CASE(FUNCTION TRIM(Full-Name)) =
-                      FUNCTION UPPER-CASE(FUNCTION TRIM(Search-Name))
+                   IF FUNCTION TRIM(Full-Name) =
+                      FUNCTION TRIM(Search-Name)
                        MOVE 'Y' TO Found-Flag
                        EXIT PERFORM
                    END-IF
