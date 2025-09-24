@@ -683,7 +683,8 @@ VIEW-PROFILE SECTION.
                NOT AT END
                    IF Prof-Username = Current-Username
                        MOVE 'Y' TO Found-Flag
-                       *> Keep this record in memory (Profile-Record already holds it)
+                       *> Display profile information
+                       PERFORM DISPLAY-PROFILE-INFO
                    END-IF
            END-READ
        END-PERFORM
@@ -694,9 +695,6 @@ VIEW-PROFILE SECTION.
            PERFORM WRITE-AND-DISPLAY
            EXIT SECTION
        END-IF
-
-       *> Display profile information
-       PERFORM DISPLAY-PROFILE-INFO
 
        EXIT SECTION.
 
