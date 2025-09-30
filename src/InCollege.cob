@@ -181,14 +181,9 @@ MAIN-AUTHENTICATE SECTION.
        PERFORM WRITE-AND-DISPLAY
        EXIT.
 
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No input found." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
-               CLOSE InputFile
-      *>         CLOSE OutputFile
-               STOP RUN
-       END-READ
+
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO User-Input
 
        EVALUATE User-Input
            WHEN "1"
@@ -399,13 +394,9 @@ SHOW-MAIN-MENU SECTION.
        MOVE "Enter your choice (1-5): " TO Message-Text
        PERFORM WRITE-AND-DISPLAY
 
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No input found." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
-               CLOSE InputFile
-               STOP RUN
-       END-READ
+
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO User-Input
 
        EVALUATE User-Input
            WHEN "1"
@@ -954,13 +945,7 @@ LEARN-SKILL-MENU SECTION.
        MOVE "Enter your choice (1-6): " TO Message-Text
        PERFORM WRITE-AND-DISPLAY
 
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No skill input found." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
-               CLOSE InputFile
-               STOP RUN
-       END-READ
+       PERFORM READ-NEXT-INPUT
 
        EVALUATE User-Input
            WHEN "1"
@@ -1056,20 +1041,28 @@ SEND-CONNECTION-REQUEST SECTION.
        WRITE Connection-Record-Line
        CLOSE ConnectionsFile
 
-       MOVE 1 TO Ptr
+      *> MOVE 1 TO Ptr
+      *> MOVE SPACES TO Message-Text
+      *> STRING "You have successfully sent a connection request to " DELIMITED BY SIZE
+      *>        FUNCTION TRIM(Search-Name) DELIMITED BY SIZE
+      *>        "!" DELIMITED BY SIZE
+      *>        INTO Message-Text
+      *>        WITH POINTER Ptr
+      *> END-STRING
+      *> PERFORM WRITE-AND-DISPLAY
+
+
        MOVE SPACES TO Message-Text
-       STRING "You have sent a connection request to " DELIMITED BY SIZE
-              FUNCTION TRIM(Search-Name) DELIMITED BY SIZE
+       MOVE 1 TO Ptr
+       STRING "You have successfully sent a connetction request to " DELIMITED BY SIZE
+              FUNCTION TRIM(Prof-FirstName) DELIMITED BY SIZE
+              " " DELIMITED BY SIZE
+              FUNCTION TRIM(Prof-LastName) DELIMITED BY SIZE
+                "!" DELIMITED BY SIZE
               INTO Message-Text
               WITH POINTER Ptr
-       END-STRING
        PERFORM WRITE-AND-DISPLAY
-*>
-      *> MOVE "Connection request sent to " TO Message-Text
-      *> STRING Message-Text DELIMITED BY SIZE
-      *>        FUNCTION TRIM(Search-Name) DELIMITED BY SIZE
-      *>        INTO Message-Text
-      *> PERFORM WRITE-AND-DISPLAY
+
        EXIT SECTION.
 
 
