@@ -16,6 +16,10 @@ ENVIRONMENT DIVISION.
                SELECT TempProfilesFile ASSIGN TO "/workspace/src/ProfilesTmp.txt"
                     ORGANIZATION IS LINE SEQUENTIAL.
 
+               SELECT ConnectionsFile ASSIGN TO "/workspace/src/Connections.txt"
+                    ORGANIZATION IS LINE SEQUENTIAL.
+
+
 DATA DIVISION.
        FILE SECTION.
            FD InputFile.
@@ -71,6 +75,9 @@ DATA DIVISION.
                       10 T-Prof-Edu-University PIC X(60).
                       10 T-Prof-Edu-Years      PIC X(20).
 
+           FD ConnectionsFile.
+                   01 Connection-Record-Line PIC X(200).
+
 
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(300).
@@ -89,6 +96,11 @@ DATA DIVISION.
 
            01 Validation-Failed PIC X VALUE 'N'.
 
+           01 Found-Username PIC X(50) VALUE SPACES.
+
+           *> Connection
+           01 Conn-Sender-WS      PIC X(50) VALUE SPACES.
+           01 Conn-Recipient-WS   PIC X(50) VALUE SPACES.
 
            01 Current-Username            PIC X(50).  *> set after successful login
            01 Temp-Input                   PIC X(100).
@@ -129,6 +141,12 @@ DATA DIVISION.
            01 Search-Name                 PIC X(100).
            01 Full-Name                   PIC X(100).
 
+           *> Request Variables
+           01 Request-Choice          PIC X(1).
+           01 Already-Exists          PIC X VALUE 'N'.
+           01 Request-Sender          PIC X(50).
+           01 Request-Recipient       PIC X(50).
+
 
 PROCEDURE DIVISION.
        OPEN OUTPUT OutputFile
@@ -163,14 +181,9 @@ MAIN-AUTHENTICATE SECTION.
        PERFORM WRITE-AND-DISPLAY
        EXIT.
 
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No input found." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
-               CLOSE InputFile
-      *>         CLOSE OutputFile
-               STOP RUN
-       END-READ
+
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO User-Input
 
        EVALUATE User-Input
            WHEN "1"
@@ -376,16 +389,14 @@ SHOW-MAIN-MENU SECTION.
        PERFORM WRITE-AND-DISPLAY
        MOVE "4. Find someone you know" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       MOVE "Enter your choice (1-4): " TO Message-Text
+       MOVE "5. View My Pending Connection Requests" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice (1-5): " TO Message-Text
        PERFORM WRITE-AND-DISPLAY
 
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No input found." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
-               CLOSE InputFile
-               STOP RUN
-       END-READ
+
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO User-Input
 
        EVALUATE User-Input
            WHEN "1"
@@ -398,9 +409,11 @@ SHOW-MAIN-MENU SECTION.
                PERFORM LEARN-SKILL-MENU
            WHEN "4"
                PERFORM SEARCH-USER
+           WHEN "5"
+               PERFORM VIEW-PENDING-REQUESTS
                PERFORM SHOW-MAIN-MENU
            WHEN OTHER
-               MOVE "Invalid choice. Please choose from 1-4." TO Message-Text
+               MOVE "Invalid choice. Please choose from 1-5." TO Message-Text
                PERFORM WRITE-AND-DISPLAY
                PERFORM SHOW-MAIN-MENU
        END-EVALUATE.
@@ -846,30 +859,17 @@ SEARCH-USER SECTION.
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO Search-Name
 
-       *> Debug: Show what we're searching for
-      *> MOVE SPACES TO Message-Text
-      *> STRING "Searching for: [" DELIMITED BY SIZE
-      *>        Search-Name DELIMITED BY SIZE
-      *>        "]" DELIMITED BY SIZE
-      *>        INTO Message-Text
-      *> PERFORM WRITE-AND-DISPLAY
-
        *> Search through profiles file
        OPEN INPUT ProfilesFile
-      *> MOVE "ProfilesFile opened successfully" TO Message-Text
-      *> PERFORM WRITE-AND-DISPLAY
        MOVE 'N' TO Found-Flag
+       MOVE SPACES TO Found-Username
 
        PERFORM UNTIL 1 = 0
            READ ProfilesFile
                AT END
-      *>             MOVE "ProfilesFile is empty or at end" TO Message-Text
-      *>             PERFORM WRITE-AND-DISPLAY
                    EXIT PERFORM
                NOT AT END
                    *> Build full name from profile
-      *>             MOVE "Found at least one profile record" TO Message-Text
-      *>             PERFORM WRITE-AND-DISPLAY
                    MOVE SPACES TO Full-Name
                    MOVE 1 TO Ptr
                    STRING FUNCTION TRIM(Prof-FirstName) DELIMITED BY SIZE
@@ -878,23 +878,51 @@ SEARCH-USER SECTION.
                           INTO Full-Name
                           WITH POINTER Ptr
 
-                   *> Compare with search name (case insensitive)
-                   IF FUNCTION TRIM(Full-Name) =
-                      FUNCTION TRIM(Search-Name)
+                   *> Case-insensitive compare
+                   IF FUNCTION UPPER-CASE(FUNCTION TRIM(Full-Name)) =
+                      FUNCTION UPPER-CASE(FUNCTION TRIM(Search-Name))
                        MOVE 'Y' TO Found-Flag
+                       MOVE Prof-Username TO Found-Username
                        EXIT PERFORM
                    END-IF
            END-READ
        END-PERFORM
-
        CLOSE ProfilesFile
+
        IF Found-Flag = 'Y'
            MOVE "--- Found User Profile ---" TO Message-Text
            PERFORM WRITE-AND-DISPLAY
            PERFORM DISPLAY-PROFILE-INFO
+
+           *> Connection request menu
+           MOVE "1. Send Connection Request" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           MOVE "2. Back to Main Menu" TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           MOVE "Enter your choice: " TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+
+           *> Use helper to avoid READ-after-EOF errors
+           PERFORM READ-NEXT-INPUT
+           MOVE User-Input(1:1) TO Request-Choice
+
+           EVALUATE Request-Choice
+               WHEN "1"
+                   PERFORM SEND-CONNECTION-REQUEST
+                   PERFORM SHOW-MAIN-MENU
+               WHEN "2"
+                   PERFORM SHOW-MAIN-MENU
+               WHEN OTHER
+                   MOVE "Invalid choice. Returning to main menu." TO Message-Text
+                   PERFORM WRITE-AND-DISPLAY
+                   PERFORM SHOW-MAIN-MENU
+           END-EVALUATE
+
        ELSE
            MOVE "No one by that name could be found." TO Message-Text
            PERFORM WRITE-AND-DISPLAY
+           PERFORM SHOW-MAIN-MENU
+           EXIT SECTION
        END-IF
 
        EXIT SECTION.
@@ -917,13 +945,7 @@ LEARN-SKILL-MENU SECTION.
        MOVE "Enter your choice (1-6): " TO Message-Text
        PERFORM WRITE-AND-DISPLAY
 
-       READ InputFile INTO User-Input
-           AT END
-               MOVE "No skill input found." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
-               CLOSE InputFile
-               STOP RUN
-       END-READ
+       PERFORM READ-NEXT-INPUT
 
        EVALUATE User-Input
            WHEN "1"
@@ -957,6 +979,161 @@ LEARN-SKILL-MENU SECTION.
        EXIT SECTION.
 
 
+*> SEND CONNECTION REQUEST SECTIONS
+SEND-CONNECTION-REQUEST SECTION.
+       MOVE FUNCTION TRIM(Current-Username)  TO Request-Sender
+       MOVE FUNCTION TRIM(Found-Username)    TO Request-Recipient
+       MOVE 'N' TO Already-Exists
+
+       IF Request-Recipient = SPACES
+           MOVE "Unable to send request: target username not found." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       IF FUNCTION UPPER-CASE(Request-Sender) =
+          FUNCTION UPPER-CASE(Request-Recipient)
+           MOVE "You cannot send a connection request to yourself." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       OPEN INPUT ConnectionsFile
+       PERFORM UNTIL 1 = 0
+           READ ConnectionsFile INTO Connection-Record-Line
+               AT END EXIT PERFORM
+               NOT AT END
+                   MOVE SPACES TO Conn-Sender-WS Conn-Recipient-WS
+                   UNSTRING Connection-Record-Line
+                       DELIMITED BY "|"
+                       INTO Conn-Sender-WS
+                            Conn-Recipient-WS
+
+                   IF FUNCTION TRIM(Conn-Sender-WS)    = Request-Sender AND
+                      FUNCTION TRIM(Conn-Recipient-WS) = Request-Recipient
+                       MOVE "You already sent a connection request to this user." TO Message-Text
+                       PERFORM WRITE-AND-DISPLAY
+                       MOVE 'Y' TO Already-Exists
+                       EXIT PERFORM
+                   END-IF
+
+                   IF FUNCTION TRIM(Conn-Sender-WS)    = Request-Recipient AND
+                      FUNCTION TRIM(Conn-Recipient-WS) = Request-Sender
+                       MOVE "This user has already sent you a connection request." TO Message-Text
+                       PERFORM WRITE-AND-DISPLAY
+                       MOVE 'Y' TO Already-Exists
+                       EXIT PERFORM
+                   END-IF
+           END-READ
+       END-PERFORM
+       CLOSE ConnectionsFile
+
+       IF Already-Exists = 'Y'
+           EXIT SECTION
+       END-IF
+
+       OPEN EXTEND ConnectionsFile
+       MOVE SPACES TO Connection-Record-Line
+       STRING FUNCTION TRIM(Request-Sender)    DELIMITED BY SIZE
+              "|"                                DELIMITED BY SIZE
+              FUNCTION TRIM(Request-Recipient)   DELIMITED BY SIZE
+              INTO Connection-Record-Line
+       WRITE Connection-Record-Line
+       CLOSE ConnectionsFile
+
+      *> MOVE 1 TO Ptr
+      *> MOVE SPACES TO Message-Text
+      *> STRING "You have successfully sent a connection request to " DELIMITED BY SIZE
+      *>        FUNCTION TRIM(Search-Name) DELIMITED BY SIZE
+      *>        "!" DELIMITED BY SIZE
+      *>        INTO Message-Text
+      *>        WITH POINTER Ptr
+      *> END-STRING
+      *> PERFORM WRITE-AND-DISPLAY
+
+
+       MOVE SPACES TO Message-Text
+       MOVE 1 TO Ptr
+       STRING "You have successfully sent a connetction request to " DELIMITED BY SIZE
+              FUNCTION TRIM(Prof-FirstName) DELIMITED BY SIZE
+              " " DELIMITED BY SIZE
+              FUNCTION TRIM(Prof-LastName) DELIMITED BY SIZE
+                "!" DELIMITED BY SIZE
+              INTO Message-Text
+              WITH POINTER Ptr
+       PERFORM WRITE-AND-DISPLAY
+
+       EXIT SECTION.
+
+
+*> VIEW PENDING REQUEST SECTIONS
+VIEW-PENDING-REQUESTS SECTION.
+       MOVE "--- Pending Connection Requests ---" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE 'N' TO Found-Flag
+
+       OPEN INPUT ConnectionsFile
+       PERFORM UNTIL 1 = 0
+           READ ConnectionsFile INTO Connection-Record-Line
+               AT END EXIT PERFORM
+               NOT AT END
+                   MOVE SPACES TO Conn-Sender-WS Conn-Recipient-WS
+                   UNSTRING Connection-Record-Line
+                      DELIMITED BY "|"
+                      INTO Conn-Sender-WS
+                           Conn-Recipient-WS
+
+                   IF FUNCTION TRIM(Conn-Recipient-WS) =
+                      FUNCTION TRIM(Current-Username)
+                       *> Try to show sender's full name
+                       OPEN INPUT ProfilesFile
+                       MOVE 'N' TO Validation-Failed
+                       PERFORM UNTIL 1 = 0
+                           READ ProfilesFile
+                               AT END EXIT PERFORM
+                               NOT AT END
+                                   IF FUNCTION TRIM(Prof-Username) =
+                                      FUNCTION TRIM(Conn-Sender-WS)
+                                       MOVE SPACES TO Message-Text
+                                       MOVE 1 TO Ptr
+                                       STRING "Request from: " DELIMITED BY SIZE
+                                              FUNCTION TRIM(Prof-FirstName) DELIMITED BY SIZE
+                                              " " DELIMITED BY SIZE
+                                              FUNCTION TRIM(Prof-LastName)  DELIMITED BY SIZE
+                                              INTO Message-Text
+                                              WITH POINTER Ptr
+                                       PERFORM WRITE-AND-DISPLAY
+                                       MOVE 'Y' TO Validation-Failed
+                                       EXIT PERFORM
+                                   END-IF
+                           END-READ
+                       END-PERFORM
+                       CLOSE ProfilesFile
+
+                       IF Validation-Failed NOT = 'Y'
+                           MOVE SPACES TO Message-Text
+                           MOVE 1 TO Ptr
+                           STRING "Request from (username): " DELIMITED BY SIZE
+                                  FUNCTION TRIM(Conn-Sender-WS) DELIMITED BY SIZE
+                                  INTO Message-Text
+                                  WITH POINTER Ptr
+                           PERFORM WRITE-AND-DISPLAY
+                       END-IF
+
+                       MOVE 'Y' TO Found-Flag
+                   END-IF
+           END-READ
+       END-PERFORM
+       CLOSE ConnectionsFile
+
+       IF Found-Flag = 'N'
+           MOVE "You have no pending connection requests at this time." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       END-IF
+
+       MOVE "-----------------------------------" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       EXIT SECTION.
 
 
 *> HELPER SECTIONS
@@ -988,4 +1165,3 @@ WRITE-ACCOUNT SECTION.
        WRITE Account-Record
        CLOSE AccountsFile
        EXIT SECTION.
-
