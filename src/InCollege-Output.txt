@@ -6,37 +6,24 @@ Enter your choice (1 or 2):
 Please enter your username:
 Please enter your password:
 You have successfully logged in!
-Welcome, alice
+Welcome, tammy
 ------- Main Menu --------
 1. Create/Edit My Profile
 2. View My Profile
 3. Learn a new skill
 4. Find someone you know
 5. View My Pending Connection Requests
+6. View My Connections
 Enter your choice (1-5):
-4
-Enter the full name of the person you are looking for:
-kaylee Tran
---- Found User Profile ---
-Name: Kaylee Tran
-University: FSU
-Major: Biomedical Science
-Graduation Year: 2027
-About Me:
-Experience:
-  None
-Education:
-  None
-1. Send Connection Request
-2. Back to Main Menu
-Enter your choice:
-1
-You have successfully sent a connetction request to Kaylee Tran!
+6
+---- Your Connections ----
+• Alice Johnson (USF Tampa, Computer Science)
 ------- Main Menu --------
 1. Create/Edit My Profile
 2. View My Profile
 3. Learn a new skill
 4. Find someone you know
 5. View My Pending Connection Requests
+6. View My Connections
 Enter your choice (1-5):
 No input found.
