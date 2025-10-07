@@ -1335,7 +1335,7 @@ DISPLAY-REQUEST-FROM SECTION.
            READ ProfilesFile
                AT END EXIT PERFORM
                NOT AT END
-                   IF (Request-Sender NOT = SPACES AND 
+                   IF (Request-Sender NOT = SPACES AND
                        FUNCTION TRIM(Prof-Username) = FUNCTION TRIM(Request-Sender))
                        OR
                       (Request-Sender = SPACES AND
