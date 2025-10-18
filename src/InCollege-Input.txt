@@ -1,4 +1,10 @@
 1
 tammy
 Secret2!
-6
+7
+1
+Software Engineer Intern
+Internship position for software engineering students.
+Twitter
+San Francisco, CA
+$30/hour

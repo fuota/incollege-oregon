@@ -23,6 +23,9 @@ ENVIRONMENT DIVISION.
                SELECT TempConnectionsFile ASSIGN TO "/workspace/src/Connect.txt"
                     ORGANIZATION IS LINE SEQUENTIAL.
 
+               SELECT JobsFile ASSIGN TO "/workspace/src/Jobs.txt"
+                    ORGANIZATION IS LINE SEQUENTIAL.
+
 
 
 DATA DIVISION.
@@ -88,6 +91,8 @@ DATA DIVISION.
            FD TempConnectionsFile.
                    01 Temp-Connection-Record-Line PIC X(200).
 
+           FD JobsFile.
+                   01 Job-Record PIC X(200).
 
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(300).
@@ -156,6 +161,13 @@ DATA DIVISION.
            01 Already-Exists          PIC X VALUE 'N'.
            01 Request-Sender          PIC X(50).
            01 Request-Recipient       PIC X(50).
+
+           *> Jobs Variables
+           01 WS-Job-Title       PIC X(100).
+           01 WS-Job-Description PIC X(200).
+           01 WS-Job-Employer    PIC X(100).
+           01 WS-Job-Location    PIC X(100).
+           01 WS-Job-Salary      PIC X(50).
 
 
 PROCEDURE DIVISION.
@@ -403,7 +415,9 @@ SHOW-MAIN-MENU SECTION.
        PERFORM WRITE-AND-DISPLAY
        MOVE "6. View My Connections" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       MOVE "Enter your choice (1-5): " TO Message-Text
+       MOVE "7. Job /Internship Search" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice (1-7): " TO Message-Text
        PERFORM WRITE-AND-DISPLAY
 
 
@@ -427,8 +441,11 @@ SHOW-MAIN-MENU SECTION.
            WHEN "6"
                PERFORM VIEW-CONNECTIONS
                PERFORM SHOW-MAIN-MENU
+           WHEN "7"
+                PERFORM JOB-INTERNSHIP-SEARCH
+                PERFORM SHOW-MAIN-MENU
            WHEN OTHER
-               MOVE "Invalid choice. Please choose from 1-6." TO Message-Text
+               MOVE "Invalid choice. Please choose from 1-7." TO Message-Text
                PERFORM WRITE-AND-DISPLAY
                PERFORM SHOW-MAIN-MENU
        END-EVALUATE.
@@ -1373,6 +1390,104 @@ DISPLAY-REQUEST-FROM SECTION.
            END-IF
            PERFORM WRITE-AND-DISPLAY
        END-IF
+
+       EXIT SECTION.
+
+JOB-INTERNSHIP-SEARCH SECTION.
+       MOVE "1. Post a Job/Internship" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "2. Browse Jobs/Internships (under construction)" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice (1-2): " TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO User-Input
+
+       EVALUATE User-Input
+           WHEN "1"
+               PERFORM POST-JOB
+           WHEN "2"
+               MOVE "Browse Jobs/Internships is under construction." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+           WHEN OTHER
+               MOVE "Invalid choice. Returning to main menu." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+       END-EVALUATE.
+       EXIT SECTION.
+
+POST-JOB SECTION.
+       MOVE "--- Post a Job/Internship ---" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       *> Job Title
+       MOVE "Enter Job Title (required):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-Job-Title
+       IF WS-Job-Title = SPACES
+           MOVE "Job Title is required. Returning to menu." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> Description
+       MOVE "Enter Job Description (required):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-Job-Description
+       IF WS-Job-Description = SPACES
+           MOVE "Job Description is required. Returning to menu." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> Employer
+       MOVE "Enter Employer Name (required):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-Job-Employer
+       IF WS-Job-Employer = SPACES
+           MOVE "Employer Name is required. Returning to menu." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> Location
+       MOVE "Enter Job Location (required):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-Job-Location
+       IF WS-Job-Location = SPACES
+           MOVE "Job Location is required. Returning to menu." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> Salary
+       MOVE "Enter Salary (optional, press Enter to skip):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO WS-Job-Salary
+
+       *> Save the job posting
+       OPEN EXTEND JobsFile
+       MOVE SPACES TO Job-Record
+       STRING WS-Job-Title DELIMITED BY SIZE
+              "|" DELIMITED BY SIZE
+              WS-Job-Description DELIMITED BY SIZE
+              "|" DELIMITED BY SIZE
+              WS-Job-Employer DELIMITED BY SIZE
+              "|" DELIMITED BY SIZE
+              WS-Job-Location DELIMITED BY SIZE
+              "|" DELIMITED BY SIZE
+              WS-Job-Salary DELIMITED BY SIZE
+              INTO Job-Record
+       WRITE Job-Record
+       CLOSE JobsFile
+
+       MOVE "Job/Internship posted successfully!" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
 
        EXIT SECTION.
 

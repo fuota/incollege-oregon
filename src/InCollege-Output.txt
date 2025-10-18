@@ -14,10 +14,25 @@ Welcome, tammy
 4. Find someone you know
 5. View My Pending Connection Requests
 6. View My Connections
-Enter your choice (1-5):
-6
----- Your Connections ----
-• Alice Johnson (USF Tampa, Computer Science)
+7. Job /Internship Search
+Enter your choice (1-7):
+7
+1. Post a Job/Internship
+2. Browse Jobs/Internships (under construction)
+Enter your choice (1-2):
+1
+--- Post a Job/Internship ---
+Enter Job Title (required):
+Software Engineer Intern
+Enter Job Description (required):
+Internship position for software engineering students.
+Enter Employer Name (required):
+Twitter
+Enter Job Location (required):
+San Francisco, CA
+Enter Salary (optional, press Enter to skip):
+$30/hour
+Job/Internship posted successfully!
 ------- Main Menu --------
 1. Create/Edit My Profile
 2. View My Profile
@@ -25,5 +40,6 @@ Enter your choice (1-5):
 4. Find someone you know
 5. View My Pending Connection Requests
 6. View My Connections
-Enter your choice (1-5):
+7. Job /Internship Search
+Enter your choice (1-7):
 No input found.
