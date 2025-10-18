@@ -92,7 +92,7 @@ DATA DIVISION.
                    01 Temp-Connection-Record-Line PIC X(200).
 
            FD JobsFile.
-                   01 Job-Record PIC X(200).
+                   01 Job-Record PIC X(550).
 
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(300).
@@ -443,7 +443,6 @@ SHOW-MAIN-MENU SECTION.
                PERFORM SHOW-MAIN-MENU
            WHEN "7"
                 PERFORM JOB-INTERNSHIP-SEARCH
-                PERFORM SHOW-MAIN-MENU
            WHEN OTHER
                MOVE "Invalid choice. Please choose from 1-7." TO Message-Text
                PERFORM WRITE-AND-DISPLAY
@@ -1398,7 +1397,9 @@ JOB-INTERNSHIP-SEARCH SECTION.
        PERFORM WRITE-AND-DISPLAY
        MOVE "2. Browse Jobs/Internships (under construction)" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       MOVE "Enter your choice (1-2): " TO Message-Text
+       MOVE "3. Return to main menu" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice (1-3): " TO Message-Text
        PERFORM WRITE-AND-DISPLAY
 
        PERFORM READ-NEXT-INPUT
@@ -1410,9 +1411,12 @@ JOB-INTERNSHIP-SEARCH SECTION.
            WHEN "2"
                MOVE "Browse Jobs/Internships is under construction." TO Message-Text
                PERFORM WRITE-AND-DISPLAY
+           WHEN "3"
+                PERFORM SHOW-MAIN-MENU
            WHEN OTHER
                MOVE "Invalid choice. Returning to main menu." TO Message-Text
                PERFORM WRITE-AND-DISPLAY
+               PERFORM SHOW-MAIN-MENU
        END-EVALUATE.
        EXIT SECTION.
 
@@ -1426,8 +1430,9 @@ POST-JOB SECTION.
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-Job-Title
        IF WS-Job-Title = SPACES
-           MOVE "Job Title is required. Returning to menu." TO Message-Text
+           MOVE "Error: Job Title is required. Returning to main menu." TO Message-Text
            PERFORM WRITE-AND-DISPLAY
+           PERFORM SHOW-MAIN-MENU
            EXIT SECTION
        END-IF
 
@@ -1437,8 +1442,9 @@ POST-JOB SECTION.
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-Job-Description
        IF WS-Job-Description = SPACES
-           MOVE "Job Description is required. Returning to menu." TO Message-Text
+           MOVE "Error: Job Description is required. Returning to main menu." TO Message-Text
            PERFORM WRITE-AND-DISPLAY
+           PERFORM SHOW-MAIN-MENU
            EXIT SECTION
        END-IF
 
@@ -1448,8 +1454,9 @@ POST-JOB SECTION.
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-Job-Employer
        IF WS-Job-Employer = SPACES
-           MOVE "Employer Name is required. Returning to menu." TO Message-Text
+           MOVE "Error: Employer Name is required. Returning to main menu." TO Message-Text
            PERFORM WRITE-AND-DISPLAY
+           PERFORM SHOW-MAIN-MENU
            EXIT SECTION
        END-IF
 
@@ -1459,13 +1466,14 @@ POST-JOB SECTION.
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-Job-Location
        IF WS-Job-Location = SPACES
-           MOVE "Job Location is required. Returning to menu." TO Message-Text
+           MOVE "Error: Job Location is required. Returning to main menu." TO Message-Text
            PERFORM WRITE-AND-DISPLAY
+           PERFORM SHOW-MAIN-MENU
            EXIT SECTION
        END-IF
 
        *> Salary
-       MOVE "Enter Salary (optional, press Enter to skip):" TO Message-Text
+       MOVE "Enter Salary (optional, enter NONE to skip):" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-Job-Salary
@@ -1488,6 +1496,7 @@ POST-JOB SECTION.
 
        MOVE "Job/Internship posted successfully!" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
+       PERFORM SHOW-MAIN-MENU
 
        EXIT SECTION.
 

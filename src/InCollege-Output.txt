@@ -19,20 +19,9 @@ Enter your choice (1-7):
 7
 1. Post a Job/Internship
 2. Browse Jobs/Internships (under construction)
-Enter your choice (1-2):
-1
---- Post a Job/Internship ---
-Enter Job Title (required):
-Software Engineer Intern
-Enter Job Description (required):
-Internship position for software engineering students.
-Enter Employer Name (required):
-Twitter
-Enter Job Location (required):
-San Francisco, CA
-Enter Salary (optional, press Enter to skip):
-$30/hour
-Job/Internship posted successfully!
+3. Return to main menu
+Enter your choice (1-3):
+3
 ------- Main Menu --------
 1. Create/Edit My Profile
 2. View My Profile
