@@ -1444,7 +1444,13 @@ POST-JOB SECTION.
        IF WS-Job-Description = SPACES
            MOVE "Error: Job Description is required. Returning to main menu." TO Message-Text
            PERFORM WRITE-AND-DISPLAY
-           PERFORM SHOW-MAIN-MENU
+           PERFORM JOB-INTERNSHIP-SEARCH
+           EXIT SECTION
+       END-IF
+       IF FUNCTION LENGTH(WS-Job-Description) > 200
+           MOVE "Error: Job Description exceeds 200 characters. Returning to Job Search menu." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM JOB-INTERNSHIP-SEARCH
            EXIT SECTION
        END-IF
 
@@ -1477,6 +1483,9 @@ POST-JOB SECTION.
        PERFORM WRITE-AND-DISPLAY
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO WS-Job-Salary
+       IF FUNCTION UPPER-CASE(WS-Job-Salary) = "NONE"
+           MOVE SPACES TO WS-Job-Salary
+       END-IF
 
        *> Save the job posting
        OPEN EXTEND JobsFile
@@ -1496,7 +1505,7 @@ POST-JOB SECTION.
 
        MOVE "Job/Internship posted successfully!" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       PERFORM SHOW-MAIN-MENU
+       PERFORM JOB-INTERNSHIP-SEARCH
 
        EXIT SECTION.
 
