@@ -6,7 +6,7 @@ Enter your choice (1 or 2):
 Please enter your username:
 Please enter your password:
 You have successfully logged in!
-Welcome, tammy
+Welcome, user4
 ------- Main Menu --------
 1. Create/Edit My Profile
 2. View My Profile
@@ -17,18 +17,22 @@ Welcome, tammy
 7. Job /Internship Search
 Enter your choice (1-7):
 7
+--- Job Search/Internship Menu ---
 1. Post a Job/Internship
-2. Browse Jobs/Internships (under construction)
-3. Return to main menu
-Enter your choice (1-3):
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
 3
-------- Main Menu --------
-1. Create/Edit My Profile
-2. View My Profile
-3. Learn a new skill
-4. Find someone you know
-5. View My Pending Connection Requests
-6. View My Connections
-7. Job /Internship Search
-Enter your choice (1-7):
+--- Your Job Applications ---
+Application Summary for user4
+------------------------------
+You have not applied to any jobs yet.
+------------------------------
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
 No input found.
