@@ -6,7 +6,7 @@ Enter your choice (1 or 2):
 Please enter your username:
 Please enter your password:
 You have successfully logged in!
-Welcome, sho
+Welcome, alice
 ------- Main Menu --------
 1. Create/Edit My Profile
 2. View My Profile
@@ -17,41 +17,85 @@ Welcome, sho
 7. Job /Internship Search
 Enter your choice (1-7):
 7
+--- Job Search/Internship Menu ---
 1. Post a Job/Internship
-2. Browse Jobs/Internships (under construction)
-3. Return to main menu
-Enter your choice (1-3):
-1
---- Post a Job/Internship ---
-Enter Job Title (required):
-Software Engineer Internship
-Enter Job Description (required):
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-Enter Employer Name (required):
-Google
-Enter Job Location (required):
-Remote
-Enter Salary (optional, enter NONE to skip):
-$25/hour
-Job/Internship posted successfully!
-1. Post a Job/Internship
-2. Browse Jobs/Internships (under construction)
-3. Return to main menu
-Enter your choice (1-3):
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
 2
-Browse Jobs/Internships is under construction.
+--- Available Job Listings ---
+001. Front End Developer at TechCopr (New York, NY)
+002. React Developer at NativeApps Corp (Remote)
+003. Data Scientist Intern at DataInsights LLC (San Francisco, CA)
+004. Mobile App Developer at AppM (Remote)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+1
+--- Job Details ---
+Title: Front End Developer
+Description: This is an internship specialize in front end Developer
+Employer: TechCopr
+Location: New York, NY
+Salary: $25/hour
+-------------------
+1. Apply for this Job
+2. Back to Job List
+Enter your choice (1-2):
+1
+Your application for Front End Developer at TechCopr has been submitted.
+--- Available Job Listings ---
+001. Front End Developer at TechCopr (New York, NY)
+002. React Developer at NativeApps Corp (Remote)
+003. Data Scientist Intern at DataInsights LLC (San Francisco, CA)
+004. Mobile App Developer at AppM (Remote)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+2
+--- Job Details ---
+Title: React Developer
+Description: This is an internship specialize in react Developer
+Employer: NativeApps Corp
+Location: Remote
+Salary: $30/hour
+-------------------
+1. Apply for this Job
+2. Back to Job List
+Enter your choice (1-2):
+1
+Your application for React Developer at NativeApps Corp has been submitted.
+--- Available Job Listings ---
+001. Front End Developer at TechCopr (New York, NY)
+002. React Developer at NativeApps Corp (Remote)
+003. Data Scientist Intern at DataInsights LLC (San Francisco, CA)
+004. Mobile App Developer at AppM (Remote)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+0
+--- Job Search/Internship Menu ---
 1. Post a Job/Internship
-2. Browse Jobs/Internships (under construction)
-3. Return to main menu
-Enter your choice (1-3):
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
 3
-------- Main Menu --------
-1. Create/Edit My Profile
-2. View My Profile
-3. Learn a new skill
-4. Find someone you know
-5. View My Pending Connection Requests
-6. View My Connections
-7. Job /Internship Search
-Enter your choice (1-7):
+--- Your Job Applications ---
+Application Summary for alice
+------------------------------
+Job Title: Front End Developer
+Employer: TechCopr
+Location: New York, NY
+---
+Job Title: React Developer
+Employer: NativeApps Corp
+Location: Remote
+---
+Total Applications: 002
+------------------------------
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
 No input found.

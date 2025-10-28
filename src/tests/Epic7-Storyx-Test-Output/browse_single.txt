@@ -17,18 +17,15 @@ Welcome, sho
 7. Job /Internship Search
 Enter your choice (1-7):
 7
+--- Job Search/Internship Menu ---
 1. Post a Job/Internship
-2. Browse Jobs/Internships (under construction)
-3. Return to main menu
-Enter your choice (1-3):
-3
-------- Main Menu --------
-1. Create/Edit My Profile
-2. View My Profile
-3. Learn a new skill
-4. Find someone you know
-5. View My Pending Connection Requests
-6. View My Connections
-7. Job /Internship Search
-Enter your choice (1-7):
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
+2
+--- Available Job Listings ---
+001. Software Engineer Internship at Google (Google)
+-----------------------------
+Enter job number to view details, or 0 to go back:
 No input found.

@@ -1,0 +1,2 @@
+alice|Front End Developer|TechCopr|New York, NY
+alice|React Developer|NativeApps Corp|Remote
