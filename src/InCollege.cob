@@ -26,6 +26,11 @@ ENVIRONMENT DIVISION.
                SELECT JobsFile ASSIGN TO "/workspace/src/Jobs.txt"
                     ORGANIZATION IS LINE SEQUENTIAL.
 
+               *> Lucas
+               SELECT ApplicationsFile ASSIGN TO "/workspace/src/Applications.txt"
+                      ORGANIZATION IS LINE SEQUENTIAL.
+
+
 
 
 DATA DIVISION.
@@ -93,6 +98,10 @@ DATA DIVISION.
 
            FD JobsFile.
                    01 Job-Record PIC X(550).
+
+           FD ApplicationsFile.
+               01 Application-Record PIC X(800).
+
 
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(300).
@@ -168,6 +177,25 @@ DATA DIVISION.
            01 WS-Job-Employer    PIC X(100).
            01 WS-Job-Location    PIC X(100).
            01 WS-Job-Salary      PIC X(50).
+
+
+           01 WS-Job-Count        PIC 9(4) VALUE 0.
+           01 WS-Job-Idx          PIC 9(4) VALUE 0.
+           01 WS-Job-Choice       PIC 9(4) VALUE 0.
+
+           01 WS-Jobs-Title       OCCURS 200 TIMES PIC X(100).
+           01 WS-Jobs-Desc        OCCURS 200 TIMES PIC X(200).
+           01 WS-Jobs-Emp         OCCURS 200 TIMES PIC X(100).
+           01 WS-Jobs-Loc         OCCURS 200 TIMES PIC X(100).
+           01 WS-Jobs-Salary      OCCURS 200 TIMES PIC X(50).
+           01 WS-Jobs-Raw         OCCURS 200 TIMES PIC X(550).
+
+           01 WS-Short-Line       PIC X(300).
+           01 WS-Num-Text         PIC X(10).
+
+           *> Guard to prevent duplicate applications
+           01 Already-Applied     PIC X VALUE 'N'.
+
 
 
 PROCEDURE DIVISION.
@@ -1393,14 +1421,21 @@ DISPLAY-REQUEST-FROM SECTION.
        EXIT SECTION.
 
 JOB-INTERNSHIP-SEARCH SECTION.
+
+       MOVE "--- Job Search/Internship Menu ---" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
        MOVE "1. Post a Job/Internship" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       MOVE "2. Browse Jobs/Internships (under construction)" TO Message-Text
+       MOVE "2. Browse Jobs/Internships" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       MOVE "3. Return to main menu" TO Message-Text
+       MOVE "3. View My Applications" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       MOVE "Enter your choice (1-3): " TO Message-Text
+       MOVE "4. Back to Main Menu" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice (1-4): " TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
 
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO User-Input
@@ -1408,16 +1443,21 @@ JOB-INTERNSHIP-SEARCH SECTION.
        EVALUATE User-Input
            WHEN "1"
                PERFORM POST-JOB
+               PERFORM JOB-INTERNSHIP-SEARCH
            WHEN "2"
-               MOVE "Browse Jobs/Internships is under construction." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
+               PERFORM BROWSE-JOBS
+               PERFORM JOB-INTERNSHIP-SEARCH
            WHEN "3"
-                PERFORM SHOW-MAIN-MENU
-           WHEN OTHER
-               MOVE "Invalid choice. Returning to main menu." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
+               PERFORM VIEW-MY-APPLICATIONS
+               PERFORM JOB-INTERNSHIP-SEARCH
+           WHEN "4"
                PERFORM SHOW-MAIN-MENU
+           WHEN OTHER
+               MOVE "Invalid choice. Returning to Job menu." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM JOB-INTERNSHIP-SEARCH
        END-EVALUATE.
+
        EXIT SECTION.
 
 POST-JOB SECTION.
@@ -1508,6 +1548,313 @@ POST-JOB SECTION.
        PERFORM JOB-INTERNSHIP-SEARCH
 
        EXIT SECTION.
+
+
+
+LOAD-ALL-JOBS SECTION.
+    MOVE 0 TO WS-Job-Count
+    OPEN INPUT JobsFile
+    PERFORM UNTIL 1 = 0
+        READ JobsFile INTO Job-Record
+            AT END EXIT PERFORM
+            NOT AT END
+                ADD 1 TO WS-Job-Count
+                MOVE Job-Record TO WS-Jobs-Raw(WS-Job-Count)
+
+                UNSTRING Job-Record
+                    DELIMITED BY "|"
+                    INTO WS-Jobs-Title(WS-Job-Count)
+                         WS-Jobs-Desc(WS-Job-Count)
+                         WS-Jobs-Emp(WS-Job-Count)
+                         WS-Jobs-Loc(WS-Job-Count)
+                         WS-Jobs-Salary(WS-Job-Count)
+    END-PERFORM
+    CLOSE JobsFile
+    EXIT SECTION.
+
+
+
+BROWSE-JOBS SECTION.
+    PERFORM LOAD-ALL-JOBS
+
+    MOVE "--- Available Job Listings ---" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+
+    IF WS-Job-Count = 0
+        MOVE "(No jobs available)" TO Message-Text
+        PERFORM WRITE-AND-DISPLAY
+        EXIT SECTION
+    END-IF
+
+    PERFORM VARYING WS-Job-Idx FROM 1 BY 1 UNTIL WS-Job-Idx > WS-Job-Count
+    *> Before building WS-Short-Line:
+    MOVE SPACES TO WS-Num-Text
+    MOVE WS-Job-Idx TO WS-Num-Text
+    INSPECT WS-Num-Text REPLACING LEADING "0" BY " "
+
+    MOVE SPACES TO WS-Short-Line
+    MOVE 1 TO Ptr
+    STRING FUNCTION TRIM(WS-Num-Text) DELIMITED BY SIZE
+           ". " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Title(WS-Job-Idx)) DELIMITED BY SIZE
+           " at " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Emp(WS-Job-Idx)) DELIMITED BY SIZE
+           " (" DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Loc(WS-Job-Idx)) DELIMITED BY SIZE
+           ")" DELIMITED BY SIZE
+           INTO WS-Short-Line
+           WITH POINTER Ptr
+
+        MOVE WS-Short-Line TO Message-Text
+        PERFORM WRITE-AND-DISPLAY
+    END-PERFORM
+
+    MOVE "-----------------------------" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+    MOVE "Enter job number to view details, or 0 to go back: " TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+
+    PERFORM READ-NEXT-INPUT
+    MOVE FUNCTION TRIM(User-Input) TO WS-Num-Text
+    MOVE FUNCTION NUMVAL(WS-Num-Text) TO WS-Job-Choice
+
+    IF WS-Job-Choice = 0
+        EXIT SECTION
+    END-IF
+
+    IF WS-Job-Choice < 1 OR WS-Job-Choice > WS-Job-Count
+        MOVE "Invalid job number." TO Message-Text
+        PERFORM WRITE-AND-DISPLAY
+        PERFORM BROWSE-JOBS
+        EXIT SECTION
+    END-IF
+
+    PERFORM SHOW-JOB-DETAILS
+    EXIT SECTION.
+
+
+
+SHOW-JOB-DETAILS SECTION.
+    MOVE "--- Job Details ---" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+
+    MOVE SPACES TO Message-Text
+    MOVE 1 TO Ptr
+    STRING "Title: " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Title(WS-Job-Choice)) DELIMITED BY SIZE
+           INTO Message-Text WITH POINTER Ptr
+    PERFORM WRITE-AND-DISPLAY
+
+    MOVE SPACES TO Message-Text
+    MOVE 1 TO Ptr
+    STRING "Description: " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Desc(WS-Job-Choice)) DELIMITED BY SIZE
+           INTO Message-Text WITH POINTER Ptr
+    PERFORM WRITE-AND-DISPLAY
+
+    MOVE SPACES TO Message-Text
+    MOVE 1 TO Ptr
+    STRING "Employer: " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Emp(WS-Job-Choice)) DELIMITED BY SIZE
+           INTO Message-Text WITH POINTER Ptr
+    PERFORM WRITE-AND-DISPLAY
+
+    MOVE SPACES TO Message-Text
+    MOVE 1 TO Ptr
+    STRING "Location: " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Loc(WS-Job-Choice)) DELIMITED BY SIZE
+           INTO Message-Text WITH POINTER Ptr
+    PERFORM WRITE-AND-DISPLAY
+
+    MOVE SPACES TO Message-Text
+    MOVE 1 TO Ptr
+    STRING "Salary: " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Salary(WS-Job-Choice)) DELIMITED BY SIZE
+           INTO Message-Text WITH POINTER Ptr
+    PERFORM WRITE-AND-DISPLAY
+
+    MOVE "-------------------" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+    MOVE "1. Apply for this Job" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+    MOVE "2. Back to Job List" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+    MOVE "Enter your choice: " TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+
+    PERFORM READ-NEXT-INPUT
+    MOVE FUNCTION TRIM(User-Input)(1:1) TO Request-Choice
+
+    EVALUATE Request-Choice
+        WHEN "1"
+            PERFORM APPLY-FOR-JOB
+            *> After applying, go back to list:
+            PERFORM BROWSE-JOBS
+        WHEN "2"
+            PERFORM BROWSE-JOBS
+        WHEN OTHER
+            MOVE "Invalid choice. Returning to job list." TO Message-Text
+            PERFORM WRITE-AND-DISPLAY
+            PERFORM BROWSE-JOBS
+    END-EVALUATE
+    .
+    EXIT SECTION.
+
+
+
+APPLY-FOR-JOB SECTION.
+    MOVE 'N' TO Already-Applied
+
+    *> Check if user already applied to this job
+    OPEN INPUT ApplicationsFile
+    MOVE 'N' TO Already-Applied
+    PERFORM UNTIL 1 = 0
+        READ ApplicationsFile INTO Application-Record
+            AT END EXIT PERFORM
+            NOT AT END
+                *> Application-Record format:
+                *> username|title|employer|location|raw
+                UNSTRING Application-Record
+                    DELIMITED BY "|"
+                    INTO Account-Username-Input
+                         WS-Job-Title
+                         WS-Job-Employer
+                         WS-Job-Location
+                         Job-Record
+
+                IF FUNCTION UPPER-CASE(FUNCTION TRIM(Account-Username-Input)) =
+                   FUNCTION UPPER-CASE(FUNCTION TRIM(Current-Username))
+                   AND FUNCTION UPPER-CASE(FUNCTION TRIM(WS-Job-Title)) =
+                       FUNCTION UPPER-CASE(FUNCTION TRIM(WS-Jobs-Title(WS-Job-Choice)))
+                   AND FUNCTION UPPER-CASE(FUNCTION TRIM(WS-Job-Employer)) =
+                       FUNCTION UPPER-CASE(FUNCTION TRIM(WS-Jobs-Emp(WS-Job-Choice)))
+                   AND FUNCTION UPPER-CASE(FUNCTION TRIM(WS-Job-Location)) =
+                       FUNCTION UPPER-CASE(FUNCTION TRIM(WS-Jobs-Loc(WS-Job-Choice)))
+                    MOVE 'Y' TO Already-Applied
+                    EXIT PERFORM
+                END-IF
+    END-PERFORM
+    CLOSE ApplicationsFile
+
+
+    IF Already-Applied = 'Y'
+        MOVE "You have already applied to this job." TO Message-Text
+        PERFORM WRITE-AND-DISPLAY
+        EXIT SECTION
+    END-IF
+
+    *> Append application: store username + compact job keys + full raw line
+    OPEN EXTEND ApplicationsFile
+    MOVE SPACES TO Application-Record
+    STRING FUNCTION TRIM(Current-Username) DELIMITED BY SIZE
+           "|" DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Title(WS-Job-Choice)) DELIMITED BY SIZE
+           "|" DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Emp(WS-Job-Choice)) DELIMITED BY SIZE
+           "|" DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Loc(WS-Job-Choice)) DELIMITED BY SIZE
+           "|" DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Raw(WS-Job-Choice)) DELIMITED BY SIZE
+           INTO Application-Record
+    WRITE Application-Record
+    CLOSE ApplicationsFile
+
+    MOVE SPACES TO Message-Text
+    MOVE 1 TO Ptr
+    STRING "Your application for " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Title(WS-Job-Choice)) DELIMITED BY SIZE
+           " at " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Jobs-Emp(WS-Job-Choice)) DELIMITED BY SIZE
+           " has been submitted." DELIMITED BY SIZE
+           INTO Message-Text
+           WITH POINTER Ptr
+    PERFORM WRITE-AND-DISPLAY
+    EXIT SECTION.
+
+
+
+VIEW-MY-APPLICATIONS SECTION.
+    MOVE "--- Your Job Applications ---" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+
+    MOVE SPACES TO Message-Text
+    MOVE 1 TO Ptr
+    STRING "Application Summary for " DELIMITED BY SIZE
+           FUNCTION TRIM(Current-Username) DELIMITED BY SIZE
+           INTO Message-Text WITH POINTER Ptr
+    PERFORM WRITE-AND-DISPLAY
+
+    MOVE "------------------------------" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+
+    OPEN INPUT ApplicationsFile
+    MOVE 0 TO WS-Job-Count
+
+    PERFORM UNTIL 1 = 0
+        READ ApplicationsFile INTO Application-Record
+            AT END EXIT PERFORM
+            NOT AT END
+                *> Expect: user|title|emp|loc|rawline
+                MOVE SPACES TO Conn-Sender-WS Conn-Recipient-WS
+                MOVE SPACES TO WS-Short-Line
+                MOVE 1 TO Ptr
+
+                *> Parse username (field1) quickly to filter
+                UNSTRING Application-Record
+                    DELIMITED BY "|"
+                    INTO Account-Username-Input   *> reuse as temp: field1 user
+                         WS-Job-Title             *> field2 title (reusing existing WS/fields)
+                         WS-Job-Employer          *> field3 emp
+                         WS-Job-Location          *> field4 loc
+                         Job-Record               *> field5 raw (ignored in report)
+
+                IF FUNCTION UPPER-CASE(FUNCTION TRIM(Account-Username-Input))
+                   = FUNCTION UPPER-CASE(FUNCTION TRIM(Current-Username))
+                    ADD 1 TO WS-Job-Count
+                    MOVE SPACES TO Message-Text
+                    MOVE 1 TO Ptr
+                    STRING "Job Title: " DELIMITED BY SIZE
+                           FUNCTION TRIM(WS-Job-Title) DELIMITED BY SIZE
+                           INTO Message-Text WITH POINTER Ptr
+                    PERFORM WRITE-AND-DISPLAY
+
+                    MOVE SPACES TO Message-Text
+                    MOVE 1 TO Ptr
+                    STRING "Employer: " DELIMITED BY SIZE
+                           FUNCTION TRIM(WS-Job-Employer) DELIMITED BY SIZE
+                           INTO Message-Text WITH POINTER Ptr
+                    PERFORM WRITE-AND-DISPLAY
+
+                    MOVE SPACES TO Message-Text
+                    MOVE 1 TO Ptr
+                    STRING "Location: " DELIMITED BY SIZE
+                           FUNCTION TRIM(WS-Job-Location) DELIMITED BY SIZE
+                           INTO Message-Text WITH POINTER Ptr
+                    PERFORM WRITE-AND-DISPLAY
+
+                    MOVE "---" TO Message-Text
+                    PERFORM WRITE-AND-DISPLAY
+                END-IF
+    END-PERFORM
+    CLOSE ApplicationsFile
+
+    MOVE "------------------------------" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+    MOVE SPACES TO WS-Num-Text
+    MOVE WS-Job-Count TO WS-Num-Text
+    INSPECT WS-Num-Text REPLACING LEADING "0" BY " "
+
+    MOVE SPACES TO Message-Text
+    MOVE 1 TO Ptr
+    STRING "Total Applications: " DELIMITED BY SIZE
+           FUNCTION TRIM(WS-Num-Text) DELIMITED BY SIZE
+           INTO Message-Text WITH POINTER Ptr
+    PERFORM WRITE-AND-DISPLAY
+
+    MOVE "------------------------------" TO Message-Text
+    PERFORM WRITE-AND-DISPLAY
+    EXIT SECTION.
+
 
 
 *> HELPER SECTIONS
