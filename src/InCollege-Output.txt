@@ -6,7 +6,7 @@ Enter your choice (1 or 2):
 Please enter your username:
 Please enter your password:
 You have successfully logged in!
-Welcome, user4
+Welcome, alice
 ------- Main Menu --------
 1. Create/Edit My Profile
 2. View My Profile
@@ -15,24 +15,24 @@ Welcome, user4
 5. View My Pending Connection Requests
 6. View My Connections
 7. Job /Internship Search
-Enter your choice (1-7):
-7
---- Job Search/Internship Menu ---
-1. Post a Job/Internship
-2. Browse Jobs/Internships
-3. View My Applications
-4. Return to main menu
-Enter your choice (1-4):
-3
---- Your Job Applications ---
-Application Summary for user4
-------------------------------
-You have not applied to any jobs yet.
-------------------------------
---- Job Search/Internship Menu ---
-1. Post a Job/Internship
-2. Browse Jobs/Internships
-3. View My Applications
-4. Return to main menu
-Enter your choice (1-4):
+8. Messages
+Enter your choice (1-8):
+8
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+1
+Enter recipient's username (must be a connection):
+user4
+Enter your message (max 200 chars):
+Hi John! I noticed we both study Computer Science. Would you like to connect and share insights about our field?
+Message sent to user4 successfully!
+---------------------
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
 No input found.
