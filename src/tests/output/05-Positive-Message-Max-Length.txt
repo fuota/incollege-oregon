@@ -27,7 +27,7 @@ Enter your choice:
 Enter recipient's username (must be a connection):
 user4
 Enter your message (max 200 chars):
-Hi John! I noticed we both study Computer Science. Would you like to connect and share insights about our field? Hi John! I noticed we both study Computer Science. Would you like to connect and share. Test
+Hi John! I noticed we both study Computer Science. Would you like to connect and share insights about our field? Hi John! I noticed we both study Computer Science. Would you like to connect and share
 Message sent to user4 successfully!
 ---------------------
 --- Messages Menu ---
