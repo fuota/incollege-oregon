@@ -1,8 +1,6 @@
 1
 alice
 12Chars*Long
-5
+8
 1
-2
-2
-6
+alice

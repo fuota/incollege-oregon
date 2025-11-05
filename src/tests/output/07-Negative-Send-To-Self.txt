@@ -25,18 +25,8 @@ Enter your choice (1-8):
 Enter your choice:
 1
 Enter recipient's username (must be a connection):
-user4
-Enter your message (max 200 chars):
-Hi John! I noticed we both study Computer Science. Would you like to connect and share insights about our field?
-Message sent to user4 successfully!
----------------------
---- Messages Menu ---
-1. Send a New Message
-2. View My Messages
-3. Back to Main Menu
-Enter your choice:
-2
-View My Messages is under construction.
+alice
+You can only message users you are connected with.
 --- Messages Menu ---
 1. Send a New Message
 2. View My Messages

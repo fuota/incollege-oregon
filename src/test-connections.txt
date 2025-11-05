@@ -1,9 +1,0 @@
-tammy|bob
-tammy|user4
-bob|user4
-phineas|tammy
-bob|phineas
-alice|phineas
-tammy|alice
-bob|alice
-phineas|alice

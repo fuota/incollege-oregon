@@ -14,16 +14,22 @@ Welcome, alice
 4. Find someone you know
 5. View My Pending Connection Requests
 6. View My Connections
-Enter your choice (1-5):
-6
----- Your Connections ----
-• Kaylee Tran (FSU, Biomedical Science)
-------- Main Menu --------
-1. Create/Edit My Profile
-2. View My Profile
-3. Learn a new skill
-4. Find someone you know
-5. View My Pending Connection Requests
-6. View My Connections
-Enter your choice (1-5):
+7. Job /Internship Search
+8. Messages
+Enter your choice (1-8):
+8
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+1
+Enter recipient's username (must be a connection):
+tammy
+You can only message users you are connected with.
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
 No input found.
