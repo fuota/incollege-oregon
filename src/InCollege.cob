@@ -210,12 +210,11 @@ DATA DIVISION.
 
            *> Messaging variables (Week 8)
            01 Msg-Recipient         PIC X(50).
-           01 Msg-Content           PIC X(200).
+           01 Msg-Content           PIC X(300).
            01 Is-Connected          PIC X VALUE 'N'.
            01 Msg-Sender-WS         PIC X(50).
            01 Msg-Recipient-WS      PIC X(50).
-           01 Msg-Content-WS        PIC X(200).
-
+           01 Msg-Content-WS        PIC X(300).
 
 PROCEDURE DIVISION.
        OPEN OUTPUT OutputFile
@@ -1948,16 +1947,17 @@ SEND-NEW-MESSAGE SECTION.
        PERFORM READ-NEXT-INPUT
        MOVE FUNCTION TRIM(User-Input) TO Msg-Content
 
-       *> Validate message content length
-       IF FUNCTION LENGTH(Msg-Content) > 200
-           MOVE "Error: Message exceeds 200 characters." TO Message-Text
+       *> Validate message content is not empty first
+       IF Msg-Content = SPACES
+           MOVE "Error: Message content cannot be empty." TO Message-Text
            PERFORM WRITE-AND-DISPLAY
            PERFORM MESSAGES-MENU
            EXIT SECTION
        END-IF
 
-       IF Msg-Content = SPACES
-           MOVE "Error: Message content cannot be empty." TO Message-Text
+       *> Validate message content length - disallow messages over 200 chars
+       IF FUNCTION LENGTH(Msg-Content) > 200
+           MOVE "Error: Message exceeds 200 characters. Please send a shorter message." TO Message-Text
            PERFORM WRITE-AND-DISPLAY
            PERFORM MESSAGES-MENU
            EXIT SECTION
