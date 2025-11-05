@@ -27,7 +27,7 @@ Enter your choice:
 Enter recipient's username (must be a connection):
 user4
 Enter your message (max 200 chars):
-Hi John! I noticed we both study Computer Science. Would you like to connect and share insights about our field?
+Hi John! I noticed we both study Computer Science. Should we join our networks and share insights about our field?
 Message sent to user4 successfully!
 ---------------------
 --- Messages Menu ---
@@ -35,8 +35,12 @@ Message sent to user4 successfully!
 2. View My Messages
 3. Back to Main Menu
 Enter your choice:
-2
-View My Messages is under construction.
+1
+Enter recipient's username (must be a connection):
+bob
+Enter your message (max 200 chars):
+Hi Bob! Let's connect. I think we have a lot in common. Would you like to join my network? I really believe we can help each other grow professionally. We can share resources, job leads, and industry insights. Looking forward to connecting with you!
+Error: Message exceeds 200 characters. Please send a shorter message.
 --- Messages Menu ---
 1. Send a New Message
 2. View My Messages

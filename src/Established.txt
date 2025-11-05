@@ -1,4 +1,2 @@
 alice                                             |user4
 alice                                             |bob
-alice                                             |tammy
-

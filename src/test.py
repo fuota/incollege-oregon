@@ -8,20 +8,14 @@ output_dir = os.path.join(base_dir, "tests", "output")
 in_college_input = os.path.join(base_dir, "InCollege-Input.txt")
 exe_path = os.path.join(base_dir, ".." ,"bin", "InCollege")  # ./bin/InCollege
 
-# File paths for connection-related files
-established_file = os.path.join(base_dir, "Established.txt")
-connect_file = os.path.join(base_dir, "Connect.txt")
-connections_file = os.path.join(base_dir, "Connections.txt")
-test_connections_file = os.path.join(base_dir, "test-connections.txt")
 
-# Clear connection-related files
-for file_path in [established_file, connect_file, connections_file]:
-    if os.path.exists(file_path):
+
+# Clear message files
+message_file = os.path.join(base_dir, "Messages.txt")
+for file_path in [message_file]:
+    if os.path.exists(message_file):
         open(file_path, 'w').close()  # Clear the file
 
-# Copy test-connections.txt to Connections.txt
-if os.path.exists(test_connections_file):
-    shutil.copyfile(test_connections_file, connections_file)
 
 # Ensure output directory exists and is clean
 if not os.path.exists(output_dir):

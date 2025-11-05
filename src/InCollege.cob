@@ -1956,7 +1956,7 @@ SEND-NEW-MESSAGE SECTION.
        END-IF
 
        *> Validate message content length - disallow messages over 200 chars
-       IF FUNCTION LENGTH(Msg-Content) > 200
+       IF FUNCTION LENGTH(FUNCTION TRIM(Msg-Content)) > 200
            MOVE "Error: Message exceeds 200 characters. Please send a shorter message." TO Message-Text
            PERFORM WRITE-AND-DISPLAY
            PERFORM MESSAGES-MENU

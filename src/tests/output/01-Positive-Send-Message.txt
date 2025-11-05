@@ -35,11 +35,4 @@ Message sent to user4 successfully!
 2. View My Messages
 3. Back to Main Menu
 Enter your choice:
-2
-View My Messages is under construction.
---- Messages Menu ---
-1. Send a New Message
-2. View My Messages
-3. Back to Main Menu
-Enter your choice:
 No input found.
