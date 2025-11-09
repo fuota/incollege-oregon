@@ -29,6 +29,9 @@ ENVIRONMENT DIVISION.
                SELECT ApplicationsFile ASSIGN TO "/workspace/src/Applications.txt"
                     ORGANIZATION IS LINE SEQUENTIAL.
 
+               SELECT MessagesFile ASSIGN TO "/workspace/src/Messages.txt"
+                    ORGANIZATION IS LINE SEQUENTIAL.
+
 
 
 DATA DIVISION.
@@ -99,6 +102,9 @@ DATA DIVISION.
 
            FD ApplicationsFile.
                    01 Application-Record PIC X(200).
+
+           FD MessagesFile.
+                   01 Message-Record PIC X(400).
 
        WORKING-STORAGE SECTION.
            01 Message-Text PIC X(300).
@@ -201,6 +207,30 @@ DATA DIVISION.
            01 App-Location          PIC X(100).
            01 Application-Count     PIC 999 VALUE 0.
            01 Already-Applied       PIC X VALUE 'N'.
+
+           *> Messaging variables (Week 8)
+           01 Msg-Recipient         PIC X(50).
+           01 Msg-Content           PIC X(300).
+           01 Is-Connected          PIC X VALUE 'N'.
+           01 Msg-Sender-WS         PIC X(50).
+           01 Msg-Recipient-WS      PIC X(50).
+           01 Msg-Content-WS        PIC X(300).
+
+           *> Messaging variables (Week 9 – Viewing)
+           01 Msg-Sender            PIC X(50).
+           01 Msg-Recipient-View    PIC X(50).
+           01 Msg-Body              PIC X(300).
+           01 Msg-Found             PIC X VALUE 'N'.
+           01 Message-Counter       PIC 9(4) VALUE 0.
+           01 Msg-Timestamp        PIC X(30).
+           01 WS-Year              PIC X(4).
+           01 WS-Month             PIC X(2).
+           01 WS-Day               PIC X(2).
+           01 WS-Hour              PIC X(2).
+           01 WS-Min               PIC X(2).
+           01 WS-Hour-NUM          PIC 99.
+           01 WS-Day-NUM           PIC 99.
+           01 WS-Now               PIC X(21).
 
 
 PROCEDURE DIVISION.
@@ -450,7 +480,9 @@ SHOW-MAIN-MENU SECTION.
        PERFORM WRITE-AND-DISPLAY
        MOVE "7. Job /Internship Search" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       MOVE "Enter your choice (1-7): " TO Message-Text
+       MOVE "8. Messages" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice (1-8): " TO Message-Text
        PERFORM WRITE-AND-DISPLAY
 
 
@@ -476,8 +508,10 @@ SHOW-MAIN-MENU SECTION.
                PERFORM SHOW-MAIN-MENU
            WHEN "7"
                 PERFORM JOB-INTERNSHIP-SEARCH
+           WHEN "8"
+                PERFORM MESSAGES-MENU
            WHEN OTHER
-               MOVE "Invalid choice. Please choose from 1-7." TO Message-Text
+               MOVE "Invalid choice. Please choose from 1-8." TO Message-Text
                PERFORM WRITE-AND-DISPLAY
                PERFORM SHOW-MAIN-MENU
        END-EVALUATE.
@@ -1875,6 +1909,273 @@ VIEW-MY-APPLICATIONS SECTION.
 
        PERFORM JOB-INTERNSHIP-SEARCH
        EXIT SECTION.
+
+*> MESSAGING SYSTEM (Week 8)
+MESSAGES-MENU SECTION.
+       MOVE "--- Messages Menu ---" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "1. Send a New Message" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "2. View My Messages" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "3. Back to Main Menu" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice: " TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO User-Input
+
+       EVALUATE User-Input
+           WHEN "1"
+               PERFORM SEND-NEW-MESSAGE
+           WHEN "2"
+                PERFORM VIEW-MY-MESSAGES
+           WHEN "3"
+               PERFORM SHOW-MAIN-MENU
+           WHEN OTHER
+               MOVE "Invalid choice." TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               PERFORM MESSAGES-MENU
+       END-EVALUATE
+       EXIT SECTION.
+
+SEND-NEW-MESSAGE SECTION.
+       MOVE "Enter recipient's username (must be a connection):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO Msg-Recipient
+
+       *> Validate that recipient is an established connection
+       PERFORM VALIDATE-CONNECTION
+
+       IF Is-Connected = 'N'
+           PERFORM MESSAGES-MENU
+           EXIT SECTION
+       END-IF
+
+       *> Get message content
+       MOVE "Enter your message (max 200 chars):" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM READ-NEXT-INPUT
+       MOVE FUNCTION TRIM(User-Input) TO Msg-Content
+
+       *> Validate message content is not empty first
+       IF Msg-Content = SPACES
+           MOVE "Error: Message content cannot be empty." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM MESSAGES-MENU
+           EXIT SECTION
+       END-IF
+
+       *> Validate message content length - disallow messages over 200 chars
+       IF FUNCTION LENGTH(FUNCTION TRIM(Msg-Content)) > 200
+           MOVE "Error: Message exceeds 200 characters. Please send a shorter message." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           PERFORM MESSAGES-MENU
+           EXIT SECTION
+       END-IF
+
+       *> Save the message
+       PERFORM SAVE-MESSAGE
+
+       MOVE SPACES TO Message-Text
+       MOVE 1 TO Ptr
+       STRING "Message sent to " DELIMITED BY SIZE
+              FUNCTION TRIM(Msg-Recipient) DELIMITED BY SIZE
+              " successfully!" DELIMITED BY SIZE
+              INTO Message-Text
+              WITH POINTER Ptr
+       PERFORM WRITE-AND-DISPLAY
+
+       MOVE "---------------------" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM MESSAGES-MENU
+       EXIT SECTION.
+
+VALIDATE-CONNECTION SECTION.
+       MOVE 'N' TO Is-Connected
+
+       *> Check if recipient username exists
+       OPEN INPUT AccountsFile
+       MOVE 'N' TO Found-Flag
+       PERFORM UNTIL 1 = 0
+           READ AccountsFile
+               AT END EXIT PERFORM
+               NOT AT END
+                   IF FUNCTION TRIM(Account-Username) = FUNCTION TRIM(Msg-Recipient)
+                       MOVE 'Y' TO Found-Flag
+                       EXIT PERFORM
+                   END-IF
+           END-READ
+       END-PERFORM
+       CLOSE AccountsFile
+
+       IF Found-Flag = 'N'
+           MOVE "User not found in your network." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+           EXIT SECTION
+       END-IF
+
+       *> Check if sender and recipient are connected (bidirectional check)
+       OPEN INPUT EstablishedFile
+       PERFORM UNTIL 1 = 0
+           READ EstablishedFile INTO Established-Record-Line
+               AT END EXIT PERFORM
+               NOT AT END
+                   UNSTRING Established-Record-Line
+                       DELIMITED BY "|"
+                       INTO Conn-Sender-WS
+                            Conn-Recipient-WS
+
+                   *> Check both directions
+                   IF (FUNCTION TRIM(Conn-Sender-WS) = FUNCTION TRIM(Current-Username) AND
+                       FUNCTION TRIM(Conn-Recipient-WS) = FUNCTION TRIM(Msg-Recipient))
+                      OR
+                      (FUNCTION TRIM(Conn-Sender-WS) = FUNCTION TRIM(Msg-Recipient) AND
+                       FUNCTION TRIM(Conn-Recipient-WS) = FUNCTION TRIM(Current-Username))
+                       MOVE 'Y' TO Is-Connected
+                       EXIT PERFORM
+                   END-IF
+           END-READ
+       END-PERFORM
+       CLOSE EstablishedFile
+
+       IF Is-Connected = 'N'
+           MOVE "You can only message users you are connected with." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       END-IF
+
+       EXIT SECTION.
+
+SAVE-MESSAGE SECTION.
+         *> Get current date and time in UTC
+       MOVE FUNCTION CURRENT-DATE TO WS-Now
+       MOVE WS-Now(1:4)  TO WS-Year
+       MOVE WS-Now(5:2)  TO WS-Month
+       MOVE WS-Now(7:2)  TO WS-Day
+       MOVE WS-Now(9:2)  TO WS-Hour
+       MOVE WS-Now(11:2) TO WS-Min
+
+       *> Convert hour and day from UTC to Tampa time (UTC-5)
+       COMPUTE WS-Hour-NUM = FUNCTION NUMVAL(WS-Hour) - 5
+       IF WS-Hour-NUM < 0
+           ADD 24 TO WS-Hour-NUM
+           COMPUTE WS-Day-NUM = FUNCTION NUMVAL(WS-Day) - 1
+           IF WS-Day-NUM < 1
+               MOVE "01" TO WS-Day          *> simple fallback for new month
+           ELSE
+               MOVE FUNCTION NUMVAL-C(WS-Day-NUM) TO WS-Day
+           END-IF
+       END-IF
+
+       *> Rebuild hour string with leading zeros
+       IF WS-Hour-NUM < 10
+           MOVE "0" TO WS-Hour(1:1)
+           MOVE FUNCTION NUMVAL-C(WS-Hour-NUM) TO WS-Hour(2:1)
+       ELSE
+           MOVE FUNCTION NUMVAL-C(WS-Hour-NUM) TO WS-Hour
+       END-IF
+
+       *> Combine into formatted timestamp
+       MOVE SPACES TO Msg-Timestamp
+       STRING WS-Year "-" WS-Month "-" WS-Day " " WS-Hour ":" WS-Min
+              DELIMITED BY SIZE INTO Msg-Timestamp
+
+       *> Save to Messages.txt
+       OPEN EXTEND MessagesFile
+       MOVE SPACES TO Message-Record
+       STRING FUNCTION TRIM(Current-Username) DELIMITED BY SIZE
+              "|" DELIMITED BY SIZE
+              FUNCTION TRIM(Msg-Recipient) DELIMITED BY SIZE
+              "|" DELIMITED BY SIZE
+              FUNCTION TRIM(Msg-Content) DELIMITED BY SIZE
+              "|" DELIMITED BY SIZE
+              FUNCTION TRIM(Msg-Timestamp) DELIMITED BY SIZE
+              INTO Message-Record
+       WRITE Message-Record
+       CLOSE MessagesFile
+       EXIT SECTION.
+
+
+
+*>  VIEW-MY-MESSAGES SECTION (WEEK 9, WITH TIMESTAMP)
+*> =========================================================
+VIEW-MY-MESSAGES SECTION.
+       MOVE "--- Your Messages ---" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       MOVE 'N' TO Msg-Found
+       MOVE 0 TO Message-Counter
+
+       OPEN INPUT MessagesFile
+
+       PERFORM UNTIL 1 = 0
+           READ MessagesFile INTO Message-Record
+               AT END
+                   EXIT PERFORM
+               NOT AT END
+                   MOVE SPACES TO Msg-Sender Msg-Recipient-View Msg-Body Msg-Timestamp
+                   UNSTRING Message-Record
+                       DELIMITED BY "|"
+                       INTO Msg-Sender
+                            Msg-Recipient-View
+                            Msg-Body
+                            Msg-Timestamp
+
+                   IF FUNCTION TRIM(Msg-Recipient-View) = FUNCTION TRIM(Current-Username)
+                       MOVE 'Y' TO Msg-Found
+                       ADD 1 TO Message-Counter
+
+                       MOVE SPACES TO Message-Text
+                       MOVE 1 TO Ptr
+                       STRING "From: " DELIMITED BY SIZE
+                              FUNCTION TRIM(Msg-Sender) DELIMITED BY SIZE
+                              INTO Message-Text
+                              WITH POINTER Ptr
+                       PERFORM WRITE-AND-DISPLAY
+
+                       MOVE SPACES TO Message-Text
+                       MOVE 1 TO Ptr
+                       STRING "Message: " DELIMITED BY SIZE
+                              FUNCTION TRIM(Msg-Body) DELIMITED BY SIZE
+                              INTO Message-Text
+                              WITH POINTER Ptr
+                       PERFORM WRITE-AND-DISPLAY
+
+                       IF FUNCTION TRIM(Msg-Timestamp) NOT = SPACES
+                           MOVE SPACES TO Message-Text
+                           MOVE 1 TO Ptr
+                           STRING "(Optional: Sent: " DELIMITED BY SIZE
+                                  FUNCTION TRIM(Msg-Timestamp) DELIMITED BY SIZE
+                                  ")" DELIMITED BY SIZE
+                                  INTO Message-Text
+                                  WITH POINTER Ptr
+                           PERFORM WRITE-AND-DISPLAY
+                       END-IF
+
+                       MOVE "---" TO Message-Text
+                       PERFORM WRITE-AND-DISPLAY
+                   END-IF
+           END-READ
+       END-PERFORM
+
+       CLOSE MessagesFile
+
+       IF Msg-Found = 'N'
+           MOVE "You have no messages at this time." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       END-IF
+
+       MOVE "---------------------" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM MESSAGES-MENU
+       EXIT SECTION.
+
 
 
 *> HELPER SECTIONS
