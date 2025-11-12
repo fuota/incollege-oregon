@@ -23,24 +23,16 @@ Enter your choice (1-8):
 2. View My Messages
 3. Back to Main Menu
 Enter your choice:
-1
-Enter recipient's username (must be a connection):
-user4
-Enter your message (max 200 chars):
-Hi John! I noticed we both study Computer Science.
-Message sent to user4 successfully!
----------------------
---- Messages Menu ---
-1. Send a New Message
-2. View My Messages
-3. Back to Main Menu
-Enter your choice:
-1
-Enter recipient's username (must be a connection):
-bob
-Enter your message (max 200 chars):
-Hi Bob! Let's connect. I think we have a lot in common. Would you like to join my network?
-Message sent to bob successfully!
+2
+--- Your Messages ---
+From: user4
+Message: Hi Alice! That sounds great. I'd love to connect and share insights about Computer Science.
+(Optional: Sent: 2025-11-12 03:20)
+---
+From: bob
+Message: Hello Alice! I'm Bob, also studying Computer Science. Looking forward to connecting with you!
+(Optional: Sent: 2025-11-12 03:25)
+---
 ---------------------
 --- Messages Menu ---
 1. Send a New Message

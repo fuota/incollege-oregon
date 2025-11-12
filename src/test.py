@@ -11,10 +11,10 @@ exe_path = os.path.join(base_dir, ".." ,"bin", "InCollege")  # ./bin/InCollege
 
 
 # Clear message files
-message_file = os.path.join(base_dir, "Messages.txt")
-for file_path in [message_file]:
-    if os.path.exists(message_file):
-        open(file_path, 'w').close()  # Clear the file
+# message_file = os.path.join(base_dir, "Messages.txt")
+# for file_path in [message_file]:
+#     if os.path.exists(message_file):
+#         open(file_path, 'w').close()  # Clear the file
 
 
 # Ensure output directory exists and is clean
