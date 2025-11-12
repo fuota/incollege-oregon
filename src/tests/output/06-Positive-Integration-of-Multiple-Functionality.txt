@@ -1,0 +1,118 @@
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+1
+Please enter your username:
+Please enter your password:
+You have successfully logged in!
+Welcome, alice
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+Enter your choice (1-8):
+8
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+2
+--- Your Messages ---
+From: user4
+Message: Hi Alice! That sounds great. I'd love to connect and share insights about Computer Science.
+(Optional: Sent: 2025-11-12 03:20)
+---
+From: bob
+Message: Hello Alice! I'm Bob, also studying Computer Science. Looking forward to connecting with you!
+(Optional: Sent: 2025-11-12 03:25)
+---
+---------------------
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+3
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+Enter your choice (1-8):
+7
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
+2
+--- Available Job Listings ---
+001. Software Engineer Intern at Twitter (San Francisco, CA)
+002. Software Engineer Intern at Meta (New York City, NY)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+0
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
+3
+--- Your Job Applications ---
+Application Summary for alice
+------------------------------
+Job Title: Software Engineer Intern
+Employer: Twitter
+Location: San Francisco, CA
+---
+Total Applications: 001
+------------------------------
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
+4
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+Enter your choice (1-8):
+8
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+1
+Enter recipient's username (must be a connection):
+user4
+Enter your message (max 200 chars):
+Hey there! Nice to meet you!
+Message sent to user4 successfully!
+---------------------
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+No input found.

@@ -1,0 +1,78 @@
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+1
+Please enter your username:
+Please enter your password:
+You have successfully logged in!
+Welcome, user4
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+Enter your choice (1-8):
+8
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+2
+--- Your Messages ---
+From: alice
+Message: Hi John! I noticed we both study Computer Science. Would you like to connect and share insights about our field?
+(Optional: Sent: 2025-11-12 00:11)
+---
+From: bob
+Message: Hi there, I'm Bob. I am also studying Computer Science and would love to connect!
+(Optional: Sent: 2025-11-12 00:15)
+---
+From: tammy
+Message: Hello! I'm Tammy, a fellow Computer Science student. Let's connect and discuss our studies!
+(Optional: Sent: 2025-11-12 01:10)
+---
+From: phineas
+Message: Hey! I'm Phineas, and I see you're into Computer Science too. Let's connect!
+(Optional: Sent: 2025-11-12 02:11)
+---
+From: alice
+Message: Hey there! Nice to meet you!
+(Optional: Sent: 2025-11-12 06:24)
+---
+From: bob
+Message: Hello! Nice to meet you as well.
+(Optional: Sent: 2025-11-12 06:30)
+---
+From: bob
+Message: Looking forward to connecting with you!
+(Optional: Sent: 2025-11-12 06:45)
+---
+From: bob
+Message: It's great to find someone with similar interests.
+(Optional: Sent: 2025-11-12 07:00)
+---
+From: tammy
+Message: Hi! Great to meet you!
+(Optional: Sent: 2025-11-12 07:15)
+---
+From: phineas
+Message: Hey! Nice to meet you too.
+(Optional: Sent: 2025-11-12 07:20)
+---
+From: alice
+Message: Hey there! Nice to meet you!
+(Optional: Sent: 2025-11-12 00:29)
+---
+---------------------
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+No input found.

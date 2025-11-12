@@ -1,7 +1,0 @@
-1
-alice
-12Chars*Long
-8
-1
-user4
-                  
