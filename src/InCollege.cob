@@ -216,6 +216,23 @@ DATA DIVISION.
            01 Msg-Recipient-WS      PIC X(50).
            01 Msg-Content-WS        PIC X(300).
 
+           *> Messaging variables (Week 9 – Viewing)
+           01 Msg-Sender            PIC X(50).
+           01 Msg-Recipient-View    PIC X(50).
+           01 Msg-Body              PIC X(300).
+           01 Msg-Found             PIC X VALUE 'N'.
+           01 Message-Counter       PIC 9(4) VALUE 0.
+           01 Msg-Timestamp        PIC X(30).
+           01 WS-Year              PIC X(4).
+           01 WS-Month             PIC X(2).
+           01 WS-Day               PIC X(2).
+           01 WS-Hour              PIC X(2).
+           01 WS-Min               PIC X(2).
+           01 WS-Hour-NUM          PIC 99.
+           01 WS-Day-NUM           PIC 99.
+           01 WS-Now               PIC X(21).
+
+
 PROCEDURE DIVISION.
        OPEN OUTPUT OutputFile
        CLOSE OutputFile
@@ -1913,9 +1930,7 @@ MESSAGES-MENU SECTION.
            WHEN "1"
                PERFORM SEND-NEW-MESSAGE
            WHEN "2"
-               MOVE "View My Messages is under construction." TO Message-Text
-               PERFORM WRITE-AND-DISPLAY
-               PERFORM MESSAGES-MENU
+                PERFORM VIEW-MY-MESSAGES
            WHEN "3"
                PERFORM SHOW-MAIN-MENU
            WHEN OTHER
@@ -2037,7 +2052,40 @@ VALIDATE-CONNECTION SECTION.
        EXIT SECTION.
 
 SAVE-MESSAGE SECTION.
-       *> Store message in format: Sender|Recipient|MessageContent
+         *> Get current date and time in UTC
+       MOVE FUNCTION CURRENT-DATE TO WS-Now
+       MOVE WS-Now(1:4)  TO WS-Year
+       MOVE WS-Now(5:2)  TO WS-Month
+       MOVE WS-Now(7:2)  TO WS-Day
+       MOVE WS-Now(9:2)  TO WS-Hour
+       MOVE WS-Now(11:2) TO WS-Min
+
+       *> Convert hour and day from UTC to Tampa time (UTC-5)
+       COMPUTE WS-Hour-NUM = FUNCTION NUMVAL(WS-Hour) - 5
+       IF WS-Hour-NUM < 0
+           ADD 24 TO WS-Hour-NUM
+           COMPUTE WS-Day-NUM = FUNCTION NUMVAL(WS-Day) - 1
+           IF WS-Day-NUM < 1
+               MOVE "01" TO WS-Day          *> simple fallback for new month
+           ELSE
+               MOVE FUNCTION NUMVAL-C(WS-Day-NUM) TO WS-Day
+           END-IF
+       END-IF
+
+       *> Rebuild hour string with leading zeros
+       IF WS-Hour-NUM < 10
+           MOVE "0" TO WS-Hour(1:1)
+           MOVE FUNCTION NUMVAL-C(WS-Hour-NUM) TO WS-Hour(2:1)
+       ELSE
+           MOVE FUNCTION NUMVAL-C(WS-Hour-NUM) TO WS-Hour
+       END-IF
+
+       *> Combine into formatted timestamp
+       MOVE SPACES TO Msg-Timestamp
+       STRING WS-Year "-" WS-Month "-" WS-Day " " WS-Hour ":" WS-Min
+              DELIMITED BY SIZE INTO Msg-Timestamp
+
+       *> Save to Messages.txt
        OPEN EXTEND MessagesFile
        MOVE SPACES TO Message-Record
        STRING FUNCTION TRIM(Current-Username) DELIMITED BY SIZE
@@ -2045,10 +2093,89 @@ SAVE-MESSAGE SECTION.
               FUNCTION TRIM(Msg-Recipient) DELIMITED BY SIZE
               "|" DELIMITED BY SIZE
               FUNCTION TRIM(Msg-Content) DELIMITED BY SIZE
+              "|" DELIMITED BY SIZE
+              FUNCTION TRIM(Msg-Timestamp) DELIMITED BY SIZE
               INTO Message-Record
        WRITE Message-Record
        CLOSE MessagesFile
        EXIT SECTION.
+
+
+
+*>  VIEW-MY-MESSAGES SECTION (WEEK 9, WITH TIMESTAMP)
+*> =========================================================
+VIEW-MY-MESSAGES SECTION.
+       MOVE "--- Your Messages ---" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       MOVE 'N' TO Msg-Found
+       MOVE 0 TO Message-Counter
+
+       OPEN INPUT MessagesFile
+
+       PERFORM UNTIL 1 = 0
+           READ MessagesFile INTO Message-Record
+               AT END
+                   EXIT PERFORM
+               NOT AT END
+                   MOVE SPACES TO Msg-Sender Msg-Recipient-View Msg-Body Msg-Timestamp
+                   UNSTRING Message-Record
+                       DELIMITED BY "|"
+                       INTO Msg-Sender
+                            Msg-Recipient-View
+                            Msg-Body
+                            Msg-Timestamp
+
+                   IF FUNCTION TRIM(Msg-Recipient-View) = FUNCTION TRIM(Current-Username)
+                       MOVE 'Y' TO Msg-Found
+                       ADD 1 TO Message-Counter
+
+                       MOVE SPACES TO Message-Text
+                       MOVE 1 TO Ptr
+                       STRING "From: " DELIMITED BY SIZE
+                              FUNCTION TRIM(Msg-Sender) DELIMITED BY SIZE
+                              INTO Message-Text
+                              WITH POINTER Ptr
+                       PERFORM WRITE-AND-DISPLAY
+
+                       MOVE SPACES TO Message-Text
+                       MOVE 1 TO Ptr
+                       STRING "Message: " DELIMITED BY SIZE
+                              FUNCTION TRIM(Msg-Body) DELIMITED BY SIZE
+                              INTO Message-Text
+                              WITH POINTER Ptr
+                       PERFORM WRITE-AND-DISPLAY
+
+                       IF FUNCTION TRIM(Msg-Timestamp) NOT = SPACES
+                           MOVE SPACES TO Message-Text
+                           MOVE 1 TO Ptr
+                           STRING "(Optional: Sent: " DELIMITED BY SIZE
+                                  FUNCTION TRIM(Msg-Timestamp) DELIMITED BY SIZE
+                                  ")" DELIMITED BY SIZE
+                                  INTO Message-Text
+                                  WITH POINTER Ptr
+                           PERFORM WRITE-AND-DISPLAY
+                       END-IF
+
+                       MOVE "---" TO Message-Text
+                       PERFORM WRITE-AND-DISPLAY
+                   END-IF
+           END-READ
+       END-PERFORM
+
+       CLOSE MessagesFile
+
+       IF Msg-Found = 'N'
+           MOVE "You have no messages at this time." TO Message-Text
+           PERFORM WRITE-AND-DISPLAY
+       END-IF
+
+       MOVE "---------------------" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+
+       PERFORM MESSAGES-MENU
+       EXIT SECTION.
+
 
 
 *> HELPER SECTIONS
@@ -2080,3 +2207,4 @@ WRITE-ACCOUNT SECTION.
        WRITE Account-Record
        CLOSE AccountsFile
        EXIT SECTION.
+       
