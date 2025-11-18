@@ -482,7 +482,9 @@ SHOW-MAIN-MENU SECTION.
        PERFORM WRITE-AND-DISPLAY
        MOVE "8. Messages" TO Message-Text
        PERFORM WRITE-AND-DISPLAY
-       MOVE "Enter your choice (1-8): " TO Message-Text
+       MOVE "9. Exit Program" TO Message-Text
+       PERFORM WRITE-AND-DISPLAY
+       MOVE "Enter your choice (1-9): " TO Message-Text
        PERFORM WRITE-AND-DISPLAY
 
 
@@ -510,8 +512,14 @@ SHOW-MAIN-MENU SECTION.
                 PERFORM JOB-INTERNSHIP-SEARCH
            WHEN "8"
                 PERFORM MESSAGES-MENU
+           WHEN "9"
+               MOVE "Exiting program. Goodbye!" TO Message-Text
+               PERFORM WRITE-AND-DISPLAY
+               CLOSE InputFile
+               STOP RUN
+               EXIT PROGRAM
            WHEN OTHER
-               MOVE "Invalid choice. Please choose from 1-8." TO Message-Text
+               MOVE "Invalid choice. Please choose from 1-9." TO Message-Text
                PERFORM WRITE-AND-DISPLAY
                PERFORM SHOW-MAIN-MENU
        END-EVALUATE.
