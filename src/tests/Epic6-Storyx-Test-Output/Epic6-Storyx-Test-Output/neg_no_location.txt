@@ -1,0 +1,60 @@
+Welcome to InCollege!
+1. Log In
+2. Create New Account
+Enter your choice (1 or 2):
+1
+Please enter your username:
+Please enter your password:
+You have successfully logged in!
+Welcome, sho
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+Enter your choice (1-8):
+7
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
+1
+--- Post a Job/Internship ---
+Enter Job Title (required):
+Cybersecurity Analyst
+Enter Job Description (required):
+Monitor threats
+Enter Employer Name (required):
+Google
+Enter Job Location (required):
+
+Error: Job Location is required. Returning to main menu.
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+Enter your choice (1-8):
+$55/hour
+Invalid choice. Please choose from 1-8.
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+Enter your choice (1-8):
+No input found.
