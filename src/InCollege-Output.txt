@@ -5,6 +5,12 @@ Enter your choice (1 or 2):
 1
 Please enter your username:
 Please enter your password:
+Invalid username. Please try again.
+Please enter your username:
+Please enter your password:
+Invalid username. Please try again.
+Please enter your username:
+Please enter your password:
 You have successfully logged in!
 Welcome, sho
 ------- Main Menu --------
@@ -16,7 +22,234 @@ Welcome, sho
 6. View My Connections
 7. Job /Internship Search
 8. Messages
-Enter your choice (1-8):
+9. Exit Program
+Enter your choice (1-9):
+1
+--- Create/Edit Profile ---
+Enter First Name:
+
+Enter Last Name:
+Doe
+Enter University/College Attended:
+
+Enter Major:
+
+Enter Graduation Year (YYYY):
+
+Enter About Me (optional, max 200 chars, blank to skip):
+
+Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
+Experience #
+DONE
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+Education #
+DONE
+First Name is required.
+University is required.
+Major is required.
+Graduation Year must be numeric.
+Profile not saved due to errors.
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+1
+--- Create/Edit Profile ---
+Enter First Name:
+Sho
+Enter Last Name:
+Duong
+Enter University/College Attended:
+USF Tampa
+Enter Major:
+Computer Science
+Enter Graduation Year (YYYY):
+2026
+Enter About Me (optional, max 200 chars, blank to skip):
+
+Add Experience (optional, max 3 entries. Enter 'DONE' to finish):
+Experience #
+DONE
+Add Education (optional, max 3 entries. Enter 'DONE' to finish):
+Education #
+DONE
+Profile saved successfully!
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+2
+--- Your Profile ---
+Name: Sho Duong
+University: USF Tampa
+Major: Computer Science
+Graduation Year: 2026
+About Me:
+Experience:
+None
+Education:
+None
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+4
+Enter the full name of the person you are looking for:
+User DNE
+No one by that name could be found.
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+4
+Enter the full name of the person you are looking for:
+John
+No one by that name could be found.
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+4
+Enter the full name of the person you are looking for:
+John Doe
+--- Found User Profile ---
+Name: John Doe
+University: Stony Brook University
+Major: Computer Science
+Graduation Year: 2026
+About Me: I love K-pop and Taylor Swift
+Experience:
+Title: Machine Learning Intern
+Company: Meta
+Dates: 2025
+Description: Improved scam account
+Education:
+Degree: Bachelor of Science in Computer Science
+University: Stony Brook University
+Years: 2017-2021
+1. Send Connection Request
+2. Back to Main Menu
+Enter your choice:
+1
+You are already connected with this user.
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+3
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+1
+AWS is under construction.
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+2
+Docker is under construction.
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+3
+COBOL is under construction.
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+4
+Azure is under construction.
+1. AWS
+2. Docker
+3. COBOL
+4. Azure
+5. GCP
+6. Return to main menu
+Enter your choice (1-6):
+6
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+6
+---- Your Connections ----
+•
+• Alice Johnson (USF Tampa, Computer Science)
+• John Doe (Stony Brook University, Computer Science)
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
 7
 --- Job Search/Internship Menu ---
 1. Post a Job/Internship
@@ -30,15 +263,261 @@ Enter your choice (1-4):
 002. React Developer at NativeApps Corp (Remote)
 003. Data Scientist Intern at DataInsights LLC (San Francisco, CA)
 004. Mobile App Developer at AppM (Remote)
-005. Software Intern at Google (Remote)
-006. Software Intern at Google (Remote)
-007. Software Intern at Google (Remote)
-008. Software Intern at Google (Remote)
-009. Software Intern at Google (Remote)
-010. Software Intern at Google (Remote)
-011. Software Engineer Internship at Google (Remote)
-012. Software Engineer Internship at Google (Remote)
-013. Software Engineer Internship at Google (Remote)
+005. Software Development at Google Internship (Australia)
+006. Software Development at Google Internship (Australia)
+007. Software Development at Google Internship (Australia)
+008. Software Development at Google Internship (Australia)
+009. Software Development at Google Internship (Australia)
+010. Software Development at Google Internship (Australia)
+011. Software Development at Google Internship (Australia)
+012. Software Development at Google Internship (Australia)
+013. Software Development at Google Internship (Australia)
+014. Software Development at Google Internship (Australia)
+015. Software Development at Google Internship (Australia)
+016. Software Development at Google Internship (Australia)
+017. Software Development at Google Internship (Australia)
 -----------------------------
 Enter job number to view details, or 0 to go back:
-No input found.
+1
+--- Job Details ---
+Title: Front End Developer
+Description: This is an internship specialize in front end Developer
+Employer: TechCopr
+Location: New York, NY
+Salary: $25/hour
+-------------------
+1. Apply for this Job
+2. Back to Job List
+Enter your choice (1-2):
+1
+You have already applied for this job.
+--- Available Job Listings ---
+001. Front End Developer at TechCopr (New York, NY)
+002. React Developer at NativeApps Corp (Remote)
+003. Data Scientist Intern at DataInsights LLC (San Francisco, CA)
+004. Mobile App Developer at AppM (Remote)
+005. Software Development at Google Internship (Australia)
+006. Software Development at Google Internship (Australia)
+007. Software Development at Google Internship (Australia)
+008. Software Development at Google Internship (Australia)
+009. Software Development at Google Internship (Australia)
+010. Software Development at Google Internship (Australia)
+011. Software Development at Google Internship (Australia)
+012. Software Development at Google Internship (Australia)
+013. Software Development at Google Internship (Australia)
+014. Software Development at Google Internship (Australia)
+015. Software Development at Google Internship (Australia)
+016. Software Development at Google Internship (Australia)
+017. Software Development at Google Internship (Australia)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+2
+--- Job Details ---
+Title: React Developer
+Description: This is an internship specialize in react Developer
+Employer: NativeApps Corp
+Location: Remote
+Salary: $30/hour
+-------------------
+1. Apply for this Job
+2. Back to Job List
+Enter your choice (1-2):
+1
+You have already applied for this job.
+--- Available Job Listings ---
+001. Front End Developer at TechCopr (New York, NY)
+002. React Developer at NativeApps Corp (Remote)
+003. Data Scientist Intern at DataInsights LLC (San Francisco, CA)
+004. Mobile App Developer at AppM (Remote)
+005. Software Development at Google Internship (Australia)
+006. Software Development at Google Internship (Australia)
+007. Software Development at Google Internship (Australia)
+008. Software Development at Google Internship (Australia)
+009. Software Development at Google Internship (Australia)
+010. Software Development at Google Internship (Australia)
+011. Software Development at Google Internship (Australia)
+012. Software Development at Google Internship (Australia)
+013. Software Development at Google Internship (Australia)
+014. Software Development at Google Internship (Australia)
+015. Software Development at Google Internship (Australia)
+016. Software Development at Google Internship (Australia)
+017. Software Development at Google Internship (Australia)
+-----------------------------
+Enter job number to view details, or 0 to go back:
+0
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
+3
+--- Your Job Applications ---
+Application Summary for sho
+------------------------------
+Job Title: Front End Developer
+Employer: TechCopr
+Location: New York, NY
+---
+Job Title: React Developer
+Employer: NativeApps Corp
+Location: Remote
+---
+Total Applications: 002
+------------------------------
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
+1
+--- Post a Job/Internship ---
+Enter Job Title (required):
+Software Development
+Enter Job Description (required):
+DOing an internship at a software company.
+Enter Employer Name (required):
+Google Internship
+Enter Job Location (required):
+Australia
+Enter Salary (optional, enter NONE to skip):
+$50000
+Job/Internship posted successfully!
+--- Job Search/Internship Menu ---
+1. Post a Job/Internship
+2. Browse Jobs/Internships
+3. View My Applications
+4. Return to main menu
+Enter your choice (1-4):
+4
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+8
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+2
+--- Your Messages ---
+From: alice
+Message: Hi John! I noticed we both study Computer Science. Would you like to connect and share insights about our field?
+(Optional: Sent: 2025-11-18 00:00)
+---
+From: alice
+Message: Conan
+(Optional: Sent: 2025-11-18 00:00)
+---
+From: alice
+Message: Conan
+(Optional: Sent: 2025-11-18 00:00)
+---
+---------------------
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+1
+Enter recipient's username (must be a connection):
+alice
+Enter your message (max 200 chars):
+Hello from Sho Duong!
+Message sent to alice successfully!
+---------------------
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+1
+Enter recipient's username (must be a connection):
+sho
+You can only message users you are connected with.
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+1
+Enter recipient's username (must be a connection):
+alice
+Enter your message (max 200 chars):
+Hi John! I noticed we both study Computer Science. Would you like to connect and share insights about our field? Hi John! I noticed we both study Computer Science. Would you like to connect and share. Testing message overflow handling. This message is intentionally made very long to test how the sys
+Error: Message exceeds 200 characters. Please send a shorter message.
+--- Messages Menu ---
+1. Send a New Message
+2. View My Messages
+3. Back to Main Menu
+Enter your choice:
+3
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+5
+--- Pending Connection Requests ---
+Request from: Sho Duong
+Request from: Sho Duong
+Request from: Sho Duong
+Request from: Sho Duong
+-----------------------------------
+Request from: Kaylee Tran
+1. Accept
+2. Reject
+Enter your choice (1 or 2):
+1
+Connection accepted!
+-----------------------------------
+Request from: Tyler1verylongfirstnamesearch Dunham*
+1. Accept
+2. Reject
+Enter your choice (1 or 2):
+1
+Connection accepted!
+-----------------------------------
+Request from: bin
+1. Accept
+2. Reject
+Enter your choice (1 or 2):
+1
+Connection accepted!
+-----------------------------------
+Request from: ace
+1. Accept
+2. Reject
+Enter your choice (1 or 2):
+1
+Connection accepted!
+-----------------------------------
+All pending requests have been processed.
+------- Main Menu --------
+1. Create/Edit My Profile
+2. View My Profile
+3. Learn a new skill
+4. Find someone you know
+5. View My Pending Connection Requests
+6. View My Connections
+7. Job /Internship Search
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
+9
+Exiting program. Goodbye!
