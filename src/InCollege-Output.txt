@@ -474,10 +474,10 @@ Enter your choice:
 Enter your choice (1-9):
 5
 --- Pending Connection Requests ---
-Request from: Sho Duong
-Request from: Sho Duong
-Request from: Sho Duong
-Request from: Sho Duong
+Request from: Kaylee Tran
+Request from: tam
+Request from: bin
+Request from: ace
 -----------------------------------
 Request from: Kaylee Tran
 1. Accept
@@ -486,7 +486,7 @@ Enter your choice (1 or 2):
 1
 Connection accepted!
 -----------------------------------
-Request from: Tyler1verylongfirstnamesearch Dunham*
+Request from: tam
 1. Accept
 2. Reject
 Enter your choice (1 or 2):
