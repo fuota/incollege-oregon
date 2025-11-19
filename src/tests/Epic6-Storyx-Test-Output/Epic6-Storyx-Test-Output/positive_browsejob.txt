@@ -16,7 +16,8 @@ Welcome, sho
 6. View My Connections
 7. Job /Internship Search
 8. Messages
-Enter your choice (1-8):
+9. Exit Program
+Enter your choice (1-9):
 7
 --- Job Search/Internship Menu ---
 1. Post a Job/Internship

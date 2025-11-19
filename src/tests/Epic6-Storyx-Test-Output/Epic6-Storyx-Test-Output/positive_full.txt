@@ -15,7 +15,9 @@ Welcome, sho
 5. View My Pending Connection Requests
 6. View My Connections
 7. Job /Internship Search
-Enter your choice (1-7):
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
 7
 1. Post a Job/Internship
 2. Browse Jobs/Internships (under construction)
@@ -42,5 +44,7 @@ Job/Internship posted successfully!
 5. View My Pending Connection Requests
 6. View My Connections
 7. Job /Internship Search
-Enter your choice (1-7):
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
 No input found.

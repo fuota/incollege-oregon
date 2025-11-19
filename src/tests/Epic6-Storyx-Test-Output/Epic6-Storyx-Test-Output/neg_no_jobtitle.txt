@@ -38,7 +38,8 @@ Error: Job Title is required. Returning to main menu.
 6. View My Connections
 7. Job /Internship Search
 8. Messages
-Enter your choice (1-8):
+9. Exit Program
+Enter your choice (1-9):
 Help build API integrations
 Invalid choice. Please choose from 1-8.
 ------- Main Menu --------
@@ -50,5 +51,6 @@ Invalid choice. Please choose from 1-8.
 6. View My Connections
 7. Job /Internship Search
 8. Messages
-Enter your choice (1-8):
+9. Exit Program
+Enter your choice (1-9):
 No input found.

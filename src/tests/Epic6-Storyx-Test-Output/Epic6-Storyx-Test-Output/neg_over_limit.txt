@@ -16,7 +16,8 @@ Welcome, sho
 6. View My Connections
 7. Job /Internship Search
 8. Messages
-Enter your choice (1-7):
+9. Exit Program
+Enter your choice (1-9):
 7
 1. Post a Job/Internship
 2. Browse Jobs/Internships (under construction)
@@ -43,7 +44,9 @@ Invalid choice. Returning to main menu.
 5. View My Pending Connection Requests
 6. View My Connections
 7. Job /Internship Search
-Enter your choice (1-7):
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
 Remote
 Invalid choice. Please choose from 1-7.
 ------- Main Menu --------
@@ -54,7 +57,9 @@ Invalid choice. Please choose from 1-7.
 5. View My Pending Connection Requests
 6. View My Connections
 7. Job /Internship Search
-Enter your choice (1-7):
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
 $25/hour
 Invalid choice. Please choose from 1-7.
 ------- Main Menu --------
@@ -65,5 +70,7 @@ Invalid choice. Please choose from 1-7.
 5. View My Pending Connection Requests
 6. View My Connections
 7. Job /Internship Search
-Enter your choice (1-7):
+8. Messages
+9. Exit Program
+Enter your choice (1-9):
 No input found.

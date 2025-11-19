@@ -16,7 +16,8 @@ Welcome, alice
 6. View My Connections
 7. Job /Internship Search
 8. Messages
-Enter your choice (1-8):
+9. Exit Program
+Enter your choice (1-9):
 8
 --- Messages Menu ---
 1. Send a New Message
